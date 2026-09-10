@@ -129,7 +129,7 @@ uint32_t syscall_handler(struct registers *regs) {
         case SYS_UNAME: {
             char* user_buf = (char*)arg1;
             if (user_buf < (char*)(13 * 4096)) ret_val = -EFAULT;
-            memcpy(user_buf, "CalcOS 10", 9);
+            memcpy(user_buf, "CalcOS 10.2", 9);
             ret_val = 0;
             break;
         }
@@ -152,21 +152,6 @@ uint32_t syscall_handler(struct registers *regs) {
 
         case SYS_LIST_FILES: {
             ret_val = vfs_list("/");
-            break;
-        }
-
-        case SYS_DRAW_RECT: {
-            int r_x = (int)(arg1 >> 16);
-            int r_y = (int)(arg1 & 0xFFFF);
-            int r_w = (int)(arg2 >> 16);
-            int r_h = (int)(arg2 & 0xFFFF);
-            uint8_t r_color = (uint8_t)arg3;
-            draw_rect(r_x, r_y, r_w, r_h, r_color);
-            
-            x = 0;
-            y = 60;
-            
-            ret_val = 0;
             break;
         }
 

@@ -18,7 +18,6 @@
 #define SYS_GET_TICKS    124
 #define SYS_PCI_PRINT    125
 #define SYS_LIST_FILES   126
-#define SYS_DRAW_RECT    127
 #define SYS_CREATE_FILE  128
 #define SYS_WAIT_STRING  129
 #define SYS_REBOOT       130

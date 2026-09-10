@@ -55,7 +55,7 @@ all: build_target
 build_target:
 	@if [ "$(ARCH)" = "x86" ]; then $(MAKE) os-image.img; else $(MAKE) KERNEL.SYS; fi
 
-os-image.img: boot.bin KERNEL.SYS LS.BIN DEVICES.BIN STATUS.BIN DRAW.BIN \
+os-image.img: boot.bin KERNEL.SYS LS.BIN DEVICES.BIN STATUS.BIN \
 			  BEHAVE.BIN REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
 
 	dd if=/dev/zero of=$@ bs=512 count=2880
@@ -65,7 +65,6 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN DEVICES.BIN STATUS.BIN DRAW.BIN \
 	mcopy -i $@ LS.BIN ::LS.BIN
 	mcopy -i $@ DEVICES.BIN ::DEVICES.BIN
 	mcopy -i $@ STATUS.BIN ::STATUS.BIN
-	mcopy -i $@ DRAW.BIN ::DRAW.BIN
 	mcopy -i $@ BEHAVE.BIN ::BEHAVE.BIN
 	mcopy -i $@ REBOOT.BIN ::REBOOT.BIN
 	mcopy -i $@ MOUNT.BIN ::MOUNT.BIN
@@ -97,9 +96,6 @@ devices.o: commands/devices.c
 status.o: commands/status.c
 	gcc $(CFLAGS) $< -o $@
 
-draw.o: commands/draw.c
-	gcc $(CFLAGS) $< -o $@
-
 behave.o: commands/behave.c
 	gcc $(CFLAGS) $< -o $@
 
@@ -123,9 +119,6 @@ DEVICES.BIN: devices.o app.ld
 
 STATUS.BIN: status.o app.ld
 	ld -m elf_i386 -T app.ld status.o -o $@
-
-DRAW.BIN: draw.o app.ld
-	ld -m elf_i386 -T app.ld draw.o -o $@
 
 BEHAVE.BIN: behave.o app.ld
 	ld -m elf_i386 -T app.ld behave.o -o $@
