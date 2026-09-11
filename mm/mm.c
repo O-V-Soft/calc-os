@@ -1,10 +1,6 @@
 #include <stdint.h>
 #include <mm.h>
 
-#define BLOCK_SIZE sizeof(Block)
-#define ALIGNMENT sizeof(void*)
-#define ALIGN(size) (((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
-
 static Block* freeList = NULL;
 
 void init_kernel_heap(void* start_addr, size_t heap_size) {

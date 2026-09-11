@@ -12,11 +12,7 @@ void init_paging() {
     for (uint32_t j = 0; j < 1024; j++) {
         uint32_t phys_addr = j * 4096;
 
-        if (j < 13) {
-            first_page_table[j] = phys_addr | 0x01; 
-        } else {
-            first_page_table[j] = phys_addr | 0x03;
-        }
+        first_page_table[j] = phys_addr | 0x03;
     }
 
     uint32_t table_addr = (uint32_t)first_page_table;
@@ -37,7 +33,7 @@ void enable_paging() {
         "mov %%eax, %%cr3\n\t"
 
         "mov %%cr0, %%eax\n\t"
-        "or $0x80000000, %%eax\n\t"
+        "or $0x80010000, %%eax\n\t"
         "mov %%eax, %%cr0\n\t"
 
         "jmp 1f\n\t"

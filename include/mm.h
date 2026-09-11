@@ -2,6 +2,10 @@
 #define MM_H
 #include <stdint.h>
 
+#define BLOCK_SIZE sizeof(Block)
+#define ALIGNMENT sizeof(void*)
+#define ALIGN(size) (((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
+
 #if defined(__riscv)
     #define HEAP_START 0x80500000          
     #define HEAP_SIZE  (4 * 1024 * 1024)  

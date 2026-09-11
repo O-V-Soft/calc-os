@@ -10,6 +10,8 @@
 #define SIGKILL  9  
 #define SIGTERM  15
 
+#define MAX_TASKS 4
+
 typedef void (*sig_handler_t)(int);
 
 typedef struct {

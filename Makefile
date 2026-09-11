@@ -33,7 +33,7 @@ else ifeq ($(ARCH),riscv)
                    -ffunction-sections -I./include -c -fno-pic 
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
-    OBJ := boot.o riscv_init.o mm.o uart.o video.o font.o keybrd.o manual.o \
+    OBJ := boot.o riscv_init.o mm.o uart.o video.o font.o keyboard3.o manual.o \
 	       convert.o string.o pci2.o timer.o keyboard.o 
 endif
 
@@ -42,7 +42,7 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
-		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keybrd arch/risc-v/cpu/timer fs \
+		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard arch/risc-v/cpu/timer fs \
           arch/x86/drivers/keyboard 
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm

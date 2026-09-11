@@ -48,7 +48,7 @@ uint32_t timer_handler(struct registers *regs) {
     if (task_list[current_task].is_active == 0) {
         int next_task = current_task;
         while (1) {
-            next_task = (next_task + 1) % 4;
+            next_task = (next_task + 1) % MAX_TASKS;
             if (next_task == 0 || task_list[next_task].is_active == 1) {
                 break;
             }
@@ -63,7 +63,7 @@ uint32_t timer_handler(struct registers *regs) {
 
     int next_task = current_task;
     while (1) {
-        next_task = (next_task + 1) % 4;
+        next_task = (next_task + 1) % MAX_TASKS;
         if (next_task == 0 || task_list[next_task].is_active == 1) {
             break;
         }
@@ -104,7 +104,7 @@ void exception_handler(struct registers *regs) {
 
         int next_task = current_task;
         while (1) {
-            next_task = (next_task + 1) % 4;
+            next_task = (next_task + 1) % MAX_TASKS;
             if (next_task == 0 || task_list[next_task].is_active == 1) {
                 break;
             }
