@@ -210,12 +210,12 @@ static int fat12_close(int fd) {
     return 0;
 }
 
-static int fat12_list(void) {
+static int fat12_list() {
     list_mounts();
     return 0;
 }
 
-static int list_basic(void) {
+static int list_basic() {
     list_files();
     return 0;
 }
@@ -228,7 +228,7 @@ static int fat12_create(const char* path, const uint8_t* data, size_t size) {
     return 0;
 }
 
-static int fat12_umount(void) {
+static int fat12_umount() {
     disk_initialized = 0; 
     
     for (int i = 0; i < 10; i++) {

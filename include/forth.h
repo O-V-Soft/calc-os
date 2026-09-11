@@ -1,6 +1,5 @@
 #ifndef FORTH_H
 #define FORTH_H
-
 #include <stdint.h>
 
 struct Stack;

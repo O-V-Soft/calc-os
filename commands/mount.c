@@ -16,6 +16,5 @@ void _start() {
     _syscall(SYS_WRITE, 1, (unsigned int)"\n", 15);
 
     int res = _syscall(SYS_MOUNT, (unsigned int)path, 0, 0);
-
     _syscall(SYS_EXIT, 0, 0, 0);
 }

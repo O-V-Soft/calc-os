@@ -28,8 +28,9 @@ void init_memory_manager();
 void* kmalloc(size_t size);
 void kfree(void* ptr);
 
+extern __attribute__((section(".bss.safe"), aligned(4096))) uint32_t page_directory[1024];
+
 void init_paging();
 void enable_paging();
-extern __attribute__((section(".bss.safe"), aligned(4096))) uint32_t page_directory[1024];
 
 #endif

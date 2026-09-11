@@ -27,17 +27,6 @@ static inline uint32_t read_csr(const char* reg) {
 
 #define NULL ((void*)0)
 
-typedef struct {
-    uint8_t bus;
-    uint8_t slot;
-    uint8_t func;
-    uint16_t vendor_id;
-    uint16_t device_id;
-    uint8_t class_id;   
-    uint8_t subclass; 
-    uint8_t prog_if;   
-} pci_device_t;
-
 void pci_print_devices();
 void pci_scan();
 uint32_t pci_read_config_dword(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
@@ -56,10 +45,8 @@ uint32_t pci_find_device(uint16_t vendor_id, uint16_t device_id, uint8_t bar_off
 
 extern unsigned int timer_ticks;
 
-void init_timer(void);
-extern void trap_vector(void);
-
-int cmp_strings(const char *str1, const char *str2);
+void init_timer();
+extern void trap_vector();
 
 #define PCI_VENDOR_TABLE_SIZE (sizeof(pci_vendor_table) / sizeof(pci_vendor_table[0]))
 

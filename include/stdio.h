@@ -22,7 +22,6 @@
 #define SYS_WAIT_STRING  129
 #define SYS_REBOOT       130
 #define SYS_BEHAVE       131
-#define SYS_GET_COLOR    132
 
 static inline int _syscall(int num, unsigned int arg1, unsigned int arg2, unsigned int arg3) {
     int ret;

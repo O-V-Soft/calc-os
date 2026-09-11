@@ -283,21 +283,10 @@ void input_wait_multiline(char *buffer) {
             case 0x33: letter = shift_pressed ? '<' : ','; break;
             case 0x28: letter = shift_pressed ? '"' : '\''; break;
             case 0x27: letter = shift_pressed ? ':' : ';'; break;
-
             case 0x0E: 
                 if (i > 0) {
                     i--;
-                    if (is_window_crt == 0 && current_mode == 0) {
-                        if (x > 32) { 
-							x -= 16; 
-							draw_rect(x, y, 16, 16, COLOR_BLACK); 
-						}
-                    } else {
-                        if (x > 48) { 
-							x -= 8; 
-							draw_rect(x, y, 8, 8, COLOR_BLACK); 
-						}
-                    }
+					draw_rect(x, y, 8, 8, COLOR_BLACK); 
                 }
                 break;
 

@@ -8,6 +8,7 @@ uint8_t asm_buffer[512];
 int asm_ptr = 0;
 
 void emit_asm(uint8_t byte) {
+    if (asm_ptr >= sizeof(asm_buffer)) return;
     asm_buffer[asm_ptr++] = byte;
 }
 
@@ -24,16 +25,6 @@ void assemble_line(const char* line) {
         return;
     }
 
-    char* mov_dx_ptr = strstr(line, "mov dx ");
-    if (mov_dx_ptr != 0) {
-        int value = atoi(mov_dx_ptr + 7); 
-        
-        emit_asm(0xBA);              
-        emit_asm(value & 0xFF);       
-        emit_asm((value >> 8) & 0xFF);
-        return;
-    }
-
     char* mov_al_ptr = strstr(line, "mov al ");
     if (mov_al_ptr != 0) {
         int value = atoi(mov_al_ptr + 7); 
@@ -42,27 +33,11 @@ void assemble_line(const char* line) {
         return;
     }
 
-    if (strstr(line, "in al dx")) {
-        emit_asm(0xEC);
-        return;
-    }
-    if (strstr(line, "in eax dx")) {
-        emit_asm(0xED);
-        return;
-    }
-
-    if (strstr(line, "out dx al")) {
-        emit_asm(0xEE);
-        return;
-    }
-    if (strstr(line, "out dx eax")) {
-        emit_asm(0xEF);
-        return;
-    }
-
-    if (strstr(line, "int 128")) {
-        emit_asm(0xCD); 
-        emit_asm(128);
+    char* int_ptr = strstr(line, "int ");
+    if (int_ptr != 0) {
+        int value = atoi(int_ptr + 4);
+        emit_asm(0xCD);
+        emit_asm(value & 0xFF);
         return;
     }
 
@@ -93,6 +68,11 @@ void assemble_line(const char* line) {
 
     if (strstr(line, "ret")) {
         emit_asm(0xC3);
+        return;
+    }
+
+    if (strstr(line, "nop")) {
+        emit_asm(0x90);
         return;
     }
 }

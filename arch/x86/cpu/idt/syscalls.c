@@ -105,12 +105,8 @@ uint32_t syscall_handler(struct registers *regs) {
 
             read_file(filename_11, load_address);
 
-            __asm__ __volatile__("cli");
-
             void (*program_entry)(void) = (void (*)(void))load_address;
             program_entry(); 
-
-            __asm__ __volatile__("sti");
 
             ret_val = 0; 
             break;
@@ -208,11 +204,6 @@ uint32_t syscall_handler(struct registers *regs) {
             ret_val = (uint32_t)current_uid;
             break;
         } 
-
-        case SYS_GET_COLOR: {
-            ret_val = COLOR_WHITE;
-            break;
-        }
 
         default:
             ret_val = -ENOSYS; 
