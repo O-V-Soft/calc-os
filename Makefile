@@ -42,7 +42,7 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
-		  drivers/keybrd  arch/risc-v/drivers/pci drivers/keybrd arch/risc-v/cpu/timer fs \
+		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keybrd arch/risc-v/cpu/timer fs \
           arch/x86/drivers/keyboard 
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
@@ -72,7 +72,7 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN DEVICES.BIN STATUS.BIN \
 	mcopy -i $@ WHOAMI.BIN ::WHOAMI.BIN
 
 boot.bin: arch/x86/boot/entry.asm
-	nasm $(ASFLAGS_BIN) $< -o $@
+	$(AS) $(ASFLAGS_BIN) $< -o $@
 
 KERNEL.SYS: $(OBJ)
 	$(LD) $(LDFLAGS) -o kernel.elf $(OBJ)
@@ -82,61 +82,61 @@ KERNEL.SYS: $(OBJ)
 	$(CC) $(CFLAGS) $< -o $@
 
 %.o: %.asm
-	nasm $(ASFLAGS_ELF) $< -o $@
+	$(AS) $(ASFLAGS_ELF) $< -o $@
 
 %.o: %.S
 	$(AS) $(ASFLAGS_ELF) $< -o $@
 
 ls.o: commands/ls.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 devices.o: commands/devices.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 status.o: commands/status.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 behave.o: commands/behave.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 reboot.o: commands/reboot.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 umount.o: commands/umount.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 mount.o: commands/mount.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 whoami.o: commands/whoami.c
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 LS.BIN: ls.o app.ld
-	ld -m elf_i386 -T app.ld ls.o -o $@
+	$(LD) -m elf_i386 -T app.ld ls.o -o $@
 
 DEVICES.BIN: devices.o app.ld
-	ld -m elf_i386 -T app.ld devices.o -o $@
+	$(LD) -m elf_i386 -T app.ld devices.o -o $@
 
 STATUS.BIN: status.o app.ld
-	ld -m elf_i386 -T app.ld status.o -o $@
+	$(LD) -m elf_i386 -T app.ld status.o -o $@
 
 BEHAVE.BIN: behave.o app.ld
-	ld -m elf_i386 -T app.ld behave.o -o $@
+	$(LD) -m elf_i386 -T app.ld behave.o -o $@
 
 REBOOT.BIN: reboot.o app.ld
-	ld -m elf_i386 -T app.ld reboot.o -o $@
+	$(LD) -m elf_i386 -T app.ld reboot.o -o $@
 
 UMOUNT.BIN: umount.o app.ld
-	ld -m elf_i386 -T app.ld umount.o -o $@
+	$(LD) -m elf_i386 -T app.ld umount.o -o $@
 
 MOUNT.BIN: mount.o app.ld
-	ld -m elf_i386 -T app.ld mount.o -o $@
+	$(LD) -m elf_i386 -T app.ld mount.o -o $@
 
 WHOAMI.BIN: whoami.o app.ld
-	ld -m elf_i386 -T app.ld whoami.o -o $@
+	$(LD) -m elf_i386 -T app.ld whoami.o -o $@
 
 clean:
-	$(RM) *.o *.bin *.elf KERNEL.SYS *.BIN arch/x86/*.o arch/riscv/*.o
+	$(RM) *.o *.bin *.elf KERNEL.SYS *.BIN
 
 cleane:
 	$(RM) *.o *.bin *.elf *.img *.vdi KERNEL.SYS *.BIN arch/x86/*.o arch/riscv/*.o
@@ -172,12 +172,10 @@ help:
 	@echo dd - write image to sd card
 	@echo rea - rebuild riscv
 	@echo rear - rebuild and run riscv
-	@echo reb - rebuild sparc
-	@echo rebr - rebuild and run sparc
 
 push:
 	git add .
-	git commit -m "CalcOS"
+	-git commit -m "CalcOS"
 	git push origin main --force
 
 test:
@@ -196,11 +194,11 @@ dd:
 	sudo dd if=os-image.img of=/dev/mmcblk0 status=progress conv=fsync
 
 rea:
-	make clean
-	make ARCH=riscv
+	$(MAKE) clean
+	$(MAKE) ARCH=riscv
 
 rear:
-	make clean
-	make ARCH=riscv
+	$(MAKE) clean
+	$(MAKE) ARCH=riscv
 	qemu-system-riscv32 -M virt -m 128M \
 		-bios none -nographic -kernel kernel.elf

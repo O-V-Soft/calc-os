@@ -13,6 +13,7 @@ extern volatile int kbd_tail;
 uint8_t get_scancode();
 
 void input_wait_string(char *buffer);
+void input_wait_multiline(char *buffer);
 void handle_hotkeys(int code);
 
 void kbd_put_scancode(uint8_t code);

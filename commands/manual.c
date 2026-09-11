@@ -33,7 +33,6 @@ void help() {
     print("  cln  - clear the screen\n", COLOR_WHITE);
     print("  ls  - list all files\n", COLOR_WHITE);
     print("  touch  - create a new file\n", COLOR_WHITE);
-    print("  draw - draw a rectangle\n", COLOR_WHITE);
     print("  status - check system status\n", COLOR_WHITE);
     print("  cat - print file content\n", COLOR_WHITE);
     print("  devices - print PCI devices\n", COLOR_WHITE);

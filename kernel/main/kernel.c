@@ -167,112 +167,23 @@ refresh:
 
                     draw_rect(0, 738, 1024, 30, COLOR_LIGHT_GRAY); 
                     x = 10; y = 746;
-                    print("F2: Save and Exit", COLOR_BLACK);
+                    print("ESC: Save and Exit", COLOR_BLACK);
 
                     x = 0; y = 40;
 
                     uint8_t file_buffer[512];
                     memset(file_buffer, 0, sizeof(file_buffer));
+
+                    input_wait_multiline((char *)file_buffer);
+
                     int buffer_ptr = 0;
-                    int shift_pressed = 0; 
-
-                    while (1) {
-                        update_system(); 
-                        int code = get_scancode();
-                        if (code == 0) continue;
-
-                        if (code == 0x2A || code == 0x36) { shift_pressed = 1; continue; }
-                        if (code == 0xAA || code == 0xB6) { shift_pressed = 0; continue; }
-                        if (code & 0x80) continue;
-
-                        if (code == 0x3C) { 
-                            vfs_create(file_name, file_buffer, buffer_ptr);
-                            screen_clear();
-                            goto refresh;
-                        }
-
-                        if (code == 0x1C) { 
-                            if (buffer_ptr < 511) {
-                                file_buffer[buffer_ptr++] = '\n';
-                                put_char('\n', COLOR_WHITE); 
-                            }
-                            continue;
-                        }
-
-                        if (code == 0x0E) { 
-                            if (buffer_ptr > 0) {
-                                buffer_ptr--;
-                                if (file_buffer[buffer_ptr] != '\n') {
-                                    x = x - 8; 
-                                    draw_rect(x, y, 8, 8, COLOR_BLACK); 
-                                }
-                                file_buffer[buffer_ptr] = 0;
-                            }
-                            continue;
-                        }
-
-                        char letter = 0;
-                        switch (code) {
-                            case 0x1E: letter = 'a'; break;
-                            case 0x30: letter = 'b'; break;
-                            case 0x2E: letter = 'c'; break; 
-                            case 0x20: letter = 'd'; break; 
-                            case 0x12: letter = 'e'; break;
-                            case 0x21: letter = 'f'; break;
-                            case 0x22: letter = 'g'; break; 
-                            case 0x23: letter = 'h'; break;
-                            case 0x17: letter = 'i'; break; 
-                            case 0x24: letter = 'j'; break;
-                            case 0x25: letter = 'k'; break; 
-                            case 0x26: letter = 'l'; break; 
-                            case 0x32: letter = 'm'; break;
-                            case 0x31: letter = 'n'; break; 
-                            case 0x18: letter = 'o'; break; 
-                            case 0x19: letter = 'p'; break; 
-                            case 0x10: letter = 'q'; break;
-                            case 0x13: letter = 'r'; break; 
-                            case 0x1F: letter = 's'; break;
-                            case 0x14: letter = 't'; break;
-                            case 0x16: letter = 'u'; break; 
-                            case 0x2F: letter = 'v'; break; 
-                            case 0x11: letter = 'w'; break; 
-                            case 0x2D: letter = 'x'; break;
-                            case 0x15: letter = 'y'; break; 
-                            case 0x2C: letter = 'z'; break;
-                            case 0x39: letter = ' '; break;
-
-                            case 0x02: letter = shift_pressed ? '!' : '1'; break; 
-                            case 0x03: letter = shift_pressed ? '@' : '2'; break;
-                            case 0x04: letter = shift_pressed ? '#' : '3'; break; 
-                            case 0x05: letter = shift_pressed ? '$' : '4'; break;
-                            case 0x06: letter = shift_pressed ? '%' : '5'; break; 
-                            case 0x07: letter = shift_pressed ? '^' : '6'; break;
-                            case 0x08: letter = shift_pressed ? '&' : '7'; break; 
-                            case 0x09: letter = shift_pressed ? '*' : '8'; break;
-                            case 0x0A: letter = shift_pressed ? '(' : '9'; break; 
-                            case 0x0B: letter = shift_pressed ? ')' : '0'; break;
-                            case 0x0C: letter = shift_pressed ? '_' : '-'; break; 
-                            case 0x0D: letter = shift_pressed ? '+' : '='; break;
-                            case 0x34: letter = shift_pressed ? '>' : '.'; break; 
-                            case 0x35: letter = shift_pressed ? '?' : '/'; break;
-                            case 0x1A: letter = shift_pressed ? '{' : '['; break; 
-                            case 0x1B: letter = shift_pressed ? '}' : ']'; break;
-                            case 0x33: letter = shift_pressed ? '<' : ','; break; 
-                            case 0x28: letter = shift_pressed ? '"' : '\''; break;
-                            case 0x27: letter = shift_pressed ? ':' : ';'; break;
-                            default:   letter = 0;   break;
-                        }
-
-                        if (shift_pressed && letter >= 'a' && letter <= 'z') {
-                            letter = letter - 'a' + 'A';
-                        }
-
-                        if (letter != 0 && buffer_ptr < 511) {
-                            put_char(letter, COLOR_WHITE); 
-                            file_buffer[buffer_ptr] = letter;
-                            buffer_ptr++;
-                        }
+                    while (file_buffer[buffer_ptr] != '\0' && buffer_ptr < 512) {
+                        buffer_ptr++;
                     }
+
+                    vfs_create(file_name, file_buffer, buffer_ptr);
+                    screen_clear();
+                    goto refresh;
                 }
                 else if (compare_strings(command, "send")) {
                     char *packet_data = strtok(NULL, " ");
