@@ -28,4 +28,8 @@ extern int current_task;
 void send_signal(int target_task_id, int signum);
 void check_signals(int current_task_id, uint32_t* registers_on_stack);
 
+void prepare_task2();
+void prepare_task3();
+void prepare_task4();
+
 #endif 

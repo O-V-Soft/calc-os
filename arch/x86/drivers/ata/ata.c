@@ -13,7 +13,14 @@ static uint8_t use_ram = 0;
 #define ATA_REG_SECTOR_COUNT 0x1F2
 #define ATA_REG_LBA_LOW      0x1F3
 
-int detect_ata(void) {
+void ata_handler() {
+    ata_interrupt_received = 1;
+
+    outb(0xA0, 0x20);
+    outb(0x20, 0x20);
+}
+
+int detect_ata() {
     outb(ATA_REG_SECTOR_COUNT, 0x55);
     outb(ATA_REG_LBA_LOW, 0xAA); 
     

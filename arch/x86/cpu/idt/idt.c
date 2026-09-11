@@ -17,10 +17,6 @@ unsigned char *timer_str[16];
 
 volatile int ata_interrupt_received = 0;
 
-volatile int mouse_cycle = 0;
-volatile uint8_t mouse_packet[3];
-volatile int mouse_ready = 0;
-
 void set_idt_gate(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags) {
     idt_entry[number].base_low = (base & 0xFFFF);
     idt_entry[number].base_high = (base >> 16) & 0xFFFF;
@@ -78,42 +74,6 @@ uint32_t timer_handler(struct registers *regs) {
     outb(0x20, 0x20); 
 
     return (uint32_t)task_list[current_task].esp;
-}
-
-void keyboard_handler() {
-    uint8_t status = inb(0x64);
-
-    if (status & 0x01) {
-        uint8_t scancode = inb(0x60); 
-        
-        if (!(status & 0x20)) {
-            kbd_put_scancode(scancode);
-        }
-    }
-
-    outb(0x20, 0x20);
-}
-
-void stub_mouse_handler() {
-    uint8_t status = inb(0x64);
-    
-    if ((status & 0x01) && (status & 0x20)) {
-        uint8_t data = inb(0x60);
-        
-        if (mouse_cycle == 0 && !(data & 0x08)) {
-            mouse_cycle = 0;
-        } else {
-            mouse_packet[mouse_cycle++] = data;
-            
-            if (mouse_cycle == 3) {
-                mouse_cycle = 0;
-                mouse_ready = 1;
-            }
-        }
-    }
-
-    outb(0xA0, 0x20); 
-    outb(0x20, 0x20); 
 }
 
 void delay_ticks(uint32_t ticks) {
@@ -230,13 +190,6 @@ void init_timer() {
     outb(0x40, 0x09);
 }
 
-void ata_handler() {
-    ata_interrupt_received = 1;
-
-    outb(0xA0, 0x20);
-    outb(0x20, 0x20);
-}
-
 unsigned int task2_stack[1024]; 
 
 void task2_main() {
@@ -290,6 +243,8 @@ void prepare_task2() {
     task_list[1].esp = (void*)st;
 }
 
+unsigned int task3_stack[1024]; 
+
 void task3_main() {
     while(1) {
         interpret(stack_init(1024), content);
@@ -297,7 +252,7 @@ void task3_main() {
 }
 
 void prepare_task3() {
-    uint32_t* st = (uint32_t*)0x1000000; 
+    uint32_t* st = &task3_stack[1024];
 
     *(--st) = 0x202;    
     *(--st) = 0x08; 
@@ -338,42 +293,6 @@ void prepare_task4() {
     *(--st) = 0x10; 
 
     task_list[3].esp = (void*)st;
-}
-
-void create_task(int task_id) {
-    if (task_id < 1 || task_id > 3) return; 
-
-    __asm__ __volatile__("cli"); 
-
-    if (task_id == 1) {
-        prepare_task2();
-    } else if (task_id == 2) {
-        prepare_task3();
-    } else if (task_id == 3) {
-        prepare_task4();
-    }
-
-    task_list[task_id].id = task_id;
-    task_list[task_id].is_active = 1; 
-
-    __asm__ __volatile__("sti");
-}
-
-void delete_task(int task_id) {
-    if (task_id < 1 || task_id > 2) return;
-
-    __asm__ __volatile__("cli");
-
-    task_list[task_id].is_active = 0;
-
-    if (current_task == task_id) {
-        __asm__ __volatile__("sti");
-        while(1) {
-            __asm__ __volatile__("hlt"); 
-        }
-    }
-
-    __asm__ __volatile__("sti");
 }
 
 void init_idt() {

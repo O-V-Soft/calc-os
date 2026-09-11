@@ -20,9 +20,7 @@ void __attribute__((section(".text.entry"))) kernel_main() {
     boot();
     current_mode = 0;
 	
-	__asm__ __volatile__("cli");
-	task_list[3].is_active = 1;
-	__asm__ __volatile__("sti");
+	create_task(3);
 	
 	while (1) {
 		__asm__ __volatile__("hlt");

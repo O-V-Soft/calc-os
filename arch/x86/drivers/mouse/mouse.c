@@ -6,6 +6,10 @@
 #include <stdint.h>
 #include <idt.h>
 
+volatile int mouse_cycle = 0;
+volatile uint8_t mouse_packet[3];
+volatile int mouse_ready = 0;
+
 unsigned char mouse_cursor[16][16] = {
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -24,6 +28,28 @@ unsigned char mouse_cursor[16][16] = {
         {1,2,1,0,0,1,2,2,1,0,0,0,0,0,0,0},
         {1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0},
 };
+
+void stub_mouse_handler() {
+    uint8_t status = inb(0x64);
+    
+    if ((status & 0x01) && (status & 0x20)) {
+        uint8_t data = inb(0x60);
+        
+        if (mouse_cycle == 0 && !(data & 0x08)) {
+            mouse_cycle = 0;
+        } else {
+            mouse_packet[mouse_cycle++] = data;
+            
+            if (mouse_cycle == 3) {
+                mouse_cycle = 0;
+                mouse_ready = 1;
+            }
+        }
+    }
+
+    outb(0xA0, 0x20); 
+    outb(0x20, 0x20); 
+}
 
 void draw_cursor(int mx, int my) {
     for (int row = 0; row < 16; row = row + 1) {

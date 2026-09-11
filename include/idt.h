@@ -31,7 +31,7 @@ typedef struct {
 void init_idt();
 void set_idt_gate(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags);
 void pic_remap();
-void prepare_task4();
+
 void exception_handler(struct registers *regs);
 
 void create_task(int task_id);
@@ -80,11 +80,6 @@ extern void syscall_wrapper();
 
 extern unsigned int timer_ticks;
 extern uint8_t *timer_str[16];
-
-extern volatile int ata_interrupt_received;
-
-extern volatile uint8_t mouse_packet[3];
-extern volatile int mouse_ready;
 
 #define SYS_EXIT    1
 #define SYS_READ    3

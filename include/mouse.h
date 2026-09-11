@@ -15,6 +15,10 @@ extern int mouse_left_button;
 extern uint8_t mouse_cursor[16][16];
 extern uint8_t cursor_back_buffer[256];
 
+extern volatile uint8_t mouse_packet[3];
+extern volatile int mouse_ready;
+extern volatile int mouse_cycle;
+
 void mouse_handler();
 void draw_cursor(int mx, int my);
 void save_background();

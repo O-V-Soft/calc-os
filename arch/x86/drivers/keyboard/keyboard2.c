@@ -9,6 +9,20 @@
 #include <video.h>
 #include <stdint.h>
 
+void keyboard_handler() {
+    uint8_t status = inb(0x64);
+
+    if (status & 0x01) {
+        uint8_t scancode = inb(0x60); 
+        
+        if (!(status & 0x20)) {
+            kbd_put_scancode(scancode);
+        }
+    }
+
+    outb(0x20, 0x20);
+}
+
 void handle_hotkeys(int code) {
 	if (code == 0x4B) {
 		is_scaled = 0;
