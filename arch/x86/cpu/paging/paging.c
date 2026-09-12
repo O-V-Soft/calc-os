@@ -1,8 +1,23 @@
 #include <stdint.h>
 #include <mm.h>
 
-__attribute__((section(".bss.safe"), aligned(4096))) uint32_t page_directory[1024];
-__attribute__((section(".bss.safe"), aligned(4096))) uint32_t first_page_table[1024];
+#define PAGE_SIZE 4096
+#define PTE_PRESENT 0x01
+
+extern char __rodata_start[];
+extern char __rodata_end[];
+
+__attribute__((section(".bss.safe"), aligned(PAGE_SIZE))) uint32_t page_directory[1024];
+__attribute__((section(".bss.safe"), aligned(PAGE_SIZE))) uint32_t first_page_table[1024];
+
+void map_rodata() {
+    uint32_t start_idx = ((uint32_t)__rodata_start) / 4096;
+    uint32_t end_idx   = ((uint32_t)__rodata_end) / 4096;
+
+    for (uint32_t i = start_idx; i < end_idx; i++) {
+        first_page_table[i] = (i * PAGE_SIZE) | 0x01;
+    }
+}
 
 void init_paging() {
     for (uint32_t i = 0; i < 1024; i++) {
@@ -10,13 +25,15 @@ void init_paging() {
     }
 
     for (uint32_t j = 0; j < 1024; j++) {
-        uint32_t phys_addr = j * 4096;
+        uint32_t phys_addr = j * PAGE_SIZE;
 
         first_page_table[j] = phys_addr | 0x03;
     }
 
     uint32_t table_addr = (uint32_t)first_page_table;
     page_directory[0] = (table_addr & 0xFFFFF000) | 0x03;
+
+    map_rodata();
 }
 
 void enable_paging() {

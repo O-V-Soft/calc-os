@@ -6,22 +6,38 @@ SECTIONS
 
     .text : {
         *(.text.entry)
-        *(.text)
+        *(.text*)
     }
 
+    . = ALIGN(4096);
+    __rodata_start = .;
+    .rodata : {
+        *(.rodata*)
+        *(.rdata*)
+    }
+    . = ALIGN(4096);
+    __rodata_end = .;
+
+    __data_start = .;
     .data : {
-        *(.data)
-        *(.rdata)
+        *(.data*)
     }
+    . = ALIGN(4096);
+    __data_end = .;
 
+    __bss_start = .;
     .bss : {
-        *(.bss)
+        *(.bss*)
+        *(COMMON)
     }
+    . = ALIGN(4096);
+    __bss_end = .;
 
-    . = 0x50000;
     .bss.safe : {
         *(.bss.safe)
     }
+    . = ALIGN(4096);
+    __bss_safe_end = .;
 
     /DISCARD/ : {
         *(.comment)
