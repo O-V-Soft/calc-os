@@ -9,7 +9,7 @@ ifeq ($(ARCH),x86)
     ASFLAGS_BIN := -f bin
     ASFLAGS_ELF := -f elf32
     CFLAGS      := -m32 -ffreestanding -fno-stack-protector -fno-leading-underscore \
-               -ffunction-sections -mgeneral-regs-only -mno-red-zone -I./include -c \
+            	-mgeneral-regs-only -mno-red-zone -I./include -c \
                -fno-pic -fno-asynchronous-unwind-tables -fno-strict-aliasing -fpack-struct \
 			   -mno-sse -O2 -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable \
 			   -Wno-unused-but-set-variable -Wno-unused-value -Wno-missing-field
@@ -21,7 +21,7 @@ ifeq ($(ARCH),x86)
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
-           keyboard2.o pci.o
+           keyboard2.o pci.o manual2.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -44,7 +44,8 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
-		  arch/risc-v/cpu/timer fs arch/x86/drivers/keyboard drivers/pci
+		  arch/risc-v/cpu/timer fs arch/x86/drivers/keyboard drivers/pci \
+		  arch/x86/commands
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 

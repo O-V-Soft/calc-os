@@ -5,6 +5,31 @@
 #include <keyboard.h>
 #include <utils.h>
 
+Command commands[] = {
+    {"cln", cln},
+    {"help", help},
+    {"exit", exit2},
+    {"su", su},
+    {"casm", casm},
+    {"empire", empire},
+    {"cat", cat},
+    {"touch", touch},
+    {"send", send},
+    {"forth", forth},
+    {NULL, NULL}
+};
+
+int execute_command(char *line) {
+    for (int i = 0; commands[i].name != NULL; i++) {
+        if (strcmp(line, commands[i].name) == 0) {
+            commands[i].func();
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
 void cln() {
     #if defined(__riscv)
         screen_clear();

@@ -202,7 +202,7 @@ void task2_main() {
             get_time(&hours, &minutes);
 
             if (hours != old_hours || minutes != old_minutes) {
-                draw_rect(970, 5, 46, 30, COLOR_BLACK); 
+                draw_rounded_rect(970, 5, 46, 30, 4, COLOR_BLACK); 
 
                 x = 972; y = 15;
                 

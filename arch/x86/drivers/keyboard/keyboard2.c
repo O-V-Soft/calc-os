@@ -25,11 +25,13 @@ void keyboard_handler() {
 
 void handle_hotkeys(int code) {
 	if (code == 0x4B) {
-		is_scaled = 0;
-		current_mode = 0;
-		is_window_crt = 0;
-		show_crt_window = 0;
-		ncount = 1;
+		if (current_mode != 0) {
+			is_scaled = 0;
+			current_mode = 0;
+			is_window_crt = 0;
+			show_crt_window = 0;
+			ncount = 1;
+		}
 	}
 	
 	if (code == 0x4D) {
