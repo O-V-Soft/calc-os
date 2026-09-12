@@ -286,6 +286,7 @@ void input_wait_multiline(char *buffer) {
             case 0x0E: 
                 if (i > 0) {
                     i--;
+					x -= 8;
 					draw_rect(x, y, 8, 8, COLOR_BLACK); 
                 }
                 break;

@@ -31,10 +31,13 @@ void handle_hotkeys(int code) {
 		show_crt_window = 0;
 		ncount = 1;
 	}
+	
 	if (code == 0x4D) {
-		is_scaled = 0;
-		current_mode = 1;
-		ncount = 1;
+		if (current_mode == 0) {
+		    is_scaled = 0;
+		    current_mode = 1;
+		    ncount = 1;
+		}
 	}
 
 	if (code == 0x3C && current_mode == 1) {
@@ -47,26 +50,31 @@ void handle_hotkeys(int code) {
 		current_mode = 2;
 		ncount = 1;
 	}
+	
 	if (code == 0x50 && current_mode == 1 && is_button_files == 1) {
 		is_button_apps = 1;
 		is_button_files = 0;
 		ncount = 1;
 	}
+	
 	if (code == 0x1C && current_mode == 1 && is_button_apps == 1) {
 		current_mode = 3;
 		ncount = 1;
 	}
+	
 	if (code == 0x48 && current_mode == 1 && is_button_apps == 1) {
 		is_button_apps = 0;
 		is_button_files = 1;
 		current_mode = 1;
 		ncount = 1;
 	}
+	
 	if (code == 0x5B) {
 		is_scaled = 0;
 		is_button_calc = 1;
 		ncount = 1;
 	}
+	
     if (code == 0x2E && ctrl_pressed == 1) { 
         if (current_uid != 0) {
             if (task_list[2].is_active) {

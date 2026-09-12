@@ -361,10 +361,8 @@ void init_idt() {
 
     __asm__ __volatile__("lidt (%0)" : : "r" (&idtp));
 
-    for (int i = 0; i < 50; i++) {
-        if (inb(0x64) & 0x01) {
-            inb(0x60);
-        }
+    while (inb(0x64) & 1) {
+        inb(0x60);
     }
 
     init_mouse();

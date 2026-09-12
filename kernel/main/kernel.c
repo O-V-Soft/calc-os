@@ -50,7 +50,7 @@ refresh:
 
     draw_button(10, 5, 56, 26, "CalcOS", COLOR_BLACK, COLOR_WHITE);
 
-    cli();
+    sti();
 
     graphics();
 

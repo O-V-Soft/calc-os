@@ -25,6 +25,14 @@ void assemble_line(const char* line) {
         return;
     }
 
+    char* mov_ah_ptr = strstr(line, "mov ah ");
+    if (mov_ah_ptr != 0) {
+        int value = atoi(mov_ah_ptr + 7); 
+        emit_asm(0xB4);                 
+        emit_asm(value & 0xFF);         
+        return;
+    }
+
     char* mov_al_ptr = strstr(line, "mov al ");
     if (mov_al_ptr != 0) {
         int value = atoi(mov_al_ptr + 7); 

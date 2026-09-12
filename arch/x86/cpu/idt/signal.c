@@ -28,19 +28,19 @@ void check_signals(int current_task_id, uint32_t* registers_on_stack) {
             task_list[current_task_id].pending_signals = task_list[current_task_id].pending_signals & ~(1 << signum);
 
             if (signum == SIGINT) {
-                task_list[current_task_id].is_active = 0;
+                delete_task(current_task_id);
                 return;
             } 
             else if (signum == SIGILL) {
-                task_list[current_task_id].is_active = 0;    
+                delete_task(current_task_id);
                 return;
             } 
             else if (signum == SIGFPE) {
-                task_list[current_task_id].is_active = 0;            
+                delete_task(current_task_id);
                 return;
             } 
             else if (signum == SIGTERM) {
-                task_list[current_task_id].is_active = 0;
+                delete_task(current_task_id);
                 return;
             }
         }
