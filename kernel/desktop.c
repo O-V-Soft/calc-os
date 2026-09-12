@@ -113,7 +113,6 @@ void graphics() {
     #if defined(__riscv)
     return;
     #else
-    cli();
     if (current_mode == 0) {
         if (draw_0 == 1) {
             draw_rect(0, 40, 1024, 728, COLOR_BLACK);
@@ -275,6 +274,5 @@ void graphics() {
         }
         is_button_calc = 0;
     }
-    sti();
     #endif
 }
