@@ -160,7 +160,7 @@ void exception_handler(struct registers *regs) {
 
     x = 10;
     y = 70;
-    printk("TECHICAL INFORMATION: ", COLOR_WHITE);
+    printk("TECHNICAL INFORMATION: ", COLOR_WHITE);
     char buf[16];
     itoa(regs->int_no, buf);
     printk("\n  INTERRUPT NO: ", COLOR_WHITE);
@@ -180,7 +180,9 @@ void exception_handler(struct registers *regs) {
     itoa(regs->err_code, buf); 
     printk(buf, COLOR_WHITE);
     
-    while(1);
+    while(1) {
+        __asm__ __volatile__("hlt");
+    };
 }
 
 void init_timer() {

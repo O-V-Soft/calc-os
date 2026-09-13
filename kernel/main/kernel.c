@@ -227,4 +227,5 @@ void boot() {
 
     is_scaled = 0;
     __asm__ __volatile__("sti");
+    *(volatile char*)__rodata_start = 'X';
 }

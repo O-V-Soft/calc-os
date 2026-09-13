@@ -18,6 +18,9 @@
 #define NULL ((void*)0)
 #endif
 
+extern char __rodata_start[];
+extern char __rodata_end[];
+
 typedef struct Block {
     size_t size;
     int free;

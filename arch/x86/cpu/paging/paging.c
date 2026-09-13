@@ -4,9 +4,6 @@
 #define PAGE_SIZE 4096
 #define PTE_PRESENT 0x01
 
-extern char __rodata_start[];
-extern char __rodata_end[];
-
 __attribute__((section(".bss.safe"), aligned(PAGE_SIZE))) uint32_t page_directory[1024];
 __attribute__((section(".bss.safe"), aligned(PAGE_SIZE))) uint32_t first_page_table[1024];
 
