@@ -5,6 +5,20 @@
 #include <keyboard.h>
 #include <utils.h>
 
+#if defined(__riscv)
+Command commands[] = {
+    {"cln", cln},
+    {"help", help},
+    {"exit", exit2},
+    {"su", su},
+    {"devices", devices2},
+    {"lifetime", lifetime},
+    {"whoami", whoami},
+    {"status", status},
+    {"reset", reset},
+    {NULL, NULL}
+};
+#else
 Command commands[] = {
     {"cln", cln},
     {"help", help},
@@ -18,6 +32,7 @@ Command commands[] = {
     {"forth", forth},
     {NULL, NULL}
 };
+#endif
 
 int execute_command(char *line) {
     for (int i = 0; commands[i].name != NULL; i++) {

@@ -3,6 +3,9 @@
 #include <stdint.h>
 
 extern volatile uint8_t* uart_reg_base;
+extern int current_uid;
+extern unsigned int timer_ticks;
+extern char buffer[4096];
 
 #define UART_REG(reg) (uart_reg_base + (reg))
 #define UART_RBR (volatile uint8_t *)(UART_BASE + 0) 
@@ -42,8 +45,6 @@ uint32_t pci_find_device(uint16_t vendor_id, uint16_t device_id, uint8_t bar_off
 #define RISCV_CLINT_MTIMECMP ((volatile uint64_t*)0x02004000)
 
 #define TIMER_FREQUENCY_HZ   10000000
-
-extern unsigned int timer_ticks;
 
 void init_timer();
 extern void trap_vector();
