@@ -11,6 +11,7 @@ void itoa(int n, char* s);
 void htoa(int n, char str[]);
 
 void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint8_t color, uint8_t text_color);
+int abs(int x);
 
 uint8_t check_battery();
 uint8_t bcd_to_bin(uint8_t val);

@@ -15,13 +15,14 @@ ifeq ($(ARCH),x86)
 			   -Wno-unused-but-set-variable -Wno-unused-value -Wno-missing-field
     LDFLAGS     := -m elf_i386 -T linker.ld --nostdlib --static
 
-    OBJ := init.o kernel.o cmos.o video.o mouse_asm.o utils.o keyboard.o font.o inout.o \
+    OBJ := init.o kernel.o cmos.o screen.o mouse_asm.o utils.o keyboard.o font.o inout.o \
            mouse.o wrappers.o idt.o isr.o task.o ata.o fat.o read.o write.o \
-           sound.o pci2.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
+           sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
-           keyboard2.o pci.o manual2.o
+           keyboard_x86.o pci.o manual_x86.o video.o calc-3d.o edges.o nodes.o \
+		   rotate.o project.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -34,18 +35,18 @@ else ifeq ($(ARCH),riscv)
                    -ffunction-sections -I./include -c -fno-pic 
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
-    OBJ := boot.o riscv_init.o mm.o uart.o video.o font.o keyboard3.o manual.o \
-	       convert.o string.o pci3.o timer.o keyboard.o pci.o manual3.o
+    OBJ := boot.o init_riscv.o mm.o uart.o video.o font.o keyboard_riscv.o manual.o \
+	       convert.o string.o pci_riscv.o timer.o keyboard.o pci.o manual_riscv.o screen.o
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \
-          arch/x86/drivers/cmos drivers/video drivers/video/font arch/x86/drivers/mouse \
+          arch/x86/drivers/cmos drivers/screen drivers/screen/font arch/x86/drivers/mouse \
           drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
           arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
 		  arch/risc-v/cpu/timer fs arch/x86/drivers/keyboard drivers/pci \
-		  arch/x86/commands arch/risc-v/commands
+		  arch/x86/commands arch/risc-v/commands Calc3D
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 

@@ -28,8 +28,6 @@ int is_crushed = 0;
 
 void screen_clear() {
 #if defined(__riscv)
-    uart_printk("\x1B[2J\x1B[H");
-
 	return;
 #else
     memset(VIDEO_MEMORY, 0, SCREEN_WIDTH * SCREEN_HEIGHT);
@@ -81,6 +79,16 @@ void init_palette() {
     set_palette_color(20, 0, 120, 215);    
     set_palette_color(21, 26, 26, 26);     
     set_palette_color(22, 255, 165, 0);    
+#endif
+}
+
+void put_pixel(int x, int y, uint8_t color) {
+#if defined(__riscv)
+    return;
+#else
+    if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
+        VIDEO_MEMORY[y * SCREEN_WIDTH + x] = color;
+    }
 #endif
 }
 
@@ -136,20 +144,6 @@ void put_char(char s, uint8_t color) {
     }
     
     x = x + (8 * scale);
-#endif
-}
-
-void printk(const char *msg, uint8_t color) {
-	for (int i = 0; msg[i] != 0; i++) {
-		put_char(msg[i], color);
-	}
-}
-
-void print(const char *msg, uint8_t color) {
-#if defined(__riscv)
-    printk(msg, color);
-#else
-    sys_write(1, msg, color);
 #endif
 }
 
@@ -209,13 +203,36 @@ void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color
 #endif
 }
 
-void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint8_t color, uint8_t text_color) {
-    int radius = 4;
-    
-    draw_rounded_rect(_x, _y, _width, _height, radius, color);
-    
-    x = _x + 4;
-    y = _y + 4;
+void draw_line(int x0, int y0, int x1, int y1, uint8_t color) {
+#if defined(__riscv)
+    return;
 
-    printk(_msg, text_color);
+#else
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+
+    int err = dx - dy;
+
+    while (1) {
+        if (x0 >= 0 && x0 < SCREEN_WIDTH && y0 >= 0 && y0 < SCREEN_HEIGHT) {
+            VIDEO_MEMORY[y0 * SCREEN_WIDTH + x0] = color;
+        }
+
+        if (x0 == x1 && y0 == y1) {
+            break;
+        }
+
+        int err2 = 2 * err;
+        if (err2 > -dy) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (err2 < dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
+#endif
 }

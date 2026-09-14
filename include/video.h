@@ -58,6 +58,18 @@ extern char name[128];
 extern char content[512];
 extern const char* root_password;
 
+typedef struct {
+    int x, y, z;
+} Point3D;
+
+typedef struct {
+    int x, y;
+} Point2D;
+
+typedef struct {
+    int a, b;
+} Edge;
+
 void draw_desktop();
 
 void screen_clear();
@@ -66,6 +78,15 @@ void printk(const char *msg, uint8_t color);
 void print(const char *msg, uint8_t color);
 void draw_rect(int x, int y, int width, int height, uint8_t color);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color);
+void draw_line(int x1, int y1, int x2, int y2, uint8_t color);
+
+Point2D project(Point3D point);
+void draw_cube(int angle_y, int angle_x);
+Point3D rotate_y(Point3D p, int angle);
+Point3D rotate_x(Point3D p, int angle);
+
+extern Edge cube_edges[12];
+extern Point3D cube_nodes[8];
 
 void update_system();
 void handle_hotkeys(int code);

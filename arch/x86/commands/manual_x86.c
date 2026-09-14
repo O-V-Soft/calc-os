@@ -140,3 +140,19 @@ void forth() {
                     
     create_task(2);
 }
+
+void cube() {
+    char *angle_y_str = strtok(NULL, " ");
+    char *angle_x_str = strtok(NULL, " ");
+
+    int angle_y = 0;
+    int angle_x = 0;
+    
+    if (angle_y_str != NULL) {
+        angle_y = atoi(angle_y_str);
+    }
+    if (angle_x_str != NULL) {
+        angle_x = atoi(angle_x_str);
+    }
+    draw_cube(angle_y, angle_x);
+}
