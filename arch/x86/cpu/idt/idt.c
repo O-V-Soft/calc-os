@@ -205,12 +205,11 @@ void task2_main() {
 
             if (hours != old_hours || minutes != old_minutes) {
                 draw_rect(965, 2, 55, 34, COLOR_LIGHT_GRAY); 
-                draw_cube(993, 20, 115, 15, 15);
-                draw_rect(975, 10, 44, 27, COLOR_BLACK);
+                draw_cube(993, 20, 110, 15, 15);
 
                 cli();
 
-                x = 977; y = 20;
+                x = 980; y = 20;
                 
                 itoa(hours, h_str);
                 if (hours < 10) print("0", COLOR_WHITE); 

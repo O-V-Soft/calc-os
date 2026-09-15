@@ -21,8 +21,8 @@ ifeq ($(ARCH),x86)
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
-           keyboard_x86.o pci.o manual_x86.o video.o calc-3d.o edges.o nodes.o \
-		   rotate.o project.o
+           keyboard_x86.o pci.o manual_x86.o video.o calc3d.o edges.o nodes.o \
+		   rotate.o project.o fill.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc

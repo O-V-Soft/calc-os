@@ -29,4 +29,13 @@ void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x) {
 
         draw_line(p1.x, p1.y, p2.x, p2.y, COLOR_WHITE);
     }
+
+    draw_filled_triangle(points2d[4], points2d[0], points2d[3], COLOR_DARK_GRAY);
+    draw_filled_triangle(points2d[4], points2d[3], points2d[7], COLOR_DARK_GRAY);
+
+    draw_filled_triangle(points2d[4], points2d[5], points2d[1], COLOR_DARK_GRAY);
+    draw_filled_triangle(points2d[4], points2d[1], points2d[0], COLOR_DARK_GRAY);
+
+    draw_filled_triangle(points2d[0], points2d[1], points2d[2], COLOR_BLACK);
+    draw_filled_triangle(points2d[0], points2d[2], points2d[3], COLOR_BLACK);
 }
