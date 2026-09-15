@@ -121,7 +121,7 @@ void draw_file_icons() {
             int icon_x = 20 + col * 180;
             int icon_y = 100 + row * 100;
 
-            draw_rect(icon_x, icon_y, 130, 30, COLOR_LIGHT_GRAY);
+            draw_rounded_rect(icon_x, icon_y, 130, 30, 4, COLOR_LIGHT_GRAY);
 
             int center_x = icon_x + 20; 
             int center_y = icon_y + 15;
