@@ -116,12 +116,17 @@ void draw_file_icons() {
             if ((uint8_t)entries[i].name[0] == 0xE5) continue;
             if (entries[i].attributes == 0x0F) continue;
 
-            int col = icon_index % 6;
-            int row = icon_index / 6;
+            int col = icon_index % 5;
+            int row = icon_index / 5;
             int icon_x = 20 + col * 180;
             int icon_y = 100 + row * 100;
 
-            draw_rounded_rect(icon_x, icon_y, 130, 30, 4, COLOR_WHITE);
+            draw_rect(icon_x, icon_y, 130, 30, COLOR_LIGHT_GRAY);
+
+            int center_x = icon_x + 20; 
+            int center_y = icon_y + 15;
+
+            draw_cube(center_x, center_y, 200, 15, 15);
 
             char name_buf[9];
             char ext_buf[4];
@@ -142,12 +147,12 @@ void draw_file_icons() {
             }
             ext_buf[ext_len] = '\0';
 
-            x = icon_x + 8;
+            x = icon_x + 40;
             y = icon_y + 8;
-            printk(name_buf, COLOR_BLACK);
+            print(name_buf, COLOR_WHITE);
             if (ext_len > 0) {
-                printk(".", COLOR_BLACK);
-                printk(ext_buf, COLOR_BLACK);
+                print(".", COLOR_WHITE);
+                print(ext_buf, COLOR_WHITE);
             }
 
             icon_index++;

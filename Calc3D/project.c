@@ -9,13 +9,13 @@
 #include <utils.h>
 #endif
 
-Point2D project(Point3D point) {
-    Point2D result;
-    int xs = ((point.x * 256) / point.z) + (SCREEN_WIDTH / 2);
-    int ys = ((point.y * 256) / point.z) + (SCREEN_HEIGHT / 2);
+Point2D project(Point3D point, int screen_offset_x, int screen_offset_y) {
+    Point2D p;
+    
+    if (point.z <= 0) point.z = 1;
 
-    result.x = xs;
-    result.y = ys;
-
-    return result;
+    p.x = ((point.x * 256) / point.z) + screen_offset_x;
+    p.y = ((point.y * 256) / point.z) + screen_offset_y;
+    
+    return p;
 }

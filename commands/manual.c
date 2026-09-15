@@ -30,7 +30,6 @@ Command commands[] = {
     {"touch", touch},
     {"send", send},
     {"forth", forth},
-    {"cube", cube},
     {NULL, NULL}
 };
 #endif

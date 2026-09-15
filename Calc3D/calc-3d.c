@@ -9,20 +9,18 @@
 #include <utils.h>
 #endif
 
-void draw_cube(int angle_y, int angle_x) {
+void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x) {
     Point2D points2d[8];
 
     for (int i = 0; i < 8; i++) {
         Point3D node = cube_nodes[i];
-        
-        node.z -= 110;
-        
+
         node = rotate_y(node, angle_y);
         node = rotate_x(node, angle_x);
-        
-        node.z += 110;
-        
-        points2d[i] = project(node); 
+
+        node.z += pos_z;
+
+        points2d[i] = project(node, pos_x, pos_y);
     }
 
     for (int i = 0; i < 12; i++) {

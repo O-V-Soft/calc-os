@@ -200,13 +200,17 @@ void task2_main() {
     char h_str[3], m_str[3];
 
     while(1) {
-        if (current_mode != 0 && is_window_crt == 0) {
+        if (current_mode != 0) {
             get_time(&hours, &minutes);
 
             if (hours != old_hours || minutes != old_minutes) {
-                draw_rounded_rect(970, 5, 46, 30, 4, COLOR_BLACK); 
+                draw_rect(965, 2, 55, 34, COLOR_LIGHT_GRAY); 
+                draw_cube(993, 20, 120, 15, 15);
+                draw_rect(980, 10, 39, 27, COLOR_BLACK);
 
-                x = 972; y = 15;
+                cli();
+
+                x = 980; y = 20;
                 
                 itoa(hours, h_str);
                 if (hours < 10) print("0", COLOR_WHITE); 
@@ -217,6 +221,8 @@ void task2_main() {
                 itoa(minutes, m_str);
                 if (minutes < 10) print("0", COLOR_WHITE); 
                 print(m_str, COLOR_WHITE);
+
+                sti();
 
                 old_hours = hours;
                 old_minutes = minutes;

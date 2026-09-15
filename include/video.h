@@ -80,8 +80,8 @@ void draw_rect(int x, int y, int width, int height, uint8_t color);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color);
 void draw_line(int x1, int y1, int x2, int y2, uint8_t color);
 
-Point2D project(Point3D point);
-void draw_cube(int angle_y, int angle_x);
+Point2D project(Point3D point, int screen_offset_x, int screen_offset_y);
+void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x);
 Point3D rotate_y(Point3D p, int angle);
 Point3D rotate_x(Point3D p, int angle);
 
