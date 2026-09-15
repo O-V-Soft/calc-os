@@ -90,6 +90,7 @@ extern Point3D cube_nodes[8];
 
 void update_system();
 void handle_hotkeys(int code);
+void set_palette_color(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
 void init_palette();
 
 extern void outb(uint16_t port, uint8_t val);

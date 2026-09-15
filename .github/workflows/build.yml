@@ -20,8 +20,7 @@ jobs:
             mtools \
             nasm \
             qemu-system-x86 \
-            gcc-riscv64-unknown-elf \
-            gcc-sparc64-linux-gnu
+            gcc-riscv64-unknown-elf
 
       - name: Build OS image x86
         run: |

@@ -49,39 +49,6 @@ void set_palette_color(uint8_t index, uint8_t r, uint8_t g, uint8_t b) {
 #endif
 }
 
-void init_palette() {
-#if defined(__riscv)
-    return; 
-#else
-    set_palette_color(0, 0, 0, 0);         
-    set_palette_color(1, 0, 0, 170);      
-    set_palette_color(2, 0, 170, 0);      
-    set_palette_color(4, 170, 0, 0);       
-    set_palette_color(7, 170, 170, 170);   
-    set_palette_color(8, 85, 85, 85);       
-    set_palette_color(14, 255, 255, 85);  
-    set_palette_color(15, 255, 255, 255);   
-
-    set_palette_color(3, 0, 170, 170);     
-    set_palette_color(5, 170, 0, 170);     
-    set_palette_color(6, 170, 85, 0);       
-    set_palette_color(9, 85, 85, 255);     
-    set_palette_color(10, 85, 255, 85);    
-    set_palette_color(11, 85, 255, 255);   
-    set_palette_color(12, 255, 85, 85);     
-    set_palette_color(13, 255, 85, 255);    
-
-    set_palette_color(16, 212, 208, 200); 
-    set_palette_color(17, 10, 24, 80);      
-    set_palette_color(18, 128, 128, 128); 
-    set_palette_color(19, 230, 230, 230);
-    
-    set_palette_color(20, 0, 120, 215);    
-    set_palette_color(21, 26, 26, 26);     
-    set_palette_color(22, 255, 165, 0);    
-#endif
-}
-
 void put_pixel(int x, int y, uint8_t color) {
 #if defined(__riscv)
     return;
@@ -104,7 +71,6 @@ void put_char(char s, uint8_t color) {
     if (s == '\n') {
         x = 0;
         y = y + (8 * scale);
-        asm volatile("sti");
         return;
     }
 

@@ -131,7 +131,7 @@ void restore_background() {
 }
 
 void check_ui_clicks() {
-    if (current_mode == 2 && mouse_left_button == 1) {
+    if (current_mode == 2 && mouse_left_button == 1 && is_window_crt == 1) {
         if (mouse_x >= win_file_x && mouse_x <= (win_file_x + 432) && mouse_y >= win_file_y && mouse_y <= (win_file_y + 32)) {
             
             win_file_x = mouse_x - 200;
@@ -145,6 +145,7 @@ void check_ui_clicks() {
             ncount = 1; 
         }
     }
+
     if (mouse_left_button == 1) {
         if (mouse_x >= 238 && mouse_x <= 374 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
@@ -164,14 +165,16 @@ void check_ui_clicks() {
             }
         }
 
-        if (current_mode == 1 && mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 250 && mouse_y <= 286) {
-            current_mode = 2;
-            ncount = 1;
-        }
+        if (current_mode == 1) {
+            if (mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 250 && mouse_y <= 286) {
+                current_mode = 2;
+                ncount = 1;
+            }
 
-        if (current_mode == 1 && mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 350 && mouse_y <= 386) {
-            current_mode = 3;
-            ncount = 1;
+            if (mouse_x >= 352 && mouse_x <= 672 && mouse_y >= 350 && mouse_y <= 386) {
+                current_mode = 3;
+                ncount = 1;
+            }
         }
 
         if (current_mode == 2 && mouse_y >= 728 && mouse_y <= SCREEN_HEIGHT) {
@@ -179,44 +182,50 @@ void check_ui_clicks() {
             ncount = 1;
         }
 
+        if (is_button_calc == 1) {
+            if (mouse_x >= 10 && mouse_x <= 80 && mouse_y >= 31 && mouse_y <= 57) {
+                current_mode = 0;
+                draw_0 = 1;
+                is_button_calc = 0;
+                ncount = 1;
+            }
+
+            if (mouse_x >= 10 && mouse_x <= 80 && mouse_y >= 51 && mouse_y <= 77) {
+                is_scaled = 0;
+                current_mode = 1;
+                draw_1 = 1;
+                is_button_calc = 0;
+                ncount = 1;
+            }
+
+            if (mouse_x >= 10 && mouse_x <= 25 && mouse_y >= 85 && mouse_y <= 100) {
+                is_scaled = 0;
+                is_button_calc = 0;
+                ncount = 1;
+            }
+
+            if (mouse_x >= 191 && mouse_x <= 206 && mouse_y >= 11 && mouse_y <= 26) { 
+                draw_0 = 0;
+                is_button_calc = 0;
+                ncount = 1;
+            }
+
+            if (mouse_x >= 351 && mouse_x <= 366 && mouse_y >= 5 && mouse_y <= 20) {
+                is_scaled = 0;
+                draw_1 = 4; 
+                is_button_calc = 0;
+                ncount = 1;
+            }
+
+            if (mouse_x >= 65 && mouse_x <= 80 && mouse_y >= 85 && mouse_y <= 100) {
+                reboot();
+            }
+        }
+        
         if (mouse_x >= 10 && mouse_x <= 66 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
             is_button_calc = 1;
             ncount = 1;
-        }
-
-        if (mouse_x >= 10 && mouse_x <= 80 && mouse_y >= 31 && mouse_y <= 57) {
-            current_mode = 0;
-            draw_0 = 1;
-            ncount = 1;
-        }
-
-        if (mouse_x >= 10 && mouse_x <= 80 && mouse_y >= 51 && mouse_y <= 77) {
-            is_scaled = 0;
-            current_mode = 1;
-            draw_1 = 1;
-            ncount = 1;
-        }
-
-        if (mouse_x >= 10 && mouse_x <= 25 && mouse_y >= 85 && mouse_y <= 100) {
-            is_scaled = 0;
-            is_button_calc = 0;
-            ncount = 1;
-        }
-
-        if (mouse_x >= 191 && mouse_x <= 206 && mouse_y >= 11 && mouse_y <= 26) { 
-            draw_0 = 0;
-            ncount = 1;
-        }
-
-        if (mouse_x >= 351 && mouse_x <= 366 && mouse_y >= 5 && mouse_y <= 20) {
-            is_scaled = 0;
-            draw_1 = 4; 
-            ncount = 1;
-        }
-
-        if (mouse_x >= 65 && mouse_x <= 80 && mouse_y >= 85 && mouse_y <= 100) {
-            reboot();
         }
     }
 }

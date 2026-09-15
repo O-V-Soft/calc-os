@@ -74,16 +74,20 @@ void list_files() {
             int name_len = 0;
             int ext_len = 0;
 
-            for(int j = 0; j < 8; j++)
-                if(entries[i].name[j] != ' ')
+            for (int j = 0; j < 8; j++) {
+                if (entries[i].name[j] != ' ') {
                     name_buf[name_len++] = entries[i].name[j];
+                }
+            }
 
             name_buf[name_len] = '\0';
 
-            for(int j = 0; j < 3; j++)
-                if(entries[i].ext[j] != ' ')
+            for (int j = 0; j < 3; j++) {
+                if (entries[i].ext[j] != ' ') {
                     ext_buf[ext_len++] = entries[i].ext[j];
-
+                }
+            }
+            
             ext_buf[ext_len] = '\0';
 
             printk(name_buf, COLOR_WHITE);
