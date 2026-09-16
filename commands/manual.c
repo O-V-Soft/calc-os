@@ -30,6 +30,7 @@ Command commands[] = {
     {"touch", touch},
     {"send", send},
     {"forth", forth},
+    {"cube", cube},
     {NULL, NULL}
 };
 #endif
@@ -87,6 +88,7 @@ void help() {
     print("  su - change to root\n", COLOR_WHITE);
     print("  exit - change to user\n", COLOR_WHITE);
     print("  whoami - print current user\n", COLOR_WHITE);
+    print("  cube - spin the cube\n", COLOR_WHITE);
     #endif
 }
 

@@ -28,5 +28,6 @@ void lifetime();
 void whoami();
 void status();
 void reset();
+void cube();
 
 #endif

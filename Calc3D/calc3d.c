@@ -28,7 +28,7 @@ void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x) {
         int v[4]; 
         uint8_t color; 
     } faces[6] = {
-        {{0, 1, 2, 3}, COLOR_BLACK},   
+        {{0, 1, 2, 3}, COLOR_DARK},   
         {{4, 5, 1, 0}, COLOR_DARK_GRAY},    
         {{4, 0, 3, 7}, COLOR_DARK_GRAY}, 
         {{1, 5, 6, 2}, COLOR_DARK_GRAY}, 

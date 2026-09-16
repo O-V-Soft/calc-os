@@ -140,3 +140,36 @@ void forth() {
                     
     create_task(2);
 }
+
+void cube() {
+    int angle_x = 0;
+    int angle_y = 0;
+
+    while (1) {
+        uint8_t code = get_scancode();
+        int step = 5;
+
+        if (code == 0x01) {
+            return;
+        } else if (code != 0) {
+            switch (code) {
+                case 0x48:
+                    angle_x = (angle_x + step) % 360;
+                    break;
+                case 0x50:
+                    angle_x = (angle_x - step + 360) % 360;
+                    break;
+                case 0x4B:
+                    angle_y = (angle_y - step + 360) % 360;
+                    break;
+                case 0x4D:
+                    angle_y = (angle_y + step) % 360;
+                    break;
+                default:
+                    break;
+            }
+            screen_clear();
+            draw_cube(525, 400, 50, angle_y, angle_x);
+        } 
+    } 
+}

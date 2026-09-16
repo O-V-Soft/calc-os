@@ -30,7 +30,7 @@
 #define COLOR_SYS_SHADOW     18  
 #define COLOR_SYS_LIGHT      19  
 #define COLOR_ACCENT_BLUE    20  
-#define COLOR_TEXT_DARK      21 
+#define COLOR_DARK           21 
 #define COLOR_ORANGE         22  
 
 extern int x;

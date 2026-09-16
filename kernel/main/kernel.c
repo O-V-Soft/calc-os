@@ -83,7 +83,7 @@ refresh:
                 int result = execute_command(command);
                 if (result == 0) {
                     continue;
-                }
+                } 
                 else {
                     if (command[0] != '\0') {
                         char cmd_with_ext[16];
