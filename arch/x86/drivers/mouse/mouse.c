@@ -204,19 +204,6 @@ void check_ui_clicks() {
                 ncount = 1;
             }
 
-            if (mouse_x >= 191 && mouse_x <= 206 && mouse_y >= 11 && mouse_y <= 26) { 
-                draw_0 = 0;
-                is_button_calc = 0;
-                ncount = 1;
-            }
-
-            if (mouse_x >= 351 && mouse_x <= 366 && mouse_y >= 5 && mouse_y <= 20) {
-                is_scaled = 0;
-                draw_1 = 4; 
-                is_button_calc = 0;
-                ncount = 1;
-            }
-
             if (mouse_x >= 65 && mouse_x <= 80 && mouse_y >= 85 && mouse_y <= 100) {
                 reboot();
             }
@@ -225,6 +212,19 @@ void check_ui_clicks() {
         if (mouse_x >= 10 && mouse_x <= 66 && mouse_y >= 5 && mouse_y <= 31) {
             is_scaled = 0;
             is_button_calc = 1;
+            ncount = 1;
+        }
+
+        if (mouse_x >= 191 && mouse_x <= 206 && mouse_y >= 11 && mouse_y <= 26) { 
+            draw_0 = 0;
+            is_button_calc = 0;
+            ncount = 1;
+        }
+
+        if (mouse_x >= 351 && mouse_x <= 366 && mouse_y >= 5 && mouse_y <= 20) {
+            is_scaled = 0;
+            draw_1 = 0; 
+            is_button_calc = 0;
             ncount = 1;
         }
     }
