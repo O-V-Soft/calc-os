@@ -38,20 +38,30 @@
 #define COLOR_DARK           21 
 #define COLOR_ORANGE         22  
 #else
-#define COLOR_BLACK          0x00000000
-#define COLOR_BLUE           0x000000FF
-#define COLOR_CYAN           0x0000FFFF
-#define COLOR_BROWN          0x00804000
-#define COLOR_LIGHT_GRAY     0x00C0C0C0
-#define COLOR_DARK_GRAY      0x00808080
-#define COLOR_LIGHT_BLUE     0x0080D8FF
-#define COLOR_WHITE          0x00FFFFFF
+#define COLOR_BLACK          0xFF000000
+#define COLOR_BLUE           0xFF0000AA
+#define COLOR_GREEN          0xFF00AA00
+#define COLOR_CYAN           0xFF00AAAA
+#define COLOR_RED            0xFFAA0000
+#define COLOR_MAGENTA        0xFFAA00AA
+#define COLOR_BROWN          0xFF643200
+#define COLOR_LIGHT_GRAY     0xFFAAAAAA
+#define COLOR_DARK_GRAY      0xFF555555
+#define COLOR_LIGHT_BLUE     0xFF5555FF
+#define COLOR_LIGHT_GREEN    0xFF55FF55
+#define COLOR_LIGHT_CYAN     0xFF55FFFF
+#define COLOR_LIGHT_RED      0xFFFF5555
+#define COLOR_LIGHT_MAGENTA  0xFFFF55FF
+#define COLOR_YELLOW         0xFFFFFF55
+#define COLOR_WHITE          0xFFFFFFFF
 
-#define COLOR_SYS_BG         0x00C0C0C0
-#define COLOR_SYS_TITLE      0x00000080
-#define COLOR_SYS_SHADOW     0x00808080
-#define COLOR_SYS_LIGHT      0x00FFFFFF
-#define COLOR_DARK           0x00404040        
+#define COLOR_SYS_BG         0xFFD4D0C8
+#define COLOR_SYS_TITLE      0xFF0A1850
+#define COLOR_SYS_SHADOW     0xFF808080
+#define COLOR_SYS_LIGHT      0xFFE6E6E6
+#define COLOR_ACCENT_BLUE    0xFF0078D7
+#define COLOR_DARK           0xFF1A1A1A
+#define COLOR_ORANGE         0xFFFFA500
 #endif
 
 extern int x;

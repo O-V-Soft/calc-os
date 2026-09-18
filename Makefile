@@ -37,7 +37,7 @@ else ifeq ($(ARCH),riscv)
 
     OBJ := boot.o init_riscv.o mm.o uart.o font.o keyboard_riscv.o manual.o \
 	       convert.o string.o pci_riscv.o timer.o keyboard.o pci.o manual_riscv.o screen.o \
-		   gpu.o screen_riscv.o
+		   gpu.o screen_riscv.o desktop.o kernel.o
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \

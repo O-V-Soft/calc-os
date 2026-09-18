@@ -206,15 +206,19 @@ void boot() {
     } else {
         print("[ERR]\n\n", COLOR_WHITE);
     }
-
+    
+    #if !defined(__riscv)
     print("Mounting FAT12 filesystem...                 ", COLOR_WHITE);
+    #endif
     vfs_mount("/", &fat12_driver);
     print("[OK]\n", COLOR_WHITE);
 
     delay_ticks(100);
 
     screen_clear();
+    #if !defined(__riscv)
     init_palette();
+    #endif
     draw_rect(0, 0, 1024, 768, COLOR_WHITE);
 
     x = 0;

@@ -82,7 +82,6 @@ void printk(const char *msg, uint32_t color) {
 
 void print(const char *msg, uint32_t color) {
     printk(msg, color);
-    flush_gpu();
 }
 
 void draw_rect(int x, int y, int width, int height, uint32_t color) {
@@ -94,4 +93,13 @@ void draw_rect(int x, int y, int width, int height, uint32_t color) {
         }
     }
     flush_gpu();
+}
+
+void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint32_t color, uint32_t text_color) {    
+    draw_rect(_x, _y, _width, _height, color);
+    
+    x = _x + 4;
+    y = _y + 4;
+
+    printk(_msg, text_color);
 }

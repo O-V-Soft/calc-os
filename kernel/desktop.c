@@ -1,26 +1,31 @@
+#if !defined(__riscv)
 #include <fat.h>
 #include <cmos.h>
-#include <video.h>
-#include <utils.h>
 #include <mouse.h>
-#include <keyboard.h>
 #include <idt.h>
-#include <stdint.h>
 #include <ata.h>
 #include <sound.h>
-#include <pci.h>
-#include <mm.h>
 #include <forth.h>
 #include <task.h>
 #include <vfs.h>
 #include <casm.h>
+#endif
+
+#include <video.h>
+#include <utils.h>
+#include <keyboard.h>
+#include <stdint.h>
+#include <pci.h>
+#include <mm.h>
 #include <coms.h>
 #include <font.h>
 
 #if defined(__riscv)
 #include <riscv.h>
+#include <virtio_gpu.h>
 #endif
 
+#if !defined(__riscv)
 static const uint8_t fade_palette[24] = {
     COLOR_WHITE, COLOR_WHITE, COLOR_SYS_LIGHT, 
     COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, 
@@ -34,11 +39,23 @@ static const uint8_t fade_palette[24] = {
     COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,  
     COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE
 };
+#else
+static const uint32_t fade_palette[24] = {
+    COLOR_WHITE, COLOR_WHITE, COLOR_SYS_LIGHT, 
+    COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, COLOR_SYS_LIGHT, 
+    COLOR_LIGHT_GRAY,  COLOR_LIGHT_GRAY, 
+    COLOR_LIGHT_GRAY,  COLOR_LIGHT_GRAY, 
+    COLOR_SYS_SHADOW,  COLOR_SYS_SHADOW, 
+    COLOR_SYS_SHADOW,  COLOR_DARK_GRAY, 
+    COLOR_DARK_GRAY,  COLOR_DARK_GRAY, 
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE, 
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,  
+    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE
+};
+#endif
 
 void draw_desktop() {
-#if defined(__riscv)
-    return; 
-#else
     draw_rect(0, 40, 1024, 728, COLOR_LIGHT_BLUE);
 
     int glass_x = 60;
@@ -87,7 +104,11 @@ void draw_desktop() {
                 int fade_index = (i * scale) + v_scale;
                 uint8_t reflect_color = (fade_index < 24) ? fade_palette[fade_index] : 20;
 
+		#if !defined(__riscv)
                 uint8_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
+		#else
+		uint32_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
+		#endif
                 unsigned char bits_copy = bits;
 
                 for (int j = 0; j < 8; j++) {
@@ -106,13 +127,9 @@ void draw_desktop() {
         }
     }
     sti();
-#endif
 }
 
 void graphics() {
-    #if defined(__riscv)
-    return;
-    #else
     if (current_mode == 0) {
         if (draw_0 == 1) {
             draw_rect(0, 40, 1024, 728, COLOR_BLACK);
@@ -170,7 +187,9 @@ void graphics() {
 
         draw_button(0, 728, 1024, 40, "F2 - create a new file", COLOR_DARK_GRAY, COLOR_WHITE);
 
+        #if !defined(__riscv)
         draw_file_icons();
+        #endif
 
         if (show_crt_window == 1) {
             is_window_crt = 1;
@@ -223,6 +242,7 @@ void graphics() {
             draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
         }
 
+        #if !defined(__riscv)
         x = 0;
         y = 96;
         print("System Information:\n", COLOR_WHITE);
@@ -233,6 +253,7 @@ void graphics() {
         } else {
             print("BAD. Please insert a new CMOS battery\n", COLOR_WHITE);
         }
+        #endif
     }
     else {
         is_scaled = 0;
@@ -273,5 +294,4 @@ void graphics() {
             ncount = 1;
         }
     }
-    #endif
 }

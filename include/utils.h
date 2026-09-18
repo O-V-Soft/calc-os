@@ -9,8 +9,11 @@ void copy_string(char *dest, char *src);
 int atoi(char *str);
 void itoa(int n, char* s);
 void htoa(int n, char str[]);
-
+#if !defined(__riscv)
 void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint8_t color, uint8_t text_color);
+#else
+void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint32_t color, uint32_t text_color);
+#endif
 int abs(int x);
 
 uint8_t check_battery();
