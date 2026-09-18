@@ -88,6 +88,7 @@ extern int is_crushed;
 extern char name[128];
 extern char content[512];
 extern const char* root_password;
+extern int current_uid; 
 
 typedef struct {
     int x, y, z;

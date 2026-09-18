@@ -9,43 +9,42 @@
 char com[512];
 char buffer[4096];
 
-char name[128];
-char content[512];
+void system();
 
-int current_uid = 1; 
-const char* root_password = "102030!";
+void boot() {
+    is_scaled = 1;
+    screen_clear();
+
+    print("Scanning PCI...                              ", COLOR_WHITE);
+    pci_scan();
+    print("[OK]\n\n", COLOR_WHITE);
+
+	print("Initializing timer...                        ", COLOR_WHITE);
+    init_timer();
+	print("[OK]\n\n", COLOR_WHITE);
+	
+    print("Initializing memory manager...               ", COLOR_WHITE);
+    init_memory_manager();
+    print("[OK]\n\n", COLOR_WHITE);
+
+    print("Initializing GPU...                          ", COLOR_WHITE);
+    init_gpu();
+    print("[OK]\n\n", COLOR_WHITE);
+
+    screen_clear();
+    draw_rect(0, 0, 1024, 768, COLOR_WHITE);
+
+    x = 0;
+    y = 10;
+
+    is_scaled = 1;
+    print("Welcome to CalcOS!", COLOR_BLACK);
+    is_scaled = 0;
+}
 
 void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
-    init_memory_manager();
-    pci_scan();
-	init_timer();
-    init_gpu();
-    screen_clear();
-    
-    while(1) {
-        if (current_uid == 0) {
-            print("# ", COLOR_WHITE);
-        } else {
-            print("$ ", COLOR_WHITE);
-        }
-
-        input_wait_string(com);
-
-        printk("\n", COLOR_WHITE);
-
-        char *com2 = strtok(com, " ");
-
-        if (com2 != NULL) {
-            int result = execute_command(com);
-            if (result == 0) {
-                continue;
-			}            
-            else {
-                if (com[0] != '\0') {
-                    printk("Unknown command. Type 'help'\n", COLOR_WHITE);
-                }
-            }
-        }
-	};
+    boot();
+	current_mode = 0;
+	system();
 }
  

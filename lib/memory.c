@@ -31,12 +31,9 @@ void* memcpy(void* dest, const void* src, uint32_t n) {
 }
 
 void* memset(void* s, int c, size_t n) {
-    asm volatile (
-        "cld\n\t"     
-        "rep stosb\n\t" 
-        :
-        : "a"(c), "D"(s), "c"(n)
-        : "memory"
-    );
+    unsigned char* p = (unsigned char*)s;
+    while (n--) {
+        *p++ = (unsigned char)c;
+    }
     return s;
 }

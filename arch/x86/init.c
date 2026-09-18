@@ -1,12 +1,64 @@
-#include <stdint.h>
+#include <fat.h>
+#include <cmos.h>
+#include <mouse.h>
 #include <idt.h>
+#include <ata.h>
+#include <sound.h>
 #include <task.h>
+#include <vfs.h>
+#include <video.h>
+#include <utils.h>
+#include <keyboard.h>
+#include <stdint.h>
+#include <pci.h>
+#include <mm.h>
 
-void init_paging();
-void enable_paging();
-void boot();
-extern int current_mode;
-extern void screen_clear();
+void boot() {
+    is_scaled = 1;
+    screen_clear();
+
+    print("Scanning PCI...                              ", COLOR_WHITE);
+    pci_scan();
+    print("[OK]\n\n", COLOR_WHITE);
+
+    print("Initializing memory manager...               ", COLOR_WHITE);
+    init_memory_manager();
+    print("[OK]\n\n", COLOR_WHITE);
+
+    print("Initializing ethernet card...                ", COLOR_WHITE);
+    int is_rtl8139_found = rtl8139_find();
+    if (is_rtl8139_found) {
+        rtl8139_init();
+        print("[OK]\n\n", COLOR_WHITE);
+    } else {
+        print("[ERR]\n\n", COLOR_WHITE);
+    }
+    
+    #if !defined(__riscv)
+    print("Mounting FAT12 filesystem...                 ", COLOR_WHITE);
+    #endif
+    vfs_mount("/", &fat12_driver);
+    print("[OK]\n", COLOR_WHITE);
+
+    delay_ticks(100);
+
+    screen_clear();
+    #if !defined(__riscv)
+    init_palette();
+    #endif
+    draw_rect(0, 0, 1024, 768, COLOR_WHITE);
+
+    x = 0;
+    y = 10;
+
+    is_scaled = 1;
+    print("Welcome to CalcOS!", COLOR_BLACK);
+    is_scaled = 2;
+    play_startup_sound();
+
+    is_scaled = 0;
+    __asm__ __volatile__("sti");
+}
 
 void __attribute__((section(".text.entry"))) kernel_main() {
     init_paging();
