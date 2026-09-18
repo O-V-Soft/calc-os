@@ -19,6 +19,8 @@ void system_riscv(uint32_t hartid, uint32_t dtb_ptr) {
     init_memory_manager();
     pci_scan();
 	init_timer();
+    init_gpu();
+    screen_clear();
     
     while(1) {
         if (current_uid == 0) {

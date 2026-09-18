@@ -48,6 +48,8 @@ uint32_t pci_find_device(uint16_t vendor_id, uint16_t device_id, uint8_t bar_off
 
 void init_timer();
 extern void trap_vector();
+void init_gpu();
+void flush_gpu();
 
 #define PCI_VENDOR_TABLE_SIZE (sizeof(pci_vendor_table) / sizeof(pci_vendor_table[0]))
 

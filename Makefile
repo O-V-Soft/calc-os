@@ -21,8 +21,8 @@ ifeq ($(ARCH),x86)
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
-           keyboard_x86.o pci.o manual_x86.o video.o calc3d.o edges.o nodes.o \
-		   rotate.o project.o fill.o
+           keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
+		   rotate.o project.o fill.o screen_x86.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -35,8 +35,9 @@ else ifeq ($(ARCH),riscv)
                    -ffunction-sections -I./include -c -fno-pic 
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
-    OBJ := boot.o init_riscv.o mm.o uart.o video.o font.o keyboard_riscv.o manual.o \
-	       convert.o string.o pci_riscv.o timer.o keyboard.o pci.o manual_riscv.o screen.o
+    OBJ := boot.o init_riscv.o mm.o uart.o font.o keyboard_riscv.o manual.o \
+	       convert.o string.o pci_riscv.o timer.o keyboard.o pci.o manual_riscv.o screen.o \
+		   gpu.o screen_riscv.o
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \
@@ -46,7 +47,8 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
           lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
 		  arch/risc-v/cpu/timer fs arch/x86/drivers/keyboard drivers/pci \
-		  arch/x86/commands arch/risc-v/commands Calc3D
+		  arch/x86/commands arch/risc-v/commands Calc3D arch/risc-v/drivers/virtio \
+	      arch/x86/drivers/screen arch/risc-v/drivers/screen
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 
@@ -204,4 +206,6 @@ rear:
 	$(MAKE) clean
 	$(MAKE) ARCH=riscv
 	qemu-system-riscv32 -M virt -m 128M \
-		-bios none -nographic -kernel kernel.elf
+		-bios none -kernel kernel.elf \
+		-device virtio-gpu-device \
+		-serial stdio

@@ -3,11 +3,16 @@
 #include <stdint.h>
 
 #define fb_address (*(volatile uint32_t*)0x0500)
+#if !defined(__riscv)
 #define VIDEO_MEMORY ((uint8_t*)(uint32_t)fb_address)
+#else
+#define VIDEO_MEMORY ((uint32_t*)frame_buffer)
+#endif
 
 #define SCREEN_WIDTH  1024
 #define SCREEN_HEIGHT 768
 
+#if !defined(__riscv)
 #define COLOR_BLACK          0
 #define COLOR_BLUE           1
 #define COLOR_GREEN          2
@@ -32,6 +37,22 @@
 #define COLOR_ACCENT_BLUE    20  
 #define COLOR_DARK           21 
 #define COLOR_ORANGE         22  
+#else
+#define COLOR_BLACK          0x00000000
+#define COLOR_BLUE           0x000000FF
+#define COLOR_CYAN           0x0000FFFF
+#define COLOR_BROWN          0x00804000
+#define COLOR_LIGHT_GRAY     0x00C0C0C0
+#define COLOR_DARK_GRAY      0x00808080
+#define COLOR_LIGHT_BLUE     0x0080D8FF
+#define COLOR_WHITE          0x00FFFFFF
+
+#define COLOR_SYS_BG         0x00C0C0C0
+#define COLOR_SYS_TITLE      0x00000080
+#define COLOR_SYS_SHADOW     0x00808080
+#define COLOR_SYS_LIGHT      0x00FFFFFF
+#define COLOR_DARK           0x00404040        
+#endif
 
 extern int x;
 extern int y;
@@ -71,17 +92,29 @@ typedef struct {
 } Edge;
 
 void draw_desktop();
-
 void screen_clear();
+
+#if !defined(__riscv)
 void put_char(char s, uint8_t color);
 void printk(const char *msg, uint8_t color);
 void print(const char *msg, uint8_t color);
-void draw_rect(int x, int y, int width, int height, uint8_t color);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color);
-void draw_line(int x1, int y1, int x2, int y2, uint8_t color);
 void put_pixel(int x, int y, uint8_t color);
-void draw_filled_triangle(Point2D p1, Point2D p2, Point2D p3, uint8_t color);
+void draw_rect(int x, int y, int width, int height, uint8_t color);
+void draw_line(int x1, int y1, int x2, int y2, uint8_t color);
+void set_palette_color(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
+void init_palette();
+#else
+void put_char(char s, uint32_t color);
+void printk(const char *msg, uint32_t color);
+void print(const char *msg, uint32_t color);
+void draw_rounded_rect(int x, int y, int width, int height, int r, uint32_t color);
+void put_pixel(int x, int y, uint32_t color);
+void draw_rect(int x, int y, int width, int height, uint32_t color);
+void draw_line(int x1, int y1, int x2, int y2, uint32_t color);
+#endif
 
+void draw_filled_triangle(Point2D p1, Point2D p2, Point2D p3, uint8_t color);
 Point2D project(Point3D point, int screen_offset_x, int screen_offset_y);
 void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x);
 Point3D rotate_y(Point3D p, int angle);
@@ -93,8 +126,6 @@ extern Point3D cube_nodes[8];
 
 void update_system();
 void handle_hotkeys(int code);
-void set_palette_color(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
-void init_palette();
 
 extern void outb(uint16_t port, uint8_t val);
 extern uint8_t inb(uint16_t port);
