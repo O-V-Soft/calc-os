@@ -24,7 +24,7 @@ void casm() {
         return;
     }
 
-    int fd = vfs_open(asm_name);
+    int fd = sys_open(asm_name);
     if (fd < 0) {
         print("casm: File not found\n", COLOR_WHITE);
         return;
@@ -32,7 +32,7 @@ void casm() {
 
     uint8_t buffer[512];
     int n = vfs_read(fd, buffer, 512);
-    vfs_close(fd);
+    sys_close(fd);
 
     name_clear();
     print("Out file name: ", COLOR_WHITE);
@@ -52,7 +52,7 @@ void cat() {
         return;
     }
 
-    int fd = vfs_open(file_name);
+    int fd = sys_open(file_name);
     if (fd < 0) {
         print("cat: File not found\n", COLOR_WHITE);
         return;
@@ -60,7 +60,7 @@ void cat() {
 
     uint8_t buffer[512];
     int n = vfs_read(fd, buffer, 511);
-    vfs_close(fd);
+    sys_close(fd);
 
     if (n > 0) {
         buffer[n] = '\0';
