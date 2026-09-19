@@ -32,12 +32,14 @@ else ifeq ($(ARCH),riscv)
     RM      := rm -f
     ASFLAGS_ELF := -c -march=rv32ima_zicsr -mabi=ilp32
     CFLAGS      := -march=rv32ima_zicsr -mabi=ilp32 -ffreestanding -fno-stack-protector \
-                   -ffunction-sections -I./include -c -fno-pic 
+                   -ffunction-sections -I./include -c -fno-pic -O2 -Wno-unused-parameter \
+				   -Wno-unused-function -Wno-unused-variable \
+			       -Wno-unused-but-set-variable -Wno-unused-value -Wno-missing-field
     LDFLAGS     := -m elf32lriscv -T arch/risc-v/linker_riscv.ld --nostdlib --static
 
     OBJ := boot.o init_riscv.o mm.o uart.o font.o keyboard_riscv.o manual.o \
 	       convert.o string.o pci_riscv.o timer.o keyboard.o pci.o manual_riscv.o screen.o \
-		   gpu.o screen_riscv.o desktop.o kernel.o memory.o
+		   gpu.o screen_riscv.o desktop.o kernel.o memory.o ansi.o
 endif
 
 vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/tasks mm arch/x86/cpu/paging \

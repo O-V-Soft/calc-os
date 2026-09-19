@@ -34,9 +34,12 @@ extern char buffer[4096];
 #define sys_exec(cmd_file_fat) __asm__ __volatile__ ("nop");
 #define create_file(name11, buffer, len) __asm__ __volatile__ ("nop");
 
+extern int ansi_state;
+int handle_ansi(uint8_t byte);
+
 void uart_put_char(char c);
 void uart_printk(const char* str);
-char uart_get_char(void);
+char uart_get_char();
 void get_string(char *buffer);
 
 static inline uint32_t read_csr(const char* reg) {

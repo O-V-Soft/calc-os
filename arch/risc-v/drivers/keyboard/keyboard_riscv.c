@@ -67,21 +67,38 @@ void get_string(char *buffer) {
 
         if (c == '\r' || c == '\n') {
             buffer[i] = '\0';
+            put_char('\n', COLOR_WHITE); 
             return;
+        }
+
+        if (handle_ansi(c)) {
+            continue; 
         }
 
         if (c == 0x08 || c == 0x7F) {
             if (i > 0) {
                 i--;
-                uart_put_char('\b');
-                uart_put_char(' ');
-                uart_put_char('\b');
+                if (is_window_crt == 0 && current_mode == 0) {
+                    if (x > 32) { 
+                        x -= 16; 
+                        draw_rect(x, y, 16, 16, COLOR_BLACK); 
+                    }
+                } else {
+                    if (x > 48) {
+                        x -= 8; 
+                        draw_rect(x, y, 8, 8, COLOR_BLACK); 
+                    }
+                }
             }
             continue;
         }
 
+        if ((uint8_t)c < 32) {
+            continue;
+        }
+
         if (i < 255) {
-            uart_put_char(c); 
+            put_char(c, COLOR_WHITE); 
             buffer[i] = c;
             i++;
         }

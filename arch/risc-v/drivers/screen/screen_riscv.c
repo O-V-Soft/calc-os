@@ -12,7 +12,6 @@ void put_pixel(int x, int y, uint32_t color) {
     if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
         VIDEO_MEMORY[y * SCREEN_WIDTH + x] = color;
     }
-    flush_gpu();
 }
 
 void screen_clear() {
@@ -85,10 +84,10 @@ void print(const char *msg, uint32_t color) {
 }
 
 void draw_rect(int x, int y, int width, int height, uint32_t color) {
-    for (int y = y; y < y + height; y++) {
-        for (int x = x; x < x + width; x++) {
-            if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
-                VIDEO_MEMORY[y * SCREEN_WIDTH + x] = color;
+    for (int ry = y; ry < y + height; ry++) {
+        for (int rx = x; rx < x + width; rx++) {
+            if (rx >= 0 && rx < SCREEN_WIDTH && ry >= 0 && ry < SCREEN_HEIGHT) {
+                VIDEO_MEMORY[ry * SCREEN_WIDTH + rx] = color;
             }
         }
     }
