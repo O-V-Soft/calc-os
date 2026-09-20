@@ -98,8 +98,8 @@ void mouse_handler() {
 
     if (mouse_x < 0) mouse_x = 0;
     if (mouse_y < 0) mouse_y = 0;
-    if (mouse_x > (SCREEN_WIDTH - 16))  mouse_x = SCREEN_WIDTH - 16; 
-    if (mouse_y > (SCREEN_HEIGHT - 16)) mouse_y = SCREEN_HEIGHT - 16; 
+    if (mouse_x > (SCREEN_WIDTH - 1))  mouse_x = SCREEN_WIDTH - 1; 
+    if (mouse_y > (SCREEN_HEIGHT - 1)) mouse_y = SCREEN_HEIGHT - 1; 
 
     mouse_left_button = first_byte & 0x01;
 }
