@@ -71,7 +71,7 @@ void get_string(char *buffer) {
             return;
         }
 
-        if (handle_ansi(c)) {
+    	if (handle_ansi(c)) {
             continue; 
         }
 

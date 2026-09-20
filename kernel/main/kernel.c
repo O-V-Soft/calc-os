@@ -170,17 +170,14 @@ refresh:
                 ncount = 1;
             }
         }
-        else if (current_mode == 5) {
-            int code = get_scancode();
-            if (code != 0) {
-                handle_hotkeys(code);
-            }
-
-            if (ncount == 1) goto refresh;
-        }
         else {
+            #if defined(__riscv)
+            int code = uart_get_char();
+            if (code != 0) handle_ansi(code);
+            #else
             int code = get_scancode();
             if (code != 0) handle_hotkeys(code);
+            #endif
             if (ncount == 1) goto refresh;
         }
     }
