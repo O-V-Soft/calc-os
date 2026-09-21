@@ -131,7 +131,6 @@ void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x);
 Point3D rotate_y(Point3D p, int angle);
 Point3D rotate_x(Point3D p, int angle);
 void draw_h_line(int x1, int x2, int y, uint8_t color);
-void draw_textured_box(int x_min, int y_min, int x_max, int y_max);
 
 extern Edge cube_edges[12];
 extern Point3D cube_nodes[8];

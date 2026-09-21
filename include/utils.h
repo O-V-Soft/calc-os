@@ -15,8 +15,6 @@ void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint
 void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint32_t color, uint32_t text_color);
 #endif
 int abs(int x);
-int min4(int a, int b, int c, int d);
-int max4(int a, int b, int c, int d);
 
 uint8_t check_battery();
 uint8_t bcd_to_bin(uint8_t val);
