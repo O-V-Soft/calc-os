@@ -9,11 +9,6 @@
 #include <utils.h>
 #endif
 
-int interpolate_x(int y, int x1, int y1, int x2, int y2) {
-    if (y1 == y2) return x1;
-    return x1 + ((y - y1) * (x2 - x1)) / (y2 - y1);
-}
-
 void draw_filled_triangle(Point2D p1, Point2D p2, Point2D p3, uint8_t color) {
     if (p1.y > p2.y) {
         Point2D t = p1; 

@@ -49,3 +49,36 @@ void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x) {
     }
 }
 
+void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_x) {
+    Point2D points2d[8];
+
+    for (int i = 0; i < 8; i++) {
+        Point3D node = cube_nodes[i];
+        node = rotate_x(node, angle_x);
+        node.z += pos_z;
+        points2d[i] = project(node, pos_x, pos_y);
+    }
+
+    struct Face { 
+        int v[4]; 
+    } faces[6] = {
+        {0, 1, 2, 3},  
+        {4, 5, 1, 0}, 
+        {4, 0, 3, 7}, 
+        {1, 5, 6, 2},
+        {3, 2, 6, 7}, 
+        {5, 4, 7, 6}     
+    };
+
+    for (int i = 0; i < 6; i++) {
+        Point2D p0 = points2d[faces[i].v[0]];
+        Point2D p1 = points2d[faces[i].v[1]];
+        Point2D p2 = points2d[faces[i].v[2]];
+        Point2D p3 = points2d[faces[i].v[3]];
+
+        if (is_face_visible(p0, p1, p2)) {
+            draw_textured_triangle(p0, p1, p2);
+            draw_textured_triangle(p0, p2, p3);
+        }
+    }
+}
