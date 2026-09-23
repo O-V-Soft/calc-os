@@ -125,7 +125,7 @@ uint32_t syscall_handler(struct registers *regs) {
         case SYS_UNAME: {
             char* user_buf = (char*)arg1;
             if (user_buf < (char*)(13 * 4096)) ret_val = -EFAULT;
-            memcpy(user_buf, "CalcOS 10.3", 11);
+            memcpy(user_buf, "CalcOS 10.4", 11);
             ret_val = 0;
             break;
         }
