@@ -49,12 +49,12 @@ void draw_cube(int pos_x, int pos_y, int pos_z, int angle_y, int angle_x) {
     }
 }
 
-void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_x) {
+void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_y) {
     Point2D points2d[8];
 
     for (int i = 0; i < 8; i++) {
         Point3D node = cube_nodes[i];
-        node = rotate_x(node, angle_x);
+        node = rotate_y(node, angle_y);
         node.z += pos_z;
         points2d[i] = project(node, pos_x, pos_y);
     }
@@ -62,12 +62,12 @@ void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_x) {
     struct Face { 
         int v[4]; 
     } faces[6] = {
-        {0, 1, 2, 3},  
-        {4, 5, 1, 0}, 
-        {4, 0, 3, 7}, 
-        {1, 5, 6, 2},
-        {3, 2, 6, 7}, 
-        {5, 4, 7, 6}     
+        {{0, 1, 2, 3}},  
+        {{4, 5, 1, 0}}, 
+        {{4, 0, 3, 7}}, 
+        {{1, 5, 6, 2}},
+        {{3, 2, 6, 7}}, 
+        {{5, 4, 7, 6}}     
     };
 
     for (int i = 0; i < 6; i++) {
@@ -77,8 +77,28 @@ void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_x) {
         Point2D p3 = points2d[faces[i].v[3]];
 
         if (is_face_visible(p0, p1, p2)) {
-            draw_textured_triangle(p0, p1, p2);
-            draw_textured_triangle(p0, p2, p3);
+            int x_min = p0.x;
+            if (p1.x < x_min) x_min = p1.x;
+            if (p2.x < x_min) x_min = p2.x;
+            if (p3.x < x_min) x_min = p3.x;
+
+            int x_max = p0.x;
+            if (p1.x > x_max) x_max = p1.x;
+            if (p2.x > x_max) x_max = p2.x;
+            if (p3.x > x_max) x_max = p3.x;
+
+            int y_min = p0.y;
+            if (p1.y < y_min) y_min = p1.y;
+            if (p2.y < y_min) y_min = p2.y;
+            if (p3.y < y_min) y_min = p3.y;
+
+            int y_max = p0.y;
+            if (p1.y > y_max) y_max = p1.y;
+            if (p2.y > y_max) y_max = p2.y;
+            if (p3.y > y_max) y_max = p3.y;
+
+            draw_textured_triangle(p0, p1, p2, x_min, x_max, y_min, y_max);
+            draw_textured_triangle(p0, p2, p3, x_min, x_max, y_min, y_max);
         }
     }
 }

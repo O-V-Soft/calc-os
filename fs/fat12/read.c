@@ -130,7 +130,7 @@ void draw_file_icons() {
             int center_x = icon_x + 20; 
             int center_y = icon_y + 15;
 
-            draw_cube(center_x, center_y, 200, 15, 15);
+            draw_textured_cube(center_x, center_y, 200, 15);
 
             char name_buf[9];
             char ext_buf[4];

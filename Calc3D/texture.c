@@ -11,11 +11,14 @@
 
 #define TEX_SIZE 4
 
+#define B COLOR_WHITE      
+#define G COLOR_LIGHT_GRAY  
+
 const uint8_t texture[TEX_SIZE * TEX_SIZE] = {
-    COLOR_DARK, COLOR_DARK, COLOR_DARK, COLOR_DARK,
-    COLOR_DARK, COLOR_DARK, COLOR_DARK, COLOR_DARK,
-    COLOR_DARK, COLOR_DARK, COLOR_DARK, COLOR_DARK,
-    COLOR_DARK, COLOR_DARK, COLOR_DARK, COLOR_DARK
+    B, B, G, G,
+    B, B, B, G,
+    B, B, B, G,
+    B, B, B, G
 };
 
 void draw_textured_line(int x1, int x2, int y, int x_min, int x_max, int y_min, int y_max) {
@@ -41,15 +44,16 @@ void draw_textured_line(int x1, int x2, int y, int x_min, int x_max, int y_min, 
     }
 }
 
-void draw_textured_triangle(Point2D p1, Point2D p2, Point2D p3) {
+void draw_textured_triangle(Point2D p1, Point2D p2, Point2D p3, int x_min, int x_max, int y_min, int y_max) {
     if (p1.y > p2.y) { 
-        Point2D t = p1; 
+        Point2D t = p1;
         p1 = p2; 
         p2 = t; 
     }
     
     if (p1.y > p3.y) { 
-        Point2D t = p1; 
+        Point2D 
+        t = p1; 
         p1 = p3; 
         p3 = t; 
     }
@@ -61,17 +65,6 @@ void draw_textured_triangle(Point2D p1, Point2D p2, Point2D p3) {
     }
 
     if (p1.y == p3.y) return;
-
-    int x_min = p1.x;
-    if (p2.x < x_min) x_min = p2.x;
-    if (p3.x < x_min) x_min = p3.x;
-
-    int x_max = p1.x;
-    if (p2.x > x_max) x_max = p2.x;
-    if (p3.x > x_max) x_max = p3.x;
-
-    int y_min = p1.y; 
-    int y_max = p3.y; 
 
     for (int y = p1.y; y <= p2.y; y++) {
         int x_long = interpolate_x(y, p1.x, p1.y, p3.x, p3.y);

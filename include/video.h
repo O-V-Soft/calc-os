@@ -133,8 +133,8 @@ Point3D rotate_x(Point3D p, int angle);
 void draw_h_line(int x1, int x2, int y, uint8_t color);
 int interpolate_x(int y, int x1, int y1, int x2, int y2);
 void draw_textured_line(int x1, int x2, int y, int x_min, int x_max, int y_min, int y_max);
-void draw_textured_triangle(Point2D p1, Point2D p2, Point2D p3);
-void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_x);
+void draw_textured_triangle(Point2D p1, Point2D p2, Point2D p3, int x_min, int x_max, int y_min, int y_max);
+void draw_textured_cube(int pos_x, int pos_y, int pos_z, int angle_y);
 
 extern Edge cube_edges[12];
 extern Point3D cube_nodes[8];
