@@ -9,16 +9,20 @@
 #include <utils.h>
 #endif
 
-#define TEX_SIZE 4
+#define TEX_SIZE 8
 
-#define B COLOR_WHITE      
+#define W COLOR_WHITE      
 #define G COLOR_LIGHT_GRAY  
 
 const uint8_t texture[TEX_SIZE * TEX_SIZE] = {
-    B, B, G, G,
-    B, B, B, G,
-    B, B, B, G,
-    B, B, B, G
+    G, W, W, W, W, G, G, G,
+    G, W, W, W, W, G, G, G,
+    G, W, W, W, W, W, W, W,
+    G, W, W, W, W, W, W, W,
+    G, W, W, W, W, W, W, W,
+    G, W, W, W, W, W, W, W,
+    G, W, W, W, W, W, W, W,
+    G, W, W, W, W, W, W, W
 };
 
 void draw_textured_line(int x1, int x2, int y, int x_min, int x_max, int y_min, int y_max) {
