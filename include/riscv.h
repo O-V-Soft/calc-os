@@ -34,6 +34,10 @@ extern char buffer[4096];
 #define sys_exec(cmd_file_fat) __asm__ __volatile__ ("nop");
 #define create_file(name11, buffer, len) __asm__ __volatile__ ("nop");
 
+static inline void sys_wait_string(char *buf) {
+    __asm__ volatile("nop");
+}
+
 extern int ansi_state;
 int handle_ansi(uint8_t byte);
 
