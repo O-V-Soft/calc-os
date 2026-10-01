@@ -103,6 +103,7 @@ extern uint8_t *timer_str[16];
 #define SYS_REBOOT       130
 #define SYS_BEHAVE       131
 #define SYS_GET_COLOR    132
+#define SYS_WAIT_MULTILINE 133
 
 #define EPERM            1
 #define ENOENT           2
@@ -184,6 +185,8 @@ int sys_read(int fd, char* buf, uint32_t count);
 uint32_t sys_time();
 void sys_uname(char *buffer);
 int sys_write(int fd, const char* str, uint8_t color);
+void sys_wait_string(char* buf);
+void sys_wait_multiline(char* buf);
 
 void system();
 

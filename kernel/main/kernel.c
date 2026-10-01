@@ -71,7 +71,7 @@ refresh:
                 print("$ ", COLOR_WHITE);
             }
             
-            input_wait_string(command);
+            sys_wait_string(command);
 
             if (ncount == 1) goto refresh;
 
@@ -143,11 +143,11 @@ refresh:
 
                 x = wx + 26;
                 y = wy + 60;
-                input_wait_string(name);
+                sys_wait_string(name);
 
                 x = wx + 26;
                 y = wy + 150;
-                input_wait_string(content);
+                sys_wait_string(content);
 
                 if (ncount == 1) goto refresh;
 

@@ -11,7 +11,7 @@ Command commands[] = {
     {"help", help},
     {"exit", exit2},
     {"su", su},
-    {"devices", devices2},
+    {"lspci", devices2},
     {"lifetime", lifetime},
     {"whoami", whoami},
     {"status", status},
@@ -19,6 +19,7 @@ Command commands[] = {
     {NULL, NULL}
 };
 #else
+void sys_wait_string(char* buf);
 Command commands[] = {
     {"cln", cln},
     {"help", help},
@@ -63,7 +64,7 @@ void help() {
     print("  help - show this message\n", COLOR_WHITE);
     print("  status - print CPU status\n", COLOR_WHITE);
     print("  reset - reset the system\n", COLOR_WHITE);
-    print("  devices - print PCI devices\n", COLOR_WHITE);
+    print("  lspci - print PCI devices\n", COLOR_WHITE);
     print("  lifetime - system timer ticks\n", COLOR_WHITE);
     print("  su - change to root\n", COLOR_WHITE);
     print("  exit - change to user\n", COLOR_WHITE);
@@ -76,7 +77,7 @@ void help() {
     print("  touch  - create a new file\n", COLOR_WHITE);
     print("  status - check system status\n", COLOR_WHITE);
     print("  cat - print file content\n", COLOR_WHITE);
-    print("  devices - print PCI devices\n", COLOR_WHITE);
+    print("  lspci - print PCI devices\n", COLOR_WHITE);
     print("  send - send a byte to the network\n", COLOR_WHITE);
     print("  behave - receive a byte from the network\n", COLOR_WHITE);
     print("  reboot - reboot the system\n", COLOR_WHITE);
@@ -104,7 +105,7 @@ void su() {
     } else {
         char pass_buf[32];
         print("Password: ", COLOR_WHITE);
-        input_wait_string(pass_buf);
+        sys_wait_string(pass_buf);
         print("\n", COLOR_WHITE);
 
         if (compare_strings(pass_buf, (char*)root_password)) {

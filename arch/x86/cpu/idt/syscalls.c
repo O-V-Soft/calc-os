@@ -52,8 +52,9 @@ uint32_t syscall_handler(struct registers *regs) {
                     ret_val = 0;
                 } else {
                     uint8_t scancode = get_scancode();
+                    char letter = scancode_to_ascii(scancode);
                     if (scancode != 0) {
-                        buf[0] = scancode;
+                        buf[0] = letter;
                         ret_val = 1;
                     } else {
                         ret_val = 0;
@@ -204,6 +205,15 @@ uint32_t syscall_handler(struct registers *regs) {
             ret_val = (uint32_t)current_uid;
             break;
         } 
+
+        case SYS_WAIT_MULTILINE: {
+            char* user_buf = (char*)arg1;
+            if (user_buf < (char*)(13 * 4096)) ret_val = -EFAULT;
+
+            input_wait_multiline(user_buf);
+            ret_val = 0;
+            break;
+        }
 
         default:
             ret_val = -ENOSYS; 

@@ -22,7 +22,7 @@ ifeq ($(ARCH),x86)
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
            keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
-		   rotate.o project.o fill.o texture.o screen_x86.o
+		   rotate.o project.o fill.o texture.o screen_x86.o multiline.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -62,7 +62,7 @@ all: build_target
 build_target:
 	@if [ "$(ARCH)" = "x86" ]; then $(MAKE) os-image.img; else $(MAKE) KERNEL.SYS; fi
 
-os-image.img: boot.bin KERNEL.SYS LS.BIN DEVICES.BIN STATUS.BIN \
+os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
 			  BEHAVE.BIN REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
 
 	dd if=/dev/zero of=$@ bs=512 count=2880
@@ -70,7 +70,7 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN DEVICES.BIN STATUS.BIN \
 	dd if=$< of=$@ conv=notrunc bs=512 count=1
 	mcopy -i $@ KERNEL.SYS ::KERNEL.SYS
 	mcopy -i $@ LS.BIN ::LS.BIN
-	mcopy -i $@ DEVICES.BIN ::DEVICES.BIN
+	mcopy -i $@ LSPCI.BIN ::LSPCI.BIN
 	mcopy -i $@ STATUS.BIN ::STATUS.BIN
 	mcopy -i $@ BEHAVE.BIN ::BEHAVE.BIN
 	mcopy -i $@ REBOOT.BIN ::REBOOT.BIN
@@ -121,8 +121,8 @@ whoami.o: commands/whoami.c
 LS.BIN: ls.o app.ld
 	$(LD) -m elf_i386 -T app.ld ls.o -o $@
 
-DEVICES.BIN: devices.o app.ld
-	$(LD) -m elf_i386 -T app.ld devices.o -o $@
+LSPCI.BIN: lspci.o app.ld
+	$(LD) -m elf_i386 -T app.ld lspci.o -o $@
 
 STATUS.BIN: status.o app.ld
 	$(LD) -m elf_i386 -T app.ld status.o -o $@

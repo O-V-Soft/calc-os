@@ -94,3 +94,11 @@ void handle_hotkeys(int code) {
         }
 	}
 }
+
+void sys_wait_string(char* buf) {
+	_syscall(SYS_WAIT_STRING, (uint32_t)buf, 0, 0);
+}
+
+void sys_wait_multiline(char* buf) {
+	_syscall(SYS_WAIT_MULTILINE, (uint32_t)buf, 0, 0);
+}
