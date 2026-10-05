@@ -32,6 +32,7 @@ extern Task task_node_2;
 extern Task task_node_3;
 
 void check_signals(Task* task, uint32_t* registers_on_stack);
+void send_signal(int target_task_id, int signum);
 
 void task_init();
 void create_task(int task_id);
