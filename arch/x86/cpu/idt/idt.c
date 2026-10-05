@@ -42,38 +42,13 @@ void pic_remap() {
     outb(0xA1, 0x2F); 
 }
 
-uint32_t timer_handler(struct registers *regs) {
-    check_signals(current_task, (uint32_t*)regs);
+uint32_t timer_handler(uint32_t esp) {
+    check_signals(current_task->id, (uint32_t*)esp);
 
-    if (task_list[current_task].is_active == 0) {
-        int next_task = current_task;
-        while (1) {
-            next_task = (next_task + 1) % MAX_TASKS;
-            if (next_task == 0 || task_list[next_task].is_active == 1) {
-                break;
-            }
-        }
-        current_task = next_task;
-        timer_ticks++;
-        outb(0x20, 0x20);
-        return (uint32_t)task_list[current_task].esp; 
-    }
+    uint32_t new_esp = schedule(esp);
 
-    task_list[current_task].esp = (void*)regs; 
-
-    int next_task = current_task;
-    while (1) {
-        next_task = (next_task + 1) % MAX_TASKS;
-        if (next_task == 0 || task_list[next_task].is_active == 1) {
-            break;
-        }
-    }
-
-    current_task = next_task;
-    timer_ticks++;
     outb(0x20, 0x20); 
-
-    return (uint32_t)task_list[current_task].esp;
+    return new_esp;
 }
 
 void delay_ticks(uint32_t ticks) {
@@ -243,19 +218,19 @@ void init_idt() {
 
     set_idt_gate(128, (uint32_t)syscall_wrapper, 0x08, 0x8E); 
 
+    task_init(); 
+
     prepare_task2();
     prepare_task3();
     prepare_task4();
     
-    current_task = 0; 
-    task_list[0].id = 0;
-
-    task_list[0].is_active = 1; 
-
-    task_list[1].is_active = 1;
-    task_list[2].is_active = 0;
-    task_list[3].is_active = 0;
-
+    task_node_0.next = &task_node_1;
+    task_node_1.next = &task_node_0;
+    
+    task_node_1.is_active = 1;
+    task_node_2.is_active = 0;
+    task_node_3.is_active = 0;
+    
     __asm__ __volatile__("lidt (%0)" : : "r" (&idtp));
 
     while (inb(0x64) & 1) {
