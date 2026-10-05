@@ -10,6 +10,7 @@ global keyboard_wrapper
 global mouse_wrapper
 global ata_wrapper
 global syscall_wrapper
+
 timer_wrapper:
     cli
     push dword 0   
@@ -24,12 +25,12 @@ timer_wrapper:
     mov fs, ax
     mov gs, ax
 
-    push esp          
+    push esp       
     call timer_handler  
     
     add esp, 4         
 
-    mov esp, eax       
+    mov esp, eax      
 
     pop eax          
     mov ds, ax
@@ -39,7 +40,7 @@ timer_wrapper:
     popa                
     add esp, 8          
     iret
-    
+
 keyboard_wrapper:
     pusha
     call keyboard_handler
