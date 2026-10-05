@@ -11,7 +11,7 @@
 #define SIGTERM  15
 
 typedef void (*sig_handler_t)(int);
-void check_signals(int current_task_id, uint32_t* registers_on_stack);
+void check_signals(Task* task, uint32_t* registers_on_stack);
 
 typedef struct task {
     uint32_t esp;           
