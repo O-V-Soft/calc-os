@@ -43,7 +43,7 @@ void pic_remap() {
 }
 
 uint32_t timer_handler(uint32_t esp) {
-    check_signals(current_task->id, (uint32_t*)esp);
+    check_signals(current_task, (uint32_t*)esp);
 
     uint32_t new_esp = schedule(esp);
 

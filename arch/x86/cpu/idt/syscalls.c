@@ -23,7 +23,7 @@ uint32_t syscall_handler(struct registers *regs) {
 
     switch (syscall_num) {
         case SYS_EXIT:
-            delete_task(current_task);
+            delete_task(current_task->id);
             ret_val = 0;
             break;
 
