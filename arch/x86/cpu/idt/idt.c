@@ -59,36 +59,35 @@ void delay_ticks(uint32_t ticks) {
 }
 
 void exception_handler(struct registers *regs) {
-    if (current_task != 0) {
+        if (current_task->id != 0) {
         printk("\nprocess with PID ", COLOR_WHITE);
         char num_buf[16];
-        itoa(current_task, num_buf);
+        itoa(current_task->id, num_buf);
         printk(num_buf, COLOR_WHITE);
         printk(" crashed.\n", COLOR_WHITE);
         
-        task_list[current_task].is_active = 0;
+        current_task->is_active = 0;
 
-        if (current_task == 3) {
+        if (current_task->id == 3) {
             is_crushed = 1;
             prepare_task4();       
-            task_list[3].is_active = 1; 
+            task_node_3.is_active = 1; 
         }
 
         outb(0x20, 0x20);
         outb(0xA0, 0x20);
 
-        int next_task = current_task;
-        while (1) {
-            next_task = (next_task + 1) % MAX_TASKS;
-            if (next_task == 0 || task_list[next_task].is_active == 1) {
-                break;
-            }
+        Task* next = current_task->next;
+        int loops = 0;
+        while (!next->is_active && loops < 4) {
+            next = next->next;
+            loops++;
         }
 
-        current_task = next_task;
+        current_task = next;
         timer_ticks++;
 
-        uint32_t new_stack = (uint32_t)task_list[current_task].esp;
+        uint32_t new_stack = current_task->esp;
 
         __asm__ __volatile__("mov %0, %%eax" : : "r"(new_stack));
         return; 
