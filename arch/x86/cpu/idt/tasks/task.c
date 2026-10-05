@@ -24,7 +24,6 @@ void task_init() {
     task_node_0.id = 0;
     task_node_0.is_active = 1;
     task_node_0.esp = 0;
-    task_node_0.kernel_esp0 = 0x90000;
     
     task_node_0.next = &task_node_0;
     current_task = &task_node_0;
