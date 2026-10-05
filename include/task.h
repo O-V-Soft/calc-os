@@ -26,6 +26,11 @@ typedef struct task {
 
 extern Task* current_task;
 
+extern Task task_node_0;
+extern Task task_node_1;
+extern Task task_node_2;
+extern Task task_node_3;
+
 void task_init();
 void create_task(int task_id);
 void delete_task(int task_id);
