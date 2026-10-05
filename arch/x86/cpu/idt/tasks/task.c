@@ -9,10 +9,10 @@
 #include <sound.h>
 #include <forth.h>
 
-static Task task_node_0;
-static Task task_node_1;
-static Task task_node_2;
-static Task task_node_3;
+Task task_node_0;
+Task task_node_1;
+Task task_node_2;
+Task task_node_3;
 
 Task* current_task = 0;
 
