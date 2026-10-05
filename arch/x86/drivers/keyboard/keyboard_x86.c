@@ -77,20 +77,11 @@ void handle_hotkeys(int code) {
 		ncount = 1;
 	}
 	
-    if (code == 0x2E && ctrl_pressed == 1) { 
-        if (current_uid != 0) {
-            if (task_list[2].is_active) {
-                send_signal(2, SIGINT); 
-                return;
-            }
-        } else {
-            if (task_list[2].is_active) {
-                send_signal(2, SIGINT); 
-            } else {
-                send_signal(0, SIGINT); 
-			}
-			
-            return;
+    if (code == 0x2E && ctrl_pressed) {
+        if (task_node_2.is_active) {
+            send_signal(2, SIGINT);
+        } else if (current_uid == 0) {
+            send_signal(0, SIGINT);
         }
 	}
 }
