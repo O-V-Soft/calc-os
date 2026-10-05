@@ -158,26 +158,27 @@ uint32_t schedule(uint32_t current_esp) {
 }
 
 void create_task(int task_id) {
-    if (task_id < 1 || task_id > 3) return; 
-
-    __asm__ __volatile__("cli"); 
+    Task* target = 0;
 
     if (task_id == 1) {
         prepare_task2();
-        task_node_1.is_active = 1;
-        task_node_1.next = task_node_0.next;
-        task_node_0.next = &task_node_1;
+        target = &task_node_1;
     } else if (task_id == 2) {
         prepare_task3();
-        task_node_2.is_active = 1;
-        task_node_2.next = task_node_1.next;
-        task_node_1.next = &task_node_2;
+        target = &task_node_2;
     } else if (task_id == 3) {
         prepare_task4();
-        task_node_3.is_active = 1;
-        task_node_3.next = task_node_2.next;
-        task_node_2.next = &task_node_3;
+        target = &task_node_3;
+    } else {
+        return; 
     }
+
+    __asm__ __volatile__("cli"); 
+
+    target->is_active = 1;
+
+    target->next = task_node_0.next;
+    task_node_0.next = target;
 
     __asm__ __volatile__("sti");
 }
