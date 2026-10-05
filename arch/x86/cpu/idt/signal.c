@@ -9,38 +9,38 @@
 #include <sound.h>
 #include <forth.h>
 
+Task* get_task_by_id(int id) {
+    if (id == 0) return &task_node_0;
+    if (id == 1) return &task_node_1;
+    if (id == 2) return &task_node_2;
+    if (id == 3) return &task_node_3;
+    
+    return 0;
+}
+
 void send_signal(int target_task_id, int signum) {
     if (signum <= 0 || signum >= NUM_SIGNALS) return;
+
+    Task* target = get_task_by_id(target_task_id);
+    if (!target) return;
 
     if (signum == SIGKILL) {
         delete_task(target_task_id); 
         return;
     }
 
-    task_list[target_task_id].pending_signals = task_list[target_task_id].pending_signals | (1 << signum);
+    target->pending_signals = target->pending_signals | (1 << signum);
 }
 
-void check_signals(int current_task_id, uint32_t* registers_on_stack) {
-    if (task_list[current_task_id].pending_signals == 0) return;
+void check_signals(Task* task, uint32_t* registers_on_stack) {
+    if (!task || task->pending_signals == 0) return;
 
     for (int signum = 1; signum < NUM_SIGNALS; signum++) {
-        if (task_list[current_task_id].pending_signals & (1 << signum)) {
-            task_list[current_task_id].pending_signals = task_list[current_task_id].pending_signals & ~(1 << signum);
+        if (task->pending_signals & (1 << signum)) {
+            task->pending_signals = task->pending_signals & ~(1 << signum);
 
-            if (signum == SIGINT) {
-                delete_task(current_task_id);
-                return;
-            } 
-            else if (signum == SIGILL) {
-                delete_task(current_task_id);
-                return;
-            } 
-            else if (signum == SIGFPE) {
-                delete_task(current_task_id);
-                return;
-            } 
-            else if (signum == SIGTERM) {
-                delete_task(current_task_id);
+            if (signum == SIGINT || signum == SIGILL || signum == SIGFPE || signum == SIGTERM) {
+                delete_task(task->id);
                 return;
             }
         }
