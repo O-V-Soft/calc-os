@@ -10,25 +10,26 @@
 #define SIGKILL  9  
 #define SIGTERM  15
 
-#define MAX_TASKS 4
-
 typedef void (*sig_handler_t)(int);
 
-typedef struct {
-    void* esp; 
+typedef struct task {
+    uint32_t esp;           
     uint8_t id;
     uint8_t state;
     uint8_t is_active;
 
     uint32_t pending_signals; 
     sig_handler_t signal_handlers[NUM_SIGNALS];
+    
+    struct task* next;             
 } Task;
 
-extern Task task_list[4];
-extern int current_task;
+extern Task* current_task;
 
-void send_signal(int target_task_id, int signum);
-void check_signals(int current_task_id, uint32_t* registers_on_stack);
+void task_init();
+void create_task(int task_id);
+void delete_task(int task_id);
+uint32_t schedule(uint32_t current_esp);
 
 void prepare_task2();
 void prepare_task3();
