@@ -1,0 +1,46 @@
+name: Build CalcOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            mtools \
+            nasm \
+            qemu-system-x86 \
+            gcc-riscv64-unknown-elf
+
+      - name: Build OS image x86
+        run: |
+          make clean || true
+          make
+
+      - name: Upload OS image x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: os-image-x86
+          path: os-image.img
+
+      - name: Build OS image RISC-V
+        run: |
+          make clean
+          make rea
+          mv kernel.elf kernel-riscv.elf
+
+      - name: Upload OS image RISC-V
+        uses: actions/upload-artifact@v4
+        with:
+          name: os-image-risc-v
+          path: kernel-riscv.elf
