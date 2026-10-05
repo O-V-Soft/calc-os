@@ -9,7 +9,6 @@
 #include <sound.h>
 #include <forth.h>
 
-// Динамічний зв'язний список замість захардкодженого масиву на 4 елементи
 static Task task_node_0;
 static Task task_node_1;
 static Task task_node_2;
@@ -22,13 +21,11 @@ unsigned int task3_stack[1024];
 unsigned int task4_stack[2048]; 
 
 void task_init() {
-    // Головна задача ядра (PID 0)
     task_node_0.id = 0;
     task_node_0.is_active = 1;
     task_node_0.esp = 0;
     task_node_0.kernel_esp0 = 0x90000;
     
-    // Замикаємо кільцевий список на себе спочатку
     task_node_0.next = &task_node_0;
     current_task = &task_node_0;
 }
