@@ -10,6 +10,8 @@
 #define SIGKILL  9  
 #define SIGTERM  15
 
+typedef void (*sig_handler_t)(int);
+
 typedef struct task {
     uint32_t esp;           
     uint8_t id;
@@ -29,7 +31,6 @@ extern Task task_node_1;
 extern Task task_node_2;
 extern Task task_node_3;
 
-typedef void (*sig_handler_t)(int);
 void check_signals(Task* task, uint32_t* registers_on_stack);
 
 void task_init();
