@@ -50,6 +50,8 @@ int execute_command(char *line) {
 void cln() {
     #if defined(__riscv)
         screen_clear();
+	ncount = 1;
+	is_scaled = 0;
         return;
     #else
         screen_clear();
@@ -105,7 +107,7 @@ void su() {
     } else {
         char pass_buf[32];
         print("Password: ", COLOR_WHITE);
-        sys_wait_string(pass_buf);
+        input_wait_string(pass_buf);
         print("\n", COLOR_WHITE);
 
         if (compare_strings(pass_buf, (char*)root_password)) {
