@@ -64,8 +64,8 @@ void icon_init() {
     if (ico_u16(s_ico_buf, 2) != 1) return;
     int count = (int)ico_u16(s_ico_buf, 4);
 
-    int best    = -1;
-    int best_w  = 0x7FFF;
+    int best = -1;
+    int best_w = 0x7FFF;
 
     for (int i = 0; i < count; i++) {
         int eoff = 6 + i * 16;
@@ -127,6 +127,15 @@ void icon_init() {
                     uint8_t a_ch = src[col * 4 + 3];
 
                     if (a_ch >= 128) {
+                        int max_c = r_ch > g_ch ? (r_ch > b_ch ? r_ch : b_ch) : (g_ch > b_ch ? g_ch : b_ch);
+                        int min_c = r_ch < g_ch ? (r_ch < b_ch ? r_ch : b_ch) : (g_ch < b_ch ? g_ch : b_ch);
+
+                        if ((max_c - min_c < 20) && (max_c > 40) && (max_c < 235)) {
+                            r_ch = 255;
+                            g_ch = 255;
+                            b_ch = 255;
+                        }
+
                         s_folder_pixels[row][col] = ico_nearest_vga(r_ch, g_ch, b_ch);
                         s_folder_alpha [row][col] = 1;
                     } else {
@@ -160,3 +169,4 @@ void draw_icon(int x, int y) {
         }
     }
 }
+
