@@ -160,6 +160,7 @@ void graphics() {
         } else {
             current_mode = 1;
             ncount = 1;
+	    if (draw_1 == 0) current_mode = -1; ncount = 1;
         }
     }
     else if (current_mode == 2) {
@@ -255,7 +256,7 @@ void graphics() {
         }
         #endif
     }
-    else {
+    else if (current_mode == 1) {
         is_scaled = 0;
 
         if (draw_1 == 1) {
@@ -292,6 +293,30 @@ void graphics() {
         } else {
             current_mode = 0;
             ncount = 1;
+	    if (draw_0 == 0) current_mode = -1; ncount = 1;
+        }
+    }
+    else {
+	draw_desktop();
+
+        if (draw_0 == 1) {
+            draw_button(78, 5, 136, 26, "Terminal", COLOR_DARK_GRAY, COLOR_WHITE);
+            draw_button(191, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
+        }
+
+        if (draw_1 == 1) {
+            draw_button(238, 5, 136, 26, "Explorer", COLOR_BLUE, COLOR_WHITE);
+            draw_button(351, 11, 15, 15, "x", COLOR_WHITE, COLOR_BLACK);
+        }
+
+        if (is_button_calc == 1) {
+            draw_rect(10, 31, 72, 70, COLOR_LIGHT_GRAY);
+
+            draw_button(10, 31, 70, 26, "Terminal", COLOR_DARK_GRAY, COLOR_WHITE);
+            draw_button(10, 51, 70, 26, "Explorer", COLOR_BLUE, COLOR_WHITE);
+
+            draw_button(10, 85, 15, 15, "x", COLOR_BLACK, COLOR_WHITE);
+            draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
         }
     }
 }
