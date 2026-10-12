@@ -38,6 +38,10 @@ void boot() {
     vfs_mount("/", &fat12_driver);
     print("[OK]\n", COLOR_WHITE);
 
+    print("Initializing icons...                        ", COLOR_WHITE);
+    icon_init();
+    print("[OK]\n\n", COLOR_WHITE);
+
     delay_ticks(100);
 
     screen_clear();

@@ -22,7 +22,7 @@ ifeq ($(ARCH),x86)
            sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
            keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
-		   rotate.o project.o fill.o texture.o screen_x86.o multiline.o
+		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -77,6 +77,7 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
 	mcopy -i $@ MOUNT.BIN ::MOUNT.BIN
 	mcopy -i $@ UMOUNT.BIN ::UMOUNT.BIN
 	mcopy -i $@ WHOAMI.BIN ::WHOAMI.BIN
+	mcopy -i $@ FILE.ICO ::FILE.ICO
 
 boot.bin: arch/x86/boot/entry.asm
 	$(AS) $(ASFLAGS_BIN) $< -o $@
