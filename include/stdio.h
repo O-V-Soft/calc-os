@@ -13,6 +13,7 @@
 #define SYS_MOUNT   165
 #define SYS_UMOUNT2 166
 #define SYS_GETUID  24
+#define SYS_RECVFROM 45
 
 #define SYS_GET_BATTERY  123
 #define SYS_GET_TICKS    124
@@ -21,7 +22,6 @@
 #define SYS_CREATE_FILE  128
 #define SYS_WAIT_STRING  129
 #define SYS_REBOOT       130
-#define SYS_BEHAVE       131
 
 static inline int _syscall(int num, unsigned int arg1, unsigned int arg2, unsigned int arg3) {
     int ret;

@@ -15,6 +15,8 @@
 #include <pci.h>
 #include <mm.h>
 #include <coms.h>
+#include <net_dev.h>
+#include <net.h>
 
 void casm() {
     char *asm_name = strtok(NULL, " ");
@@ -113,16 +115,14 @@ void touch() {
 }
 
 void send() {
-    char *packet_data = strtok(NULL, " ");
+    const uint8_t *packet_data = strtok(NULL, " ");
     if (packet_data == NULL) {
         print("Usage: send <message_text>\n", COLOR_WHITE);
         return;
     }
-
-    uint32_t payload_size = strlen(packet_data); 
-    uint8_t dest_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-                    
-    send_pack((uint8_t*)packet_data, payload_size, dest_mac);
+    
+    struct net_device* dev = get_primary_net_device();
+    net_send(dev, 0xFFFFFFFF, 278, 725, (const uint8_t*)packet_data, strlen(packet_data));
 }
 
 void forth() {

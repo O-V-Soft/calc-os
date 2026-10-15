@@ -12,6 +12,8 @@
 #include <mm.h>
 #include <pci.h>
 #include <vfs.h>
+#include <net.h>
+#include <net_dev.h>
 
 uint32_t syscall_handler(struct registers *regs) {
     uint32_t syscall_num = regs->eax;
@@ -177,8 +179,18 @@ uint32_t syscall_handler(struct registers *regs) {
             break;
         }
 
-        case SYS_BEHAVE: {
-            read_pack();
+        case SYS_RECVFROM: {
+            struct net_device* dev = get_primary_net_device();
+            if (!dev || !dev->poll_packet) return -1;
+
+            uint8_t raw_frame[1500];
+
+            int frame_len = dev->poll_packet(raw_frame, sizeof(raw_frame));
+            
+            if (frame_len > 0) {
+                net_receive(dev, raw_frame, (uint16_t)frame_len);
+            }
+
             ret_val = 0;
             break;
         }

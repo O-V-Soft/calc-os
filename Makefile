@@ -19,10 +19,11 @@ ifeq ($(ARCH),x86)
            mouse.o wrappers.o idt.o isr.o task.o ata.o fat.o read.o write.o \
            sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
            sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
-           sys_write.o sys_close.o sys_exec.o sys_getuid.o paging.o vfs.o \
+           sys_write.o sys_close.o sys_exec.o sys_getuid.o sys_recvfrom.o paging.o vfs.o \
            casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
            keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
-		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o
+		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o \
+		    udp.o net_dev.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -50,7 +51,7 @@ vpath %.c kernel/main kernel arch/x86/cpu arch/x86/cpu/idt arch/x86/cpu/idt/task
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
 		  arch/risc-v/cpu/timer fs arch/x86/drivers/keyboard drivers/pci \
 		  arch/x86/commands arch/risc-v/commands Calc3D arch/risc-v/drivers/virtio \
-	      arch/x86/drivers/screen arch/risc-v/drivers/screen
+	      arch/x86/drivers/screen arch/risc-v/drivers/screen net
 
 vpath %.asm arch/x86/boot arch/x86/io arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 
@@ -63,7 +64,7 @@ build_target:
 	@if [ "$(ARCH)" = "x86" ]; then $(MAKE) os-image.img; else $(MAKE) KERNEL.SYS; fi
 
 os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
-			  BEHAVE.BIN REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
+			  RECVFROM.BIN REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
 
 	dd if=/dev/zero of=$@ bs=512 count=2880
 	mformat -i $@ -f 1440 ::
@@ -72,7 +73,7 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
 	mcopy -i $@ LS.BIN ::LS.BIN
 	mcopy -i $@ LSPCI.BIN ::LSPCI.BIN
 	mcopy -i $@ STATUS.BIN ::STATUS.BIN
-	mcopy -i $@ BEHAVE.BIN ::BEHAVE.BIN
+	mcopy -i $@ RECVFROM.BIN ::RECVFROM.BIN
 	mcopy -i $@ REBOOT.BIN ::REBOOT.BIN
 	mcopy -i $@ MOUNT.BIN ::MOUNT.BIN
 	mcopy -i $@ UMOUNT.BIN ::UMOUNT.BIN
@@ -128,8 +129,8 @@ LSPCI.BIN: lspci.o app.ld
 STATUS.BIN: status.o app.ld
 	$(LD) -m elf_i386 -T app.ld status.o -o $@
 
-BEHAVE.BIN: behave.o app.ld
-	$(LD) -m elf_i386 -T app.ld behave.o -o $@
+RECVFROM.BIN: recvfrom.o app.ld
+	$(LD) -m elf_i386 -T app.ld recvfrom.o -o $@
 
 REBOOT.BIN: reboot.o app.ld
 	$(LD) -m elf_i386 -T app.ld reboot.o -o $@
