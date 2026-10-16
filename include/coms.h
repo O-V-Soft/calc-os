@@ -20,7 +20,7 @@ void casm();
 void empire();
 void cat();
 void touch();
-void send();
+void ping();
 void forth();
 
 void devices2();

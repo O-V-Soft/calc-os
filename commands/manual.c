@@ -29,7 +29,7 @@ Command commands[] = {
     {"empire", empire},
     {"cat", cat},
     {"touch", touch},
-    {"send", send},
+    {"ping", ping},
     {"forth", forth},
     {"cube", cube},
     {NULL, NULL}

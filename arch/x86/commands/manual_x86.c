@@ -114,15 +114,14 @@ void touch() {
     screen_clear();
 }
 
-void send() {
-    const uint8_t *packet_data = strtok(NULL, " ");
-    if (packet_data == NULL) {
-        print("Usage: send <message_text>\n", COLOR_WHITE);
+void ping() {
+    const uint8_t *ip = strtok(NULL, " ");
+    if (ip == NULL) {
+        print("Usage: ping <ip_address>\n", COLOR_WHITE);
         return;
     }
     
     struct net_device* dev = get_primary_net_device();
-    udp_send(dev, 0xFFFFFFFF, 278, 725, (const uint8_t*)packet_data, strlen(packet_data));
 }
 
 void forth() {

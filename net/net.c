@@ -19,9 +19,6 @@ void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
         case 1:  
             icmp_receive(dev, packet, len); 
             break;
-        case 17:  
-            udp_receive(dev, packet, len);  
-            break;
         default: 
             break;
     }

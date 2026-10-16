@@ -21,13 +21,6 @@ struct ipv4_header {
     uint32_t dest_ip;
 } __attribute__((packed));
 
-struct udp_header {
-    uint16_t src_port;
-    uint16_t dest_port;
-    uint16_t length;
-    uint16_t checksum; 
-} __attribute__((packed));
-
 struct icmp_header {
     uint8_t  type;
     uint8_t  code;
@@ -48,8 +41,6 @@ struct arp_header {
     uint32_t target_ip;     
 } __attribute__((packed));
 
-int udp_send(struct net_device* dev, uint32_t dest_ip, uint16_t src_port, uint16_t dest_port, const uint8_t* payload, uint16_t payload_len);
-void udp_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len);
 void icmp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
 void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
 void arp_handle_request(struct net_device* dev, const uint8_t* packet, uint16_t len);
