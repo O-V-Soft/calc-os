@@ -127,6 +127,6 @@ struct net_device rtl_device = {
 };
 
 void rtl8139_register() {
-    for(int i=0; i<6; i++) rtl_device.mac_addr[i] = mac_addr[i];
+    for(int i = 0; i < 6; i++) rtl_device.mac_addr[i] = mac_addr[i];
     register_net_device(&rtl_device);
 }
