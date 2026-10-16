@@ -3,7 +3,7 @@
 #include <net.h>
 #include <video.h>
 
-int net_send(struct net_device* dev, uint32_t dest_ip, uint16_t src_port, uint16_t dest_port, const uint8_t* payload, uint16_t payload_len) {
+int udp_send(struct net_device* dev, uint32_t dest_ip, uint16_t src_port, uint16_t dest_port, const uint8_t* payload, uint16_t payload_len) {
     if (!dev) return -1;
 
     uint8_t frame[1500];
@@ -47,7 +47,7 @@ int net_send(struct net_device* dev, uint32_t dest_ip, uint16_t src_port, uint16
     return dev->send_packet(frame, total_frame_len);
 }
 
-void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len) {
+void udp_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len) {
     if (len < sizeof(struct eth_header)) return;
 
     struct eth_header* eth = (struct eth_header*)raw_packet;
@@ -68,6 +68,9 @@ void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len
 
     struct udp_header* udp = (struct udp_header*)(raw_packet + udp_offset);
     uint16_t dest_port = __builtin_bswap16(udp->dest_port);
+
+    if (dest_port != 1024) return;
+
     uint16_t udp_len = __builtin_bswap16(udp->length);
     
     const uint8_t* udp_payload = raw_packet + udp_offset + sizeof(struct udp_header);

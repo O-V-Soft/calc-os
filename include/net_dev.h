@@ -1,6 +1,5 @@
 #ifndef NET_DEV_H
 #define NET_DEV_H
-
 #include <stdint.h>
 
 struct net_device {

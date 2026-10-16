@@ -122,7 +122,7 @@ void send() {
     }
     
     struct net_device* dev = get_primary_net_device();
-    net_send(dev, 0xFFFFFFFF, 278, 725, (const uint8_t*)packet_data, strlen(packet_data));
+    udp_send(dev, 0xFFFFFFFF, 278, 725, (const uint8_t*)packet_data, strlen(packet_data));
 }
 
 void forth() {

@@ -17,13 +17,11 @@ ifeq ($(ARCH),x86)
 
     OBJ := init.o kernel.o cmos.o screen.o mouse_asm.o utils.o keyboard.o font.o inout.o \
            mouse.o wrappers.o idt.o isr.o task.o ata.o fat.o read.o write.o \
-           sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys_exit.o \
-           sys_getpid.o sys_open.o sys_read.o sys_time.o sys_uname.o \
-           sys_write.o sys_close.o sys_exec.o sys_getuid.o sys_recvfrom.o paging.o vfs.o \
-           casm.o manual.o signal.o desktop.o string.o memory.o convert.o \
-           keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
+           sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys_wrappers.o \
+		   paging.o vfs.o casm.o manual.o signal.o desktop.o string.o memory.o \
+		   convert.o keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
 		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o \
-		    udp.o net_dev.o
+		   udp.o net_dev.o icmp.o net.o arp.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -154,7 +152,7 @@ cleane:
 
 run: os-image.img
 	qemu-system-i386 -drive file=os-image.img,format=raw \
-	-netdev user,id=net0 \
+	-netdev tap,id=net0,ifname=tap0,script=no,downscript=no \
     -object filter-dump,id=f1,netdev=net0,file=traffic.pcap \
     -device rtl8139,netdev=net0
 
@@ -162,7 +160,7 @@ ahci:
 	qemu-system-i386 -device ich9-ahci,id=ahci \
     -drive file=os-image.img,format=raw,if=none,id=drv0 \
     -device ide-hd,bus=ahci.0,drive=drv0 \
-    -netdev user,id=net0 \
+    -netdev tap,id=net0,ifname=tap0,script=no,downscript=no \
     -object filter-dump,id=f1,netdev=net0,file=traffic.pcap \
     -device rtl8139,netdev=net0
 

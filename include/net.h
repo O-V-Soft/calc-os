@@ -1,6 +1,5 @@
 #ifndef NET_H
 #define NET_H
-
 #include <stdint.h>
 
 struct eth_header {
@@ -29,7 +28,31 @@ struct udp_header {
     uint16_t checksum; 
 } __attribute__((packed));
 
-int net_send(struct net_device* dev, uint32_t dest_ip, uint16_t src_port, uint16_t dest_port, const uint8_t* payload, uint16_t payload_len);
+struct icmp_header {
+    uint8_t  type;
+    uint8_t  code;
+    uint16_t checksum;
+    uint16_t identifier;
+    uint16_t sequence;
+} __attribute__((packed));
+
+struct arp_header {
+    uint16_t hw_type;     
+    uint16_t proto_type;
+    uint8_t  hw_len;       
+    uint8_t  proto_len;  
+    uint16_t opcode;      
+    uint8_t  sender_mac[6]; 
+    uint32_t sender_ip;   
+    uint8_t  target_mac[6]; 
+    uint32_t target_ip;     
+} __attribute__((packed));
+
+int udp_send(struct net_device* dev, uint32_t dest_ip, uint16_t src_port, uint16_t dest_port, const uint8_t* payload, uint16_t payload_len);
+void udp_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len);
+void icmp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
+void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
+void arp_handle_request(struct net_device* dev, const uint8_t* packet, uint16_t len);
 void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len);
 
 #endif
