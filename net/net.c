@@ -16,9 +16,6 @@ void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
     }
 
     switch (ip->protocol) {
-        case 1:  
-            icmp_receive(dev, packet, len); 
-            break;
         default: 
             break;
     }
@@ -31,7 +28,6 @@ void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len
     uint16_t ethertype = __builtin_bswap16(eth->ethertype);
 
     if (ethertype == 0x0806) {
-        arp_handle_request(dev, raw_packet, len);
         return;
     }
 

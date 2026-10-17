@@ -41,9 +41,7 @@ struct arp_header {
     uint32_t target_ip;     
 } __attribute__((packed));
 
-void icmp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
 void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
-void arp_handle_request(struct net_device* dev, const uint8_t* packet, uint16_t len);
 void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len);
 
 #endif

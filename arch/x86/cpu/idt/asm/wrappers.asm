@@ -4,12 +4,14 @@
 [extern stub_mouse_handler]
 [extern ata_handler]
 [extern syscall_handler]
+[extern rtl8139_handler]
 
 global timer_wrapper
 global keyboard_wrapper
 global mouse_wrapper
 global ata_wrapper
 global syscall_wrapper
+global rtl8139_wrapper
 
 timer_wrapper:
     cli
@@ -76,4 +78,18 @@ syscall_wrapper:
     pop ds        
     popa         
     add esp, 8      
+    iret
+
+rtl8139_wrapper:
+    cli
+    pusha       
+    
+    call rtl8139_handler 
+    
+    mov al, 0x20
+    out 0x20, al        
+    out 0xA0, al       
+    
+    popa
+    sti
     iret
