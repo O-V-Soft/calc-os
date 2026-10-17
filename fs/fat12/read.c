@@ -130,7 +130,6 @@ void draw_file_icons() {
             int center_x = icon_x + 20; 
             int center_y = icon_y + 15;
 
-            //draw_cube(center_x, center_y, 200, 15, 15);
             draw_icon(center_x - ICON_W / 2, center_y - ICON_H / 2);
 
             char name_buf[9];
