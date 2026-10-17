@@ -41,7 +41,22 @@ struct arp_header {
     uint32_t target_ip;     
 } __attribute__((packed));
 
+#define OUR_IP ((192) | (168 << 8) | (50 << 16) | (2 << 24))
+#define TARGET_IP ((192) | (168 << 8) | (50 << 16) | (1 << 24))
+
+extern uint8_t target_host_mac[6];
+extern int host_mac_resolved;
+
+void arp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
+void arp_request(struct net_device* dev, uint32_t target_ip);
+
+uint16_t calculate_checksum(const void* data, size_t len);
 void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len);
+int ip_send(struct net_device* dev, uint32_t dest_ip, uint8_t protocol, const uint8_t* payload, uint16_t payload_len);
+
 void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len);
+int net_ping(struct net_device* dev);
+
+int icmp_send(struct net_device* dev, uint32_t dest_ip, uint8_t type, uint8_t code, const uint8_t* data, uint16_t data_len);
 
 #endif

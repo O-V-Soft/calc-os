@@ -7,13 +7,13 @@
 #include <net.h>
 
 static volatile uint8_t* rtl_mmio;
-static uint8_t rtl_rx_buffer[0x1000 + 2048] __attribute__((aligned(16)));
+static uint8_t rtl_rx_buffer[0x10000 + 2048] __attribute__((aligned(16)));
 static volatile uint8_t rtl_tx_buffer[4][2048] __attribute__((aligned(4)));
 static uint8_t tx_counter = 0;
 static uint16_t rx_offset = 0;
 static uint8_t mac_addr[6];
 
-uint8_t rtl_irq = -1;
+uint8_t rtl_irq;
 
 void irq_unmask(uint8_t irq) {
     uint16_t port;
@@ -94,6 +94,7 @@ void rtl8139_init() {
     rx_offset = 0; 
 
     irq_unmask(rtl_irq);
+    set_idt_gate(0x20 + rtl_irq, (uint32_t)rtl8139_wrapper, 0x08, 0x8E);
 }
 
 static int rtl8139_send(const uint8_t* data, uint16_t len) {
