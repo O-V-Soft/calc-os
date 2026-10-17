@@ -62,7 +62,7 @@ build_target:
 	@if [ "$(ARCH)" = "x86" ]; then $(MAKE) os-image.img; else $(MAKE) KERNEL.SYS; fi
 
 os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
-			  RECVFROM.BIN REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
+			REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
 
 	dd if=/dev/zero of=$@ bs=512 count=2880
 	mformat -i $@ -f 1440 ::
@@ -71,7 +71,6 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
 	mcopy -i $@ LS.BIN ::LS.BIN
 	mcopy -i $@ LSPCI.BIN ::LSPCI.BIN
 	mcopy -i $@ STATUS.BIN ::STATUS.BIN
-	mcopy -i $@ RECVFROM.BIN ::RECVFROM.BIN
 	mcopy -i $@ REBOOT.BIN ::REBOOT.BIN
 	mcopy -i $@ MOUNT.BIN ::MOUNT.BIN
 	mcopy -i $@ UMOUNT.BIN ::UMOUNT.BIN
@@ -103,9 +102,6 @@ devices.o: commands/devices.c
 status.o: commands/status.c
 	$(CC) $(CFLAGS) $< -o $@
 
-behave.o: commands/behave.c
-	$(CC) $(CFLAGS) $< -o $@
-
 reboot.o: commands/reboot.c
 	$(CC) $(CFLAGS) $< -o $@
 
@@ -126,9 +122,6 @@ LSPCI.BIN: lspci.o app.ld
 
 STATUS.BIN: status.o app.ld
 	$(LD) -m elf_i386 -T app.ld status.o -o $@
-
-RECVFROM.BIN: recvfrom.o app.ld
-	$(LD) -m elf_i386 -T app.ld recvfrom.o -o $@
 
 REBOOT.BIN: reboot.o app.ld
 	$(LD) -m elf_i386 -T app.ld reboot.o -o $@
