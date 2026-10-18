@@ -94,7 +94,6 @@ extern uint8_t *timer_str[16];
 #define SYS_MOUNT    165
 #define SYS_UMOUNT2  166
 #define SYS_GETUID   24
-#define SYS_RECVFROM 45
 
 #define SYS_GET_BATTERY  123
 #define SYS_GET_TICKS    124

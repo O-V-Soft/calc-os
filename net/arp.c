@@ -1,6 +1,7 @@
 #include <net_dev.h>
 #include <net.h>
 #include <utils.h>
+#include <video.h>
 
 uint8_t target_host_mac[6];
 int host_mac_resolved = 0;
@@ -15,7 +16,7 @@ void arp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
         if (arp->target_ip != OUR_IP) return;
 
         uint8_t reply_buf[60];
-        __builtin_memset(reply_buf, 0, sizeof(reply_buf));
+        memset(reply_buf, 0, sizeof(reply_buf));
 
         struct eth_header* eth = (struct eth_header*)reply_buf;
         struct arp_header* rep_arp = (struct arp_header*)(reply_buf + sizeof(struct eth_header));

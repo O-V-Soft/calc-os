@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <net_dev.h>
 #include <net.h>
+#include <utils.h>
 
 uint16_t calculate_checksum(const void* data, size_t len) {
     const uint16_t* ptr = (const uint16_t*)data;
@@ -53,7 +54,7 @@ int ip_send(struct net_device* dev, uint32_t dest_ip, uint8_t protocol, const ui
 
     uint8_t packet[128];
     if (total_len > sizeof(packet)) return -2; 
-    __builtin_memset(packet, 0, total_len < 60 ? 60 : total_len);
+    memset(packet, 0, total_len < 60 ? 60 : total_len);
 
     struct eth_header*  eth = (struct eth_header*)packet;
     struct ipv4_header* ip  = (struct ipv4_header*)(packet + sizeof(struct eth_header));

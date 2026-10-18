@@ -42,10 +42,6 @@ int sys_read(int fd, char* buf, uint32_t count) {
     return (int)_syscall(SYS_READ, (uint32_t)fd, (uint32_t)buf, (uint32_t)count);
 }
 
-int sys_recvfrom() {
-    return (int)_syscall(SYS_RECVFROM, 0, 0, 0);
-}
-
 uint32_t sys_time() {
     return _syscall(SYS_TIME, 0, 0, 0);
 }

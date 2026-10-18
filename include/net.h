@@ -59,4 +59,7 @@ int net_ping(struct net_device* dev);
 
 int icmp_send(struct net_device* dev, uint32_t dest_ip, uint8_t type, uint8_t code, const uint8_t* data, uint16_t data_len);
 
+void rtl8139_register();
+void rtl8139_init();
+
 #endif

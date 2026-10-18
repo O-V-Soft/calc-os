@@ -79,12 +79,12 @@ void rtl8139_init() {
     }
     if (timeout == 0) return;
 
-    *(volatile uint32_t*)(rtl_mmio + 0x44) = 0x0000E70F;
+    *(volatile uint32_t*)(rtl_mmio + 0x44) = (1 << 7) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0) | (0b11 << 11);
 
     *(volatile uint32_t*)(rtl_mmio + 0x30) = rx_phys;
 
     *(volatile uint16_t*)(rtl_mmio + 0x38) = 0;
-    *(volatile uint16_t*)(rtl_mmio + 0x3A) = 0;
+    *(volatile uint16_t*)(rtl_mmio + 0x3A) = 0xFFF0; 
 
     *(volatile uint16_t*)(rtl_mmio + 0x3C) = 0x0005;
 
@@ -97,7 +97,7 @@ void rtl8139_init() {
     set_idt_gate(0x20 + rtl_irq, (uint32_t)rtl8139_wrapper, 0x08, 0x8E);
 }
 
-static int rtl8139_send(const uint8_t* data, uint16_t len) {
+int rtl8139_send(const uint8_t* data, uint16_t len) {
     if (len > 1792) return -1; 
     
     uint32_t phys_tx_buf = (uint32_t)rtl_tx_buffer[tx_counter];
@@ -116,9 +116,7 @@ static int rtl8139_send(const uint8_t* data, uint16_t len) {
     return 0;
 }
 
-static int rtl8139_poll(uint8_t* buffer, uint16_t max_len) {
-    if (rtl_mmio[0x37] & 0x01) return 0; 
-    
+int rtl8139_poll(uint8_t* buffer, uint16_t max_len) {
     uint8_t* header = rtl_rx_buffer + rx_offset;
     uint16_t status = header[0] | (header[1] << 8);
     if (!(status & 0x01)) return 0;
@@ -136,7 +134,7 @@ static int rtl8139_poll(uint8_t* buffer, uint16_t max_len) {
     }
 
     rx_offset = (rx_offset + length + 4 + 3) & ~3;
-    rx_offset = rx_offset % 0x8000;
+    rx_offset = rx_offset % 0x10000;
     *(volatile uint16_t*)(rtl_mmio + 0x3A) = rx_offset - 16;
 
     return packet_len;

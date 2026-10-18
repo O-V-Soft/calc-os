@@ -13,6 +13,7 @@
 #include <pci.h>
 #include <mm.h>
 #include <net_dev.h>
+#include <net.h>
 
 void boot() {
     is_scaled = 1;
@@ -28,10 +29,10 @@ void boot() {
 
     print("Initializing ethernet card...                ", COLOR_WHITE);
     int is_rtl8139_found = rtl8139_find();
-    if (is_rtl8139_found) {
-        register_net_device(&rtl_device);
+    if (is_rtl8139_found >= 0) {
+        rtl8139_init();
+	    rtl8139_register();
         struct net_device* net_device = get_primary_net_device();
-        net_device->init();
         print("[OK]\n\n", COLOR_WHITE);
     } else {
         print("[ERR]\n\n", COLOR_WHITE);
