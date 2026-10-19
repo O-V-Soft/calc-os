@@ -48,7 +48,7 @@ vpath %.c kernel/main kernel arch/x86/kernel arch/x86/drivers/cmos drivers/scree
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
 		  arch/risc-v/kernel arch/x86/fs arch/x86/drivers/keyboard drivers/pci \
 		  arch/x86/commands arch/risc-v/commands Calc3D arch/risc-v/drivers/virtio \
-	      arch/x86/drivers/screen arch/risc-v/drivers/screen net mm
+	      arch/x86/drivers/screen arch/risc-v/drivers/screen net
 
 vpath %.asm arch/x86/boot arch/x86/kernel arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 
