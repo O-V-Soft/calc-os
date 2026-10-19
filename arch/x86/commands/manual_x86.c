@@ -116,9 +116,13 @@ void touch() {
 
 void ping() {
     const uint8_t *ip = strtok(NULL, " ");
+    if (ip == NULL) {
+        print("Usage: ping <ip_address>\n", COLOR_WHITE);
+        return;
+    }
     
     struct net_device* dev = get_primary_net_device();
-    net_ping(dev);
+    net_ping(dev, ipv4_parse(ip));
 }
 
 void forth() {

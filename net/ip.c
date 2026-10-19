@@ -1,7 +1,26 @@
 #include <stdint.h>
 #include <net_dev.h>
 #include <net.h>
+#include <video.h>
 #include <utils.h>
+
+uint32_t ipv4_parse(const char *str) {
+    uint32_t addr = 0;
+    uint32_t current_val = 0;
+
+    while (*str != '\0') {
+        if (*str >= '0' && *str <= '9') {
+            current_val = current_val * 10 + (*str - '0');
+        } else if (*str == '.') {
+            addr = (addr << 8) | (current_val & 0xFF);
+            current_val = 0;
+        }
+        str++;
+    }
+    addr = (addr << 8) | (current_val & 0xFF);
+
+    return __builtin_bswap32(addr); 
+}
 
 uint16_t calculate_checksum(const void* data, size_t len) {
     const uint16_t* ptr = (const uint16_t*)data;
@@ -38,15 +57,24 @@ void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
     }
 
     switch (ip->protocol) {
+        case 1: { 
+            const struct icmp_header *icmp = (const struct icmp_header *)(packet + ihl);
+            if (icmp->type == 0) { 
+                print("Ping reply received\n", COLOR_WHITE);
+            }
+            break;
+        }
         default: 
             break;
     }
 }
 
 int ip_send(struct net_device* dev, uint32_t dest_ip, uint8_t protocol, const uint8_t* payload, uint16_t payload_len) {
-    if (!host_mac_resolved) {
+    uint8_t dest_mac[6];
+
+    if (!arp_cache_lookup(dest_ip, dest_mac)) {
         arp_request(dev, dest_ip);
-        return -1;
+        return -1; 
     }
 
     uint16_t ip_total_len = sizeof(struct ipv4_header) + payload_len;
@@ -54,14 +82,14 @@ int ip_send(struct net_device* dev, uint32_t dest_ip, uint8_t protocol, const ui
 
     uint8_t packet[128];
     if (total_len > sizeof(packet)) return -2; 
-    memset(packet, 0, total_len < 60 ? 60 : total_len);
+    __builtin_memset(packet, 0, total_len < 60 ? 60 : total_len);
 
-    struct eth_header*  eth = (struct eth_header*)packet;
-    struct ipv4_header* ip  = (struct ipv4_header*)(packet + sizeof(struct eth_header));
-    uint8_t* dest_payload   = packet + sizeof(struct eth_header) + sizeof(struct ipv4_header);
+    struct eth_header  *eth = (struct eth_header*)packet;
+    struct ipv4_header *ip  = (struct ipv4_header*)(packet + sizeof(struct eth_header));
+    uint8_t *dest_payload   = packet + sizeof(struct eth_header) + sizeof(struct ipv4_header);
 
     for (int i = 0; i < 6; i++) {
-        eth->dest_mac[i] = target_host_mac[i];
+        eth->dest_mac[i] = dest_mac[i];
         eth->src_mac[i] = dev->mac_addr[i];
     }
     eth->ethertype = __builtin_bswap16(0x0800);

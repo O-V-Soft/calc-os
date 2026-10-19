@@ -7,7 +7,7 @@
 #include <net.h>
 
 static volatile uint8_t* rtl_mmio;
-static uint8_t rtl_rx_buffer[0x10000 + 2048] __attribute__((aligned(16)));
+static uint8_t rtl_rx_buffer[8192 + 16 + 1500] __attribute__((aligned(16)));
 static volatile uint8_t rtl_tx_buffer[4][2048] __attribute__((aligned(4)));
 static uint8_t tx_counter = 0;
 static uint16_t rx_offset = 0;
@@ -79,13 +79,12 @@ void rtl8139_init() {
     }
     if (timeout == 0) return;
 
-    *(volatile uint32_t*)(rtl_mmio + 0x44) = (1 << 7) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0) | (0b11 << 11);
+    *(volatile uint32_t*)(rtl_mmio + 0x44) = (1 << 7) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
 
     *(volatile uint32_t*)(rtl_mmio + 0x30) = rx_phys;
 
-    *(volatile uint16_t*)(rtl_mmio + 0x38) = 0;
-    *(volatile uint16_t*)(rtl_mmio + 0x3A) = 0xFFF0; 
-
+    *(volatile uint16_t*)(rtl_mmio + 0x38) = 8192 - 16; 
+    
     *(volatile uint16_t*)(rtl_mmio + 0x3C) = 0x0005;
 
     rtl_mmio[0x37] = 0x0C;
@@ -134,8 +133,10 @@ int rtl8139_poll(uint8_t* buffer, uint16_t max_len) {
     }
 
     rx_offset = (rx_offset + length + 4 + 3) & ~3;
-    rx_offset = rx_offset % 0x10000;
-    *(volatile uint16_t*)(rtl_mmio + 0x3A) = rx_offset - 16;
+    rx_offset = rx_offset % 8192;
+    
+    uint16_t capr_val = (rx_offset == 0) ? (8192 - 16) : (rx_offset - 16);
+    *(volatile uint16_t*)(rtl_mmio + 0x38) = capr_val;
 
     return packet_len;
 }

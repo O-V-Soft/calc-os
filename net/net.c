@@ -1,5 +1,6 @@
 #include <net_dev.h>
 #include <net.h>
+#include <idt.h>
 
 void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len) {
     if (len < sizeof(struct eth_header)) return;
@@ -16,7 +17,15 @@ void net_receive(struct net_device* dev, const uint8_t* raw_packet, uint16_t len
     }
 }
 
-int net_ping(struct net_device* dev) {
-    const char* msg = "CalcOS Ping";
-    return icmp_send(dev, TARGET_IP, 8, 0, (const uint8_t*)msg, 10);
+int net_ping(struct net_device *dev, uint32_t dest_ip) {
+    uint8_t mac[6];
+    
+    if (!arp_cache_lookup(dest_ip, mac)) {
+        arp_request(dev, dest_ip);
+    }
+    
+    delay_ticks(100);
+
+    const char *msg = "Ping";
+    return icmp_send(dev, dest_ip, 8, 0, (const uint8_t*)msg, 4); 
 }

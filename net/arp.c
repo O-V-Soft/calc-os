@@ -3,9 +3,6 @@
 #include <utils.h>
 #include <video.h>
 
-uint8_t target_host_mac[6];
-int host_mac_resolved = 0;
-
 void arp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
     if (len < sizeof(struct arp_header)) return;
 
@@ -43,10 +40,7 @@ void arp_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
         dev->send_packet(reply_buf, 60);
     } 
     else if (opcode == 2) {
-        for (int i = 0; i < 6; i++) {
-            target_host_mac[i] = arp->sender_mac[i];
-        }
-        host_mac_resolved = 1;
+        arp_cache_update(arp->sender_ip, arp->sender_mac);
     }
 }
 
