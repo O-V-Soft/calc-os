@@ -42,11 +42,11 @@ else ifeq ($(ARCH),riscv)
 endif
 
 vpath %.c kernel/main kernel arch/x86/kernel arch/x86/drivers/cmos drivers/screen drivers/screen/font arch/x86/drivers/mouse \
-          drivers/keyboard arch/x86/drivers/ata fs/fat12 arch/x86/drivers/sound \
-          arch/x86/drivers/pci arch/x86/drivers/rtl8139 fs/vfs \
-          lib forth casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
+          drivers/keyboard arch/x86/drivers/ata arch/x86/drivers/sound \
+          arch/x86/drivers/pci arch/x86/drivers/rtl8139 arch/x86/fs/fat12 \
+          lib arch/x86/forth arch/x86/casm commands arch/x86 arch/risc-v arch/risc-v/drivers/uart \
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
-		  arch/risc-v/kernel fs arch/x86/drivers/keyboard drivers/pci \
+		  arch/risc-v/kernel arch/x86/fs arch/x86/drivers/keyboard drivers/pci \
 		  arch/x86/commands arch/risc-v/commands Calc3D arch/risc-v/drivers/virtio \
 	      arch/x86/drivers/screen arch/risc-v/drivers/screen net mm
 

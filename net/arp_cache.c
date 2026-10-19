@@ -1,3 +1,4 @@
+#include <net_dev.h>
 #include <net.h>
 
 struct arp_cache_entry arp_cache[ARP_CACHE_SIZE];

@@ -80,8 +80,7 @@ void help() {
     print("  status - check system status\n", COLOR_WHITE);
     print("  cat - print file content\n", COLOR_WHITE);
     print("  lspci - print PCI devices\n", COLOR_WHITE);
-    print("  send - send a byte to the network\n", COLOR_WHITE);
-    print("  behave - receive a byte from the network\n", COLOR_WHITE);
+    print("  ping - ping the network\n", COLOR_WHITE);
     print("  reboot - reboot the system\n", COLOR_WHITE);
     print("  forth - Forth interpreter\n", COLOR_WHITE);
     print("  empire - play imperial march\n", COLOR_WHITE);
