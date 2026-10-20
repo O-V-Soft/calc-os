@@ -40,7 +40,7 @@ void boot() {
     
     print("Mounting FAT12 filesystem...                 ", COLOR_WHITE);
     vfs_mount("/", &fat12_driver);
-    print("[OK]\n", COLOR_WHITE);
+    print("[OK]\n\n", COLOR_WHITE);
 
     print("Initializing icons...                        ", COLOR_WHITE);
     icon_init();

@@ -53,9 +53,9 @@ setup_vbe_loop:
     jne next_mode
 
     mov bx, MODE_INFO_BUF
-    cmp word [bx + 18], 1024   
+    cmp word [bx + 18], 1024
     jne next_mode
-    cmp word [bx + 20], 768    
+    cmp word [bx + 20], 768   
     jne next_mode
     cmp byte [bx + 25], 8      
     jne next_mode
