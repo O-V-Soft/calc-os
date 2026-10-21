@@ -141,6 +141,8 @@ static struct fs_driver* vfs_find_driver(const char* path, const char** rel) {
     int best_match_idx = -1;
     int best_match_len = -1;
 
+    int is_relative = (path[0] != '/');
+
     for (int i = 0; i < mount_count; i++) {
         const char* mp = mounts[i].path;
         int len = strlen(mp);
@@ -150,6 +152,10 @@ static struct fs_driver* vfs_find_driver(const char* path, const char** rel) {
                 best_match_idx = i;
                 best_match_len = 1;
             }
+            continue;
+        }
+
+        if (is_relative) {
             continue;
         }
 
@@ -166,13 +172,18 @@ static struct fs_driver* vfs_find_driver(const char* path, const char** rel) {
     if (best_match_idx != -1) {
         const char* mp = mounts[best_match_idx].path;
         int len = strlen(mp);
-        const char* r = path + len;
         
-        if (*r == '/') r++;
-        *rel = r;
+        if (is_relative && strcmp(mp, "/") == 0) {
+            *rel = path;
+        } else {
+            const char* r = path + len;
+            if (*r == '/') r++;
+            *rel = r;
+        }
         
         return mounts[best_match_idx].driver;
     }
 
     return 0;
 }
+

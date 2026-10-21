@@ -32,7 +32,7 @@ void casm() {
     }
 
     uint8_t buffer[512];
-    int n = vfs_read(fd, buffer, 512);
+    int n = sys_read(fd, buffer, 512);
     sys_close(fd);
 
     name_clear();
@@ -135,7 +135,14 @@ void forth() {
     char name_11[11];
     format_fat_name(forth_name, name_11);
 
-    read_file(name_11, content);
+    int fd = sys_open(forth_name);
+    if (fd < 0) {
+        print("forth: File not found\n", COLOR_WHITE);
+        return;
+    }
+
+    int n = vfs_read(fd, content, 16);
+    sys_close(fd);
                     
     create_task(task3_main);
 }

@@ -190,7 +190,8 @@ void sys_wait_multiline(char* buf);
 void system();
 
 
-#define cli() __asm__ __volatile__ ("cli");
-#define sti() __asm__ __volatile__ ("sti");
+#define cli() __asm__ __volatile__("cli");
+#define sti() __asm__ __volatile__("sti");
+#define hlt() __asm__ __volatile__("hlt");
 
 #endif

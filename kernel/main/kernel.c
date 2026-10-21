@@ -112,6 +112,7 @@ refresh:
                         
                         if (start_cluster != 0) {
                             sys_exec(cmd_file_fat);
+                            for (int i = 0; i < 5; i++) hlt();
                         } else {
                             print("Unknown command. Type 'help'\n", COLOR_WHITE);
                         }

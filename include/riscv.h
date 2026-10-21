@@ -30,6 +30,8 @@ extern char buffer[4096];
 
 #define cli() __asm__ __volatile__ ("nop");
 #define sti() __asm__ __volatile__ ("nop");
+#define hlt() __asm__ __volatile__ ("nop");
+
 #define find_file_in_root(cmd_file_fat) (0);
 #define sys_exec(cmd_file_fat) __asm__ __volatile__ ("nop");
 #define create_file(name11, buffer, len) __asm__ __volatile__ ("nop");
