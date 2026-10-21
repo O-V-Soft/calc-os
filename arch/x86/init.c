@@ -74,13 +74,12 @@ void boot() {
 }
 
 void __attribute__((section(".text.entry"))) kernel_main() {
-    // The bootloader loads the flat image but does not initialize its BSS.
     clear_bss();
     init_paging();
     enable_paging();
     
     __asm__ __volatile__("cli");
-	screen_clear();
+    screen_clear();
     init_idt();
     __asm__ __volatile__("sti");
 	
@@ -94,8 +93,4 @@ void __attribute__((section(".text.entry"))) kernel_main() {
     while (1) {
         __asm__ __volatile__("hlt");
     }
-	
-	while (1) {
-		__asm__ __volatile__("hlt");
-	}
 }

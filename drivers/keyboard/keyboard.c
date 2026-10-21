@@ -18,6 +18,7 @@
 
 int shift_pressed = 0;
 int ctrl_pressed = 0;
+volatile int keyboard_lock = 0;
 
 volatile uint8_t last_scancode = 0;
 
@@ -46,6 +47,14 @@ uint8_t get_scancode() {
 
     sti();
     return code;
+}
+
+void acquire_lock(volatile int *lock) {
+    while (__atomic_test_and_set(lock, __ATOMIC_ACQUIRE));
+}
+
+void release_lock(volatile int *lock) {
+    __atomic_clear(lock, __ATOMIC_RELEASE);
 }
 
 char scancode_to_ascii(uint8_t scancode) {
@@ -130,6 +139,8 @@ void input_wait_string(char *buffer) {
     #if defined(__riscv)
     get_string(buffer);
     #else
+    acquire_lock(&keyboard_lock);
+
     int i = 0;
     int shift_pressed = 0;
 
@@ -140,6 +151,7 @@ void input_wait_string(char *buffer) {
 
         if (ncount == 1) {
             buffer[i] = '\0';
+            release_lock(&keyboard_lock);
             return;
         }
 
@@ -172,6 +184,7 @@ void input_wait_string(char *buffer) {
 
         if (code == 0x1C) {
             buffer[i] = '\0';
+            release_lock(&keyboard_lock);
             return;
         }
 
@@ -258,5 +271,6 @@ void input_wait_string(char *buffer) {
             i++;
         }
     }
+    release_lock(&keyboard_lock);
     #endif
 }
