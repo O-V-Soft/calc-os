@@ -46,7 +46,7 @@ This project uses a versatile `Makefile` to handle multiple architectures. Here 
 ### Quick Run Example (x86):
 ```bash
 # Clone the repository
-git clone [https://github.com/O-V-Soft/calc-os.git](https://github.com/O-V-Soft/calc-os.git)
+git clone https://github.com/O-V-Soft/calc-os.git
 cd calc-os
 
 # Build and run in QEMU
