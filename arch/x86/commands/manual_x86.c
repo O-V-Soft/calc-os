@@ -137,7 +137,7 @@ void forth() {
 
     read_file(name_11, content);
                     
-    create_task(2);
+    create_task(task3_main);
 }
 
 void cube() {

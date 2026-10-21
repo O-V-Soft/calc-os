@@ -1,32 +1,22 @@
-#include <cmos.h>
-#include <video.h>
-#include <mouse.h>
-#include <utils.h>
-#include <keyboard.h>
+#include <stdint.h>
 #include <idt.h>
 #include <task.h>
-#include <stdint.h>
-#include <sound.h>
+#include <mm.h>
+#include <video.h>
+#include <utils.h>
 #include <forth.h>
 
-Task task_node_0;
-Task task_node_1;
-Task task_node_2;
-Task task_node_3;
-
-Task* current_task = 0;
-
-unsigned int task2_stack[1024]; 
-unsigned int task3_stack[1024]; 
-unsigned int task4_stack[2048]; 
+Task *current_task = 0;
+static int next_pid = 1;
+static Task main_task;
 
 void task_init() {
-    task_node_0.id = 0;
-    task_node_0.is_active = 1;
-    task_node_0.esp = 0;
-    
-    task_node_0.next = &task_node_0;
-    current_task = &task_node_0;
+    main_task.pid = 0;
+    main_task.esp = 0;
+    main_task.is_active = 1;
+    main_task.next = &main_task;
+
+    current_task = &main_task;
 }
 
 void task2_main() {
@@ -66,135 +56,68 @@ void task2_main() {
     }
 }
 
-void prepare_task2() {
-    uint32_t* st = &task2_stack[1024];
-
-    *(--st) = 0x202;       
-    *(--st) = 0x08;    
-    *(--st) = (uint32_t)task2_main; 
-
-    *(--st) = 0;
-    *(--st) = 0;
-
-    for (int i = 0; i < 8; i++) {
-        *(--st) = 0;
-    }
-
-    *(--st) = 0x10;
-
-    task_node_1.esp = (uint32_t)st;
-    task_node_1.id = 1;
-    task_node_1.is_active = 1;
-}
-
 void task3_main() {
     while(1) {
         interpret(stack_init(1024), content);
     }
 }
 
-void prepare_task3() {
-    uint32_t* st = &task3_stack[1024];
-
-    *(--st) = 0x202;    
-    *(--st) = 0x08; 
-    *(--st) = (uint32_t)task3_main; 
-
-    *(--st) = 0;          
-    *(--st) = 32;           
-
-    for (int i = 0; i < 8; i++) {
-        *(--st) = 0;
-    }
-
-    *(--st) = 0x10;
-
-    task_node_2.esp = (uint32_t)st;
-    task_node_2.id = 2;
-    task_node_2.is_active = 0; 
-}
-
 void task4_main() {
     system(); 
 }
 
-void prepare_task4() {
-    uint32_t* st = &task4_stack[2048];
+void create_task(void (*entry_point)()) {
+    Task *new_task = (Task*)kmalloc(sizeof(Task));
+    if (!new_task) return;
 
-    *(--st) = 0x202;                
-    *(--st) = 0x08;             
-    *(--st) = (uint32_t)task4_main; 
+    uint8_t *stack = (uint8_t*)kmalloc(4096);
+    if (!stack) {
+        kfree(new_task);
+        return;
+    }
+    
+    uint32_t *sp = (uint32_t*)(stack + 4096);
 
-    *(--st) = 0;
-    *(--st) = 0; 
+    *(--sp) = 0x0202; 
+    *(--sp) = 0x08;
+    *(--sp) = (uint32_t)entry_point;
+
+    *(--sp) = 0;
+    *(--sp) = 0;
 
     for (int i = 0; i < 8; i++) {
-        *(--st) = 0; 
+        *(--sp) = 0;
     }
 
-    *(--st) = 0x10; 
+    *(--sp) = 0x10;
 
-    task_node_3.esp = (uint32_t)st;
-    task_node_3.id = 3;
-    task_node_3.is_active = 0;
-}
-
-uint32_t schedule(uint32_t current_esp) {
-    if (!current_task) return current_esp;
-
-    current_task->esp = current_esp;
-
-    Task* next = current_task->next;
-    int loops = 0;
-    while (!next->is_active && loops < 4) {
-        next = next->next;
-        loops++;
-    }
-
-    current_task = next;
-    timer_ticks++;
-
-    return current_task->esp;
-}
-
-void create_task(int task_id) {
-    Task* target = 0;
-
-    if (task_id == 1) {
-        prepare_task2();
-        target = &task_node_1;
-    } else if (task_id == 2) {
-        prepare_task3();
-        target = &task_node_2;
-    } else if (task_id == 3) {
-        prepare_task4();
-        target = &task_node_3;
-    } else {
-        return; 
-    }
-
-    __asm__ __volatile__("cli"); 
-
-    target->is_active = 1;
-
-    target->next = task_node_0.next;
-    task_node_0.next = target;
-
+    new_task->esp = (uint32_t)sp;
+    new_task->pid = next_pid++;
+    new_task->is_active = 1;
+    
+    __asm__ __volatile__("cli");
+    new_task->next = current_task->next;
+    current_task->next = new_task;
     __asm__ __volatile__("sti");
 }
 
-void delete_task(int task_id) {
-    if (task_id < 1 || task_id > 2) return;
-
+void delete_task(int pid) {
     __asm__ __volatile__("cli");
 
-    if (task_id == 1) task_node_1.is_active = 0;
-    if (task_id == 2) task_node_2.is_active = 0;
+    Task *curr = current_task;
+    
+    while (curr != current_task) {
+        if (curr->pid == pid) {
+            curr->is_active = 0;
+            break;
+        }
+        curr = curr->next;
+    };
 
-    if (current_task->id == task_id) {
+    if (current_task->pid == pid) {
         __asm__ __volatile__("sti");
-        while(1) {
-            __asm__ __volatile__("hlt"); 
+        while (1) {
+            __asm__ __volatile__("hlt");
         }
     }
 

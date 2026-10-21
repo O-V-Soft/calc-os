@@ -25,7 +25,7 @@ uint32_t syscall_handler(struct registers *regs) {
 
     switch (syscall_num) {
         case SYS_EXIT:
-            delete_task(current_task->id);
+            delete_task(current_task->pid);
             ret_val = 0;
             break;
 
@@ -89,27 +89,29 @@ uint32_t syscall_handler(struct registers *regs) {
         case SYS_EXEC: {
             const char* filename_11 = (const char*)arg1; 
 
-            if (filename_11 == 0) ret_val = -EFAULT;
+            if (filename_11 == 0) {
+                ret_val = -EFAULT;
+                break;
+            }
 
             uint16_t start_cluster = find_file_in_root(filename_11);
-            if (start_cluster == 0) ret_val = -ENOENT;
+            if (start_cluster == 0) {
+                ret_val = -ENOENT;
+                break; 
+            }
 
             uint8_t* load_address = (uint8_t*)0x400000;
-            
             uint32_t page_idx = (uint32_t)load_address / 0x400000; 
-            
             uint32_t phys_addr = 0x400000; 
 
             page_directory[page_idx] = phys_addr | 0x83;
 
             __asm__ __volatile__("mov %%cr3, %%eax; mov %%eax, %%cr3" ::: "eax");
 
-            memset((void*)0x400000, 0x90, 4096);
-
             read_file(filename_11, load_address);
 
-            void (*program_entry)(void) = (void (*)(void))load_address;
-            program_entry(); 
+            void (*program_entry)() = (void (*)())load_address;
+            create_task(program_entry); 
 
             ret_val = 0; 
             break;

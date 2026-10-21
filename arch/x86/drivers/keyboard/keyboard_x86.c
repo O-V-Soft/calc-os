@@ -77,12 +77,10 @@ void handle_hotkeys(int code) {
 		ncount = 1;
 	}
 	
-    if (code == 0x2E && ctrl_pressed) {
-        if (task_node_2.is_active) {
-            send_signal(2, SIGINT);
-        } else if (current_uid == 0) {
-            send_signal(0, SIGINT);
-        }
+    if (code == 0x2E && ctrl_pressed) { 
+		if (current_task && current_task->pid != 0) {
+			send_signal(current_task->pid, SIGINT);
+		}
 	}
 }
 

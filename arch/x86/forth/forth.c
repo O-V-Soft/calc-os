@@ -245,5 +245,5 @@ void interpret(struct Stack* st, char* input) {
         print("\n", COLOR_WHITE);
     }
 
-    delete_task(2);
+    sys_exit();
 }

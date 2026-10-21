@@ -59,19 +59,18 @@ void delay_ticks(uint32_t ticks) {
 }
 
 void exception_handler(struct registers *regs) {
-        if (current_task->id != 0) {
+        if (current_task->pid != 0) {
         printk("\nprocess with PID ", COLOR_WHITE);
         char num_buf[16];
-        itoa(current_task->id, num_buf);
+        itoa(current_task->pid, num_buf);
         printk(num_buf, COLOR_WHITE);
         printk(" crashed.\n", COLOR_WHITE);
         
         current_task->is_active = 0;
 
-        if (current_task->id == 3) {
+        if (current_task->pid == 3) {
             is_crushed = 1;
-            prepare_task4();       
-            task_node_3.is_active = 1; 
+            create_task(task3_main);
         }
 
         outb(0x20, 0x20);
@@ -217,17 +216,6 @@ void init_idt() {
     set_idt_gate(128, (uint32_t)syscall_wrapper, 0x08, 0x8E); 
 
     task_init(); 
-
-    prepare_task2();
-    prepare_task3();
-    prepare_task4();
-    
-    task_node_0.next = &task_node_1;
-    task_node_1.next = &task_node_0;
-    
-    task_node_1.is_active = 1;
-    task_node_2.is_active = 0;
-    task_node_3.is_active = 0;
     
     __asm__ __volatile__("lidt (%0)" : : "r" (&idtp));
 
