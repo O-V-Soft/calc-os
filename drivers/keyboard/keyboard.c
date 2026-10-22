@@ -11,6 +11,7 @@
 #include <keyboard.h>
 #include <video.h>
 #include <stdint.h>
+#include <mm.h>
 
 #if defined(__riscv)
 #include <riscv.h>
@@ -47,14 +48,6 @@ uint8_t get_scancode() {
 
     sti();
     return code;
-}
-
-void acquire_lock(volatile int *lock) {
-    while (__atomic_test_and_set(lock, __ATOMIC_ACQUIRE));
-}
-
-void release_lock(volatile int *lock) {
-    __atomic_clear(lock, __ATOMIC_RELEASE);
 }
 
 char scancode_to_ascii(uint8_t scancode) {

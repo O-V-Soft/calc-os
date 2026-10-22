@@ -93,6 +93,8 @@ extern char content[512];
 extern const char* root_password;
 extern int current_uid; 
 
+extern int bin_running;
+
 typedef struct {
     int x, y, z;
 } Point3D;

@@ -34,6 +34,8 @@ const char* root_password = "102030!";
 int win_file_x = 296;
 int win_file_y = 244;
 
+int bin_running = 0;
+
 void system() {
 refresh:
     ncount = 0;
@@ -63,7 +65,10 @@ refresh:
 
         if (ncount == 1) goto refresh;
 
-        if (current_mode == 0) {
+    prompt_start:
+        if (current_mode == 0) {    
+            if (bin_running == 1) goto prompt_start;
+            
             is_scaled = 2;
             if (current_uid == 0) {
                 print("# ", COLOR_WHITE);
@@ -111,8 +116,9 @@ refresh:
                         uint16_t start_cluster = find_file_in_root(cmd_file_fat);
                         
                         if (start_cluster != 0) {
+                            bin_running = 1;
                             sys_exec(cmd_file_fat);
-                            for (int i = 0; i < 5; i++) hlt();
+                            goto prompt_start;
                         } else {
                             print("Unknown command. Type 'help'\n", COLOR_WHITE);
                         }

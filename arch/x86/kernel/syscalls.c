@@ -25,6 +25,7 @@ uint32_t syscall_handler(struct registers *regs) {
 
     switch (syscall_num) {
         case SYS_EXIT:
+            bin_running = 0;
             delete_task(current_task->pid);
             ret_val = 0;
             break;

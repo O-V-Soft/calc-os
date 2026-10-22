@@ -10,6 +10,8 @@ extern uint8_t kbd_buffer[KBD_BUFFER_SIZE];
 extern volatile int kbd_head;
 extern volatile int kbd_tail;
 
+extern volatile int keyboard_lock;
+
 uint8_t get_scancode();
 
 char scancode_to_ascii(uint8_t scancode);
