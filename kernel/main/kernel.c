@@ -66,14 +66,8 @@ refresh:
         if (ncount == 1) goto refresh;
 
     prompt_start:
-        hlt();
         if (current_mode == 0) {    
-            if (bin_running == 1) {
-                hlt();
-                goto prompt_start;
-            }
-
-            hlt();
+            if (bin_running == 1) goto prompt_start;
 
             is_scaled = 2;
             if (current_uid == 0) {
@@ -122,7 +116,6 @@ refresh:
                         uint16_t start_cluster = find_file_in_root(cmd_file_fat);
                         
                         if (start_cluster != 0) {
-                            hlt();
                             bin_running = 1;
                             sys_exec(cmd_file_fat);
                             goto prompt_start;
