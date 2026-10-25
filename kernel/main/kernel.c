@@ -66,14 +66,11 @@ refresh:
         if (ncount == 1) goto refresh;
 
     prompt_start:
-        hlt();
         if (current_mode == 0) {    
             if (bin_running == 1) {
                 hlt();
                 goto prompt_start;
             }
-
-            hlt();
 
             is_scaled = 2;
             if (current_uid == 0) {

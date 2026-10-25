@@ -17,7 +17,7 @@ ifeq ($(ARCH),x86)
 
     OBJ := init.o kernel.o cmos.o screen.o mouse_asm.o utils.o keyboard.o font.o inout.o \
            mouse.o wrappers.o idt.o isr.o task.o ata.o fat.o read.o write.o \
-           sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys_wrappers.o \
+           sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys.o \
 		   paging.o vfs.o casm.o manual.o signal.o desktop.o string.o memory.o \
 		   convert.o keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
 		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o \
