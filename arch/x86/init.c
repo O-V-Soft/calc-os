@@ -36,6 +36,10 @@ void boot() {
     init_memory_manager();
     print("[OK]\n\n", COLOR_WHITE);
 
+	print("Initializing FAT12 driver...                 ", COLOR_WHITE);
+    vfs_register_driver(&fat12_driver);
+	print("[OK]\n\n", COLOR_WHITE);
+	
     print("Initializing ethernet card...                ", COLOR_WHITE);
     int is_rtl8139_found = rtl8139_find();
     if (is_rtl8139_found >= 0) {
@@ -46,10 +50,6 @@ void boot() {
     } else {
         print("[ERR]\n\n", COLOR_WHITE);
     }
-    
-    print("Mounting FAT12 filesystem...                 ", COLOR_WHITE);
-    vfs_mount("/", &fat12_driver);
-    print("[OK]\n\n", COLOR_WHITE);
 
     print("Initializing icons...                        ", COLOR_WHITE);
     icon_init();

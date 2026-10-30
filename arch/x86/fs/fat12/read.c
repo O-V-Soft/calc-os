@@ -9,27 +9,6 @@
 #include <pci.h>
 #include <vfs.h>
 
-void read_file_basic(uint16_t cluster, uint8_t* destination, uint8_t* fat_table, struct fat12_bpb* bpb) {
-    uint32_t root_dir_sectors = ((bpb->root_entries * 32) + (bpb->bytes_per_sector - 1)) / bpb->bytes_per_sector;
-    uint32_t fat_size = bpb->num_fats * bpb->fat_size_sectors;
-    uint32_t data_lba = bpb->reserved_sectors + fat_size + root_dir_sectors;
-
-    uint16_t current_cluster = cluster;
-
-    while (current_cluster < 0xFF8) {
-        uint32_t cluster_lba = ((current_cluster - 2) * bpb->sectors_per_cluster) + data_lba;
-
-        for (uint8_t i = 0; i < bpb->sectors_per_cluster; i++) {
-            ata_read_sector(cluster_lba + i, (uint16_t*)destination);
-            destination = destination + 512;
-        }
-
-        current_cluster = get_fat_entry(current_cluster, fat_table);
-        
-        if (current_cluster == 0) break;
-    }
-}
-
 void read_file(const char* filename_11, uint8_t* buffer) {
     if (!disk_initialized) {
         uint16_t bpb_buf[256];
@@ -43,10 +22,24 @@ void read_file(const char* filename_11, uint8_t* buffer) {
         disk_initialized = 1;
     }
 
-    uint16_t start_cluster = find_file_in_root(filename_11);
+    uint16_t current_cluster = find_file_in_root(filename_11);
+    if (current_cluster == 0) return;
 
-    if (start_cluster != 0) {
-        read_file_basic(start_cluster, buffer, cached_fat, &cached_bpb);
+    uint32_t root_dir_sectors = ((cached_bpb.root_entries * 32) + (cached_bpb.bytes_per_sector - 1)) / cached_bpb.bytes_per_sector;
+    uint32_t fat_size = cached_bpb.num_fats * cached_bpb.fat_size_sectors;
+    uint32_t data_lba = cached_bpb.reserved_sectors + fat_size + root_dir_sectors;
+
+    while (current_cluster < 0xFF8) {
+        uint32_t cluster_lba = ((current_cluster - 2) * cached_bpb.sectors_per_cluster) + data_lba;
+
+        for (uint8_t i = 0; i < cached_bpb.sectors_per_cluster; i++) {
+            ata_read_sector(cluster_lba + i, (uint16_t*)buffer);
+            buffer = buffer + 512;
+        }
+
+        current_cluster = get_fat_entry(current_cluster, cached_fat);
+        
+        if (current_cluster == 0) break;
     }
 }
 
@@ -162,4 +155,33 @@ void draw_file_icons() {
             icon_index++;
         }
     }
+}
+
+int fat12_read(int fd, void* buf, size_t count) {
+    if (fd < 3 || fd >= 10 || !fat12_fd_table[fd].used)
+        return -1;
+
+    uint16_t cluster = fat12_fd_table[fd].cluster;
+    uint32_t offset  = fat12_fd_table[fd].offset;
+
+    static uint8_t sector_buf[512];
+
+    uint32_t root_lba = cached_bpb.reserved_sectors +
+                        (cached_bpb.num_fats * cached_bpb.fat_size_sectors);
+
+    uint32_t root_sectors = ((cached_bpb.root_entries * 32) + 511) / 512;
+
+    uint32_t data_lba = root_lba + root_sectors;
+
+    ata_read_sector(data_lba + (cluster - 2), (uint16_t*)sector_buf);
+
+    size_t bytes_to_copy = count;
+    if (offset + bytes_to_copy > 512)
+        bytes_to_copy = 512 - offset;
+
+    memcpy(buf, sector_buf + offset, bytes_to_copy);
+
+    fat12_fd_table[fd].offset += bytes_to_copy;
+
+    return bytes_to_copy;
 }

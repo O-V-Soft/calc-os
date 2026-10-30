@@ -35,6 +35,12 @@ struct fat12_entry {
     uint32_t    file_size;
 } __attribute__((packed));
 
+typedef struct {
+    uint16_t cluster;
+    uint32_t offset;
+    uint8_t used;
+} fat12_fd_t;
+
 void read_file(const char* filename_11, uint8_t* buffer);
 void create_file(const char* name_11, uint8_t* data, int size);
 void list_files();
@@ -42,9 +48,13 @@ uint16_t find_file_in_root(const char* target_name_11);
 uint16_t get_fat_entry(uint16_t cluster_n, uint8_t* fat_table);
 void set_fat_entry(uint16_t cluster_n, uint16_t value, uint8_t* fat_table);
 
+int fat12_read(int fd, void* buf, size_t count);
+int fat12_create(const char* path, const uint8_t* data, size_t size);
+
 extern int disk_initialized;
 extern uint8_t cached_fat[512 * 9];
 extern struct fat12_bpb cached_bpb;
 extern struct fs_driver fat12_driver;
+extern fat12_fd_t fat12_fd_table[10];
 
 #endif

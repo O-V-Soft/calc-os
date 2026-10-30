@@ -11,6 +11,17 @@ static uint16_t bpb_buf[256];
 static uint8_t fat_table[512 * 9];
 static uint16_t root_buf[256];
 
+void set_fat_entry(uint16_t cluster_n, uint16_t value, uint8_t* fat_table) {
+    uint32_t offset = cluster_n + (cluster_n / 2);
+    uint16_t* ptr = (uint16_t*)(fat_table + offset);
+
+    if (cluster_n % 2 == 0) {
+        *ptr = (*ptr & 0xF000) | (value & 0x0FFF);
+    } else {
+        *ptr = (*ptr & 0x000F) | (value << 4);
+    }
+}
+
 void create_file(const char* name_11, uint8_t* data, int size) {
     ata_read_sector(0, (uint16_t*)bpb_buf);
     struct fat12_bpb* bpb = (struct fat12_bpb*)bpb_buf;
@@ -68,4 +79,12 @@ void create_file(const char* name_11, uint8_t* data, int size) {
     if (disk_initialized) {
         disk_initialized = 0;
     }
+}
+
+int fat12_create(const char* path, const uint8_t* data, size_t size) {
+    char name11[11];
+    format_fat_name(path, name11);
+
+    create_file(name11, (uint8_t*)data, (int)size);
+    return 0;
 }

@@ -10,8 +10,6 @@
 #define SYS_UNAME   122
 #define SYS_CLOSE   6
 #define SYS_EXEC    11
-#define SYS_MOUNT   165
-#define SYS_UMOUNT2 166
 #define SYS_GETUID  24
 #define SYS_RECVFROM 45
 

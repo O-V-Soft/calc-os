@@ -153,7 +153,7 @@ uint32_t syscall_handler(struct registers *regs) {
         }
 
         case SYS_LIST_FILES: {
-            ret_val = vfs_list("/");
+            ret_val = vfs_list();
             break;
         }
 
@@ -179,24 +179,6 @@ uint32_t syscall_handler(struct registers *regs) {
         case SYS_REBOOT: {
             reboot();
             ret_val = 0;
-            break;
-        }
-
-        case SYS_MOUNT: {
-            const char* path = (const char*)arg1;
-            if (path < (const char*)(13 * 4096)) ret_val = -EFAULT;
-
-            int res = vfs_mount(path, &fat12_driver);
-            ret_val = res == 0 ? 0 : -EINVAL;
-            break;
-        }
-
-        case SYS_UMOUNT2: {
-            const char* path = (const char*)arg1;
-            if (path < (const char*)(13 * 4096)) ret_val = -EFAULT;
-
-            int res = vfs_umount(path);
-            ret_val = res == 0 ? 0 : -EINVAL;
             break;
         }
 

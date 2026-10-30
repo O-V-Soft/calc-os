@@ -61,7 +61,7 @@ build_target:
 	@if [ "$(ARCH)" = "x86" ]; then $(MAKE) os-image.img; else $(MAKE) KERNEL.SYS; fi
 
 os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
-			REBOOT.BIN MOUNT.BIN UMOUNT.BIN WHOAMI.BIN
+			REBOOT.BIN WHOAMI.BIN
 
 	dd if=/dev/zero of=$@ bs=512 count=2880
 	mformat -i $@ -f 1440 ::
@@ -71,8 +71,6 @@ os-image.img: boot.bin KERNEL.SYS LS.BIN LSPCI.BIN STATUS.BIN \
 	mcopy -i $@ LSPCI.BIN ::LSPCI.BIN
 	mcopy -i $@ STATUS.BIN ::STATUS.BIN
 	mcopy -i $@ REBOOT.BIN ::REBOOT.BIN
-	mcopy -i $@ MOUNT.BIN ::MOUNT.BIN
-	mcopy -i $@ UMOUNT.BIN ::UMOUNT.BIN
 	mcopy -i $@ WHOAMI.BIN ::WHOAMI.BIN
 	mcopy -i $@ FILE.ICO ::FILE.ICO
 
@@ -104,12 +102,6 @@ status.o: commands/status.c
 reboot.o: commands/reboot.c
 	$(CC) $(CFLAGS) $< -o $@
 
-umount.o: commands/umount.c
-	$(CC) $(CFLAGS) $< -o $@
-
-mount.o: commands/mount.c
-	$(CC) $(CFLAGS) $< -o $@
-
 whoami.o: commands/whoami.c
 	$(CC) $(CFLAGS) $< -o $@
 
@@ -124,12 +116,6 @@ STATUS.BIN: status.o app.ld
 
 REBOOT.BIN: reboot.o app.ld
 	$(LD) -m elf_i386 -T app.ld reboot.o -o $@
-
-UMOUNT.BIN: umount.o app.ld
-	$(LD) -m elf_i386 -T app.ld umount.o -o $@
-
-MOUNT.BIN: mount.o app.ld
-	$(LD) -m elf_i386 -T app.ld mount.o -o $@
 
 WHOAMI.BIN: whoami.o app.ld
 	$(LD) -m elf_i386 -T app.ld whoami.o -o $@
