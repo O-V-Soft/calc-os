@@ -33,8 +33,6 @@ void draw_file_icons();
 void play_startup_sound();
 void play_imperial_march();
 
-int atoi_super(const char* str);
-
 size_t strlen(const char* str);
 int strcmp(const char* a, const char* b);
 char* strstr(const char* haystack, const char* needle);
