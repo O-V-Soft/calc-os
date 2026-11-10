@@ -74,16 +74,16 @@ refresh:
 
             is_scaled = 2;
             if (current_uid == 0) {
-                print("# ", COLOR_WHITE);
+                print("# ");
             } else {
-                print("$ ", COLOR_WHITE);
+                print("$ ");
             }
             
             input_wait_string(command);
 
             if (ncount == 1) goto refresh;
 
-            print("\n", COLOR_WHITE);
+            print("\n");
 
             char *command2 = strtok(command, " ");
 
@@ -124,7 +124,7 @@ refresh:
                             sys_exec(cmd_file_fat);
                             goto prompt_start;
                         } else {
-                            print("Unknown command. Type 'help'\n", COLOR_WHITE);
+                            print("Unknown command. Type 'help'\n");
                         }
                     }
                 }
@@ -162,7 +162,7 @@ refresh:
 
                 if (ncount == 1) goto refresh;
 
-                print("\n", COLOR_WHITE);
+                print("\n");
 
                 int len = 0;
                 while (content[len] != '\0') len++;

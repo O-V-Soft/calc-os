@@ -60,7 +60,7 @@ void ip_receive(struct net_device* dev, const uint8_t* packet, uint16_t len) {
         case 1: { 
             const struct icmp_header *icmp = (const struct icmp_header *)(packet + ihl);
             if (icmp->type == 0) { 
-                print("Ping reply received\n", COLOR_WHITE);
+                print("Ping reply received\n");
             }
             break;
         }

@@ -113,7 +113,7 @@ void screen_clear();
 #if !defined(__riscv)
 void put_char(char s, uint8_t color);
 void printk(const char *msg, uint8_t color);
-void print(const char *msg, uint8_t color);
+void print(const char *msg);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint8_t color);
 void put_pixel(int x, int y, uint8_t color);
 void draw_rect(int x, int y, int width, int height, uint8_t color);
@@ -123,7 +123,7 @@ void init_palette();
 #else
 void put_char(char s, uint32_t color);
 void printk(const char *msg, uint32_t color);
-void print(const char *msg, uint32_t color);
+void print(const char *msg);
 void draw_rounded_rect(int x, int y, int width, int height, int r, uint32_t color);
 void put_pixel(int x, int y, uint32_t color);
 void draw_rect(int x, int y, int width, int height, uint32_t color);

@@ -68,6 +68,7 @@ void get_string(char *buffer) {
         if (c == '\r' || c == '\n') {
             buffer[i] = '\0';
             put_char('\n', COLOR_WHITE); 
+			flush_gpu();
             return;
         }
 
@@ -101,6 +102,7 @@ void get_string(char *buffer) {
             put_char(c, COLOR_WHITE); 
             buffer[i] = c;
             i++;
+			flush_gpu();
         }
     }
 }

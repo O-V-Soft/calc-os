@@ -2,7 +2,6 @@
 #define STDIO_H
 
 #define SYS_EXIT    1
-#define SYS_READ    3
 #define SYS_WRITE   4
 #define SYS_OPEN    5
 #define SYS_TIME    13
@@ -17,7 +16,6 @@
 #define SYS_GET_TICKS    124
 #define SYS_PCI_PRINT    125
 #define SYS_LIST_FILES   126
-#define SYS_CREATE_FILE  128
 #define SYS_WAIT_STRING  129
 #define SYS_REBOOT       130
 

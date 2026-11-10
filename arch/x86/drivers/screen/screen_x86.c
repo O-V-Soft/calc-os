@@ -112,8 +112,8 @@ void printk(const char *msg, uint8_t color) {
 	}
 }
 
-void print(const char *msg, uint8_t color) {
-    sys_write(1, msg, color);
+void print(const char *msg) {
+    sys_write(1, msg, strlen(msg));
 }
 
 void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint8_t color, uint8_t text_color) {

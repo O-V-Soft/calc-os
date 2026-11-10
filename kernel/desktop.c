@@ -34,10 +34,10 @@ static const uint8_t fade_palette[24] = {
     COLOR_SYS_SHADOW,  COLOR_SYS_SHADOW, 
     COLOR_SYS_SHADOW,  COLOR_DARK_GRAY, 
     COLOR_DARK_GRAY,  COLOR_DARK_GRAY, 
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE, 
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,  
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE
+    COLOR_DARK_GRAY,  COLOR_DARK_GRAY, 
+    COLOR_DARK_GRAY,  COLOR_DARK_GRAY,
+    COLOR_DARK,  COLOR_DARK,  
+    COLOR_BLACK,  COLOR_BLACK
 };
 #else
 static const uint32_t fade_palette[24] = {
@@ -48,10 +48,10 @@ static const uint32_t fade_palette[24] = {
     COLOR_SYS_SHADOW,  COLOR_SYS_SHADOW, 
     COLOR_SYS_SHADOW,  COLOR_DARK_GRAY, 
     COLOR_DARK_GRAY,  COLOR_DARK_GRAY, 
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE, 
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE,  
-    COLOR_ACCENT_BLUE,  COLOR_ACCENT_BLUE
+    COLOR_DARK_GRAY,  COLOR_DARK_GRAY, 
+    COLOR_DARK_GRAY,  COLOR_DARK_GRAY,
+    COLOR_DARK,  COLOR_DARK,  
+    COLOR_BLACK,  COLOR_BLACK
 };
 #endif
 
@@ -78,10 +78,10 @@ void draw_desktop() {
 
     is_scaled = 1;
     x = text_x + 3; y = text_y + 3;
-    print(text, COLOR_BLACK);
+    printk(text, COLOR_BLACK);
 
     x = text_x; y = text_y;
-    print(text, COLOR_WHITE);
+    print(text);
     is_scaled = 0;
 
     int reflect_y = text_y + 24 + 2; 
@@ -104,11 +104,11 @@ void draw_desktop() {
                 int fade_index = (i * scale) + v_scale;
                 uint8_t reflect_color = (fade_index < 24) ? fade_palette[fade_index] : 20;
 
-		#if !defined(__riscv)
+		    #if !defined(__riscv)
                 uint8_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
-		#else
-		uint32_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
-		#endif
+		    #else
+		        uint32_t *row = &VIDEO_MEMORY[current_pixel_y * SCREEN_WIDTH];
+		    #endif
                 unsigned char bits_copy = bits;
 
                 for (int j = 0; j < 8; j++) {
@@ -205,17 +205,17 @@ void graphics() {
 
             x = wx + 18;
             y = wy + 8;
-            print("Create a new file", COLOR_WHITE);
+            print("Create a new file");
 
             x = wx + 18;
             y = wy + 44;
-            print("Name:", COLOR_WHITE);
+            print("Name:");
             draw_rect(wx + 18, wy + 56, 404, 24, COLOR_WHITE);
             draw_rect(wx + 20, wy + 58, 400, 20, COLOR_BLACK);
 
             x = wx + 18;
             y = wy + 94;
-            print("Content:", COLOR_WHITE);
+            print("Content:");
             draw_rect(wx + 18, wy + 146, 404, 24, COLOR_WHITE); 
             draw_rect(wx + 20, wy + 148, 400, 20, COLOR_BLACK);
         }
@@ -243,18 +243,18 @@ void graphics() {
             draw_button(65, 85, 15, 15, "r", COLOR_BLACK, COLOR_WHITE);
         }
 
-        #if !defined(__riscv)
+    #if !defined(__riscv)
         x = 0;
         y = 96;
-        print("System Information:\n", COLOR_WHITE);
-        print("Battery Status: ", COLOR_WHITE);
+        print("System Information:\n");
+        print("Battery Status: ");
         unsigned char battery_status = check_battery();
         if (battery_status) {
-            print("OK\n", COLOR_WHITE);
+            print("OK\n");
         } else {
-            print("BAD. Please insert a new CMOS battery\n", COLOR_WHITE);
+            print("BAD. Please insert a new CMOS battery\n");
         }
-        #endif
+    #endif
     }
     else if (current_mode == 1) {
         is_scaled = 0;

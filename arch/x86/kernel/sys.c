@@ -21,7 +21,6 @@ void sys_exit() {
     _syscall(SYS_EXIT, 0, 0, 0);
 }
 
-
 int sys_get_battery() {
     return (int)_syscall(SYS_GET_BATTERY, 0, 0, 0);
 }
@@ -38,10 +37,6 @@ int sys_open(const char* path) {
     return (int)_syscall(SYS_OPEN, (uint32_t)path, 0, 0);
 }
 
-int sys_read(int fd, char* buf, uint32_t count) {
-    return (int)_syscall(SYS_READ, (uint32_t)fd, (uint32_t)buf, (uint32_t)count);
-}
-
 uint32_t sys_time() {
     return _syscall(SYS_TIME, 0, 0, 0);
 }
@@ -50,6 +45,6 @@ void sys_uname(char *buffer) {
     _syscall(SYS_UNAME, (uint32_t)buffer, 0, 0);
 }
 
-int sys_write(int fd, const char* str, uint8_t color) {
-    return (int)_syscall(SYS_WRITE, (uint32_t)fd, (uint32_t)str, (uint32_t)color);
+int sys_write(int fd, const char* str, int count) {
+    return (int)_syscall(SYS_WRITE, (uint32_t)fd, (uint32_t)str, (uint32_t)count);
 }

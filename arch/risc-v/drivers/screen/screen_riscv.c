@@ -69,7 +69,6 @@ void put_char(char s, uint32_t color) {
     }
     
     x = x + (8 * scale);
-    flush_gpu();
 }
 
 void printk(const char *msg, uint32_t color) {
@@ -79,8 +78,8 @@ void printk(const char *msg, uint32_t color) {
     flush_gpu();
 }
 
-void print(const char *msg, uint32_t color) {
-    printk(msg, color);
+void print(const char *msg) {
+    printk(msg, COLOR_WHITE);
 }
 
 void draw_rect(int x, int y, int width, int height, uint32_t color) {

@@ -18,24 +18,24 @@ void boot() {
     is_scaled = 1;
     screen_clear();
 
-    print("Scanning PCI...                              ", COLOR_WHITE);
+    print("Scanning PCI...                              ");
     pci_scan();
-    print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 
-    print("Initializing timer...                        ", COLOR_WHITE);
+    print("Initializing timer...                        ");
     init_timer();
-    print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 	
-    print("Initializing memory manager...               ", COLOR_WHITE);
+    print("Initializing memory manager...               ");
     init_memory_manager();
-    print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 
     draw_rect(0, 0, 1024, 768, COLOR_WHITE);
 
     x = 0;
     y = 10;
     is_scaled = 1;
-    print("Welcome to CalcOS!", COLOR_BLACK);
+    printk("Welcome to CalcOS!", COLOR_BLACK);
     is_scaled = 0;
 }
 

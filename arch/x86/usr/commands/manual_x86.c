@@ -21,24 +21,24 @@
 void casm() {
     char *asm_name = strtok(NULL, " ");
     if (asm_name == NULL) {
-        print("Usage: casm <asm_file>\n", COLOR_WHITE);
+        print("Usage: casm <asm_file>\n");
         return;
     }
 
     int fd = sys_open(asm_name);
     if (fd < 0) {
-        print("casm: File not found\n", COLOR_WHITE);
+        print("casm: File not found\n");
         return;
     }
 
     uint8_t buffer[512];
-    int n = sys_read(fd, buffer, 512);
+    int n = vfs_read(fd, buffer, 512);
     sys_close(fd);
 
     name_clear();
-    print("Out file name: ", COLOR_WHITE);
+    print("Out file name: ");
     input_wait_string(name);
-    print("\n", COLOR_WHITE);
+    print("\n");
     assemble_to_bin(name, buffer);
 }
 
@@ -49,18 +49,18 @@ void empire() {
 void cat() {
     char *file_name = strtok(NULL, " ");
     if (file_name == NULL) {
-        print("Usage: cat <file_name>\n", COLOR_WHITE);
+        print("Usage: cat <file_name>\n");
         return;
     }
 
     int fd = sys_open(file_name);
     if (fd < 0) {
-        print("cat: File not found\n", COLOR_WHITE);
+        print("cat: File not found\n");
         return;
     }
 
     uint8_t buffer[512];
-    int n = vfs_read(fd, buffer, 511);
+    int n = vfs_read(fd, buffer, 512);
     sys_close(fd);
 
     if (n > 0) {
@@ -73,15 +73,15 @@ void cat() {
             put_char(c, COLOR_WHITE);
         }
     } else {
-        print("cat: Empty or unreadable file\n", COLOR_WHITE);
+        print("cat: Empty or unreadable file\n");
     }
-    print("\n", COLOR_WHITE);
+    print("\n");
 }
 
 void touch() {
     char *file_name = strtok(NULL, " ");
     if (file_name == NULL) {
-        print("Usage: touch <file_name>\n", COLOR_WHITE);
+        print("Usage: touch <file_name>\n");
         return;
     }
 
@@ -91,12 +91,12 @@ void touch() {
 
     draw_rect(0, 0, 1024, 30, COLOR_LIGHT_GRAY); 
     x = 10; y = 8;
-    print("Editing: ", COLOR_BLACK);
-    print(file_name, COLOR_BLACK); 
+    printk("Editing: ", COLOR_BLACK);
+    printk(file_name, COLOR_BLACK); 
 
     draw_rect(0, 738, 1024, 30, COLOR_LIGHT_GRAY); 
     x = 10; y = 746;
-    print("ESC: Save and Exit", COLOR_BLACK);
+    printk("ESC: Save and Exit", COLOR_BLACK);
 
     x = 0; y = 40;
 
@@ -117,7 +117,7 @@ void touch() {
 void ping() {
     const uint8_t *ip = strtok(NULL, " ");
     if (ip == NULL) {
-        print("Usage: ping <ip_address>\n", COLOR_WHITE);
+        print("Usage: ping <ip_address>\n");
         return;
     }
     
@@ -128,7 +128,7 @@ void ping() {
 void forth() {
     char *forth_name = strtok(NULL, " ");
     if (forth_name == NULL) {
-        print("Usage: forth <file_name>\n", COLOR_WHITE);
+        print("Usage: forth <file_name>\n");
         return;
     }
 
@@ -137,7 +137,7 @@ void forth() {
 
     int fd = sys_open(forth_name);
     if (fd < 0) {
-        print("forth: File not found\n", COLOR_WHITE);
+        print("forth: File not found\n");
         return;
     }
 

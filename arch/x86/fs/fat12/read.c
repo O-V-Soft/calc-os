@@ -146,10 +146,10 @@ void draw_file_icons() {
 
             x = icon_x + 40;
             y = icon_y + 8;
-            print(name_buf, COLOR_WHITE);
+            print(name_buf);
             if (ext_len > 0) {
-                print(".", COLOR_WHITE);
-                print(ext_buf, COLOR_WHITE);
+                print(".");
+                print(ext_buf);
             }
 
             icon_index++;

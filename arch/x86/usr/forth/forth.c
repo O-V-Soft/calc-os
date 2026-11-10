@@ -24,7 +24,7 @@ struct Word {
 struct Stack* stack_init(int size) {
     struct Stack* st = kmalloc(sizeof(struct Stack));
     if (!st) {
-        print("\nforth: cannot allocate Stack\n", COLOR_WHITE);
+        print("\nforth: cannot allocate Stack\n");
     }
 
     st->size = size;
@@ -32,7 +32,7 @@ struct Stack* stack_init(int size) {
 
     st->data = kmalloc(size * sizeof(int));
     if (!st->data) {
-        print("\nforth: cannot allocate stack data\n", COLOR_WHITE);
+        print("\nforth: cannot allocate stack data\n");
     }
         
     return st;
@@ -43,7 +43,7 @@ void stack_push(struct Stack* st, int value) {
         int new_size = st->size + 32;
         int* new_data = kmalloc(new_size * sizeof(int));
         if (!new_data) {
-            print("\nforth: cannot expand stack\n", COLOR_WHITE);
+            print("\nforth: cannot expand stack\n");
         }
 
         for (int i = 0; i <= st->sp; i++) {
@@ -61,7 +61,7 @@ void stack_push(struct Stack* st, int value) {
 
 int stack_pop(struct Stack* st) {
     if (st->sp == -1) {
-        print("\nforth: pop from empty stack\n", COLOR_WHITE);
+        print("\nforth: pop from empty stack\n");
         return 0;
     }
 
@@ -94,7 +94,7 @@ void word_div(struct Stack* st) {
     int a = stack_pop(st);
 
     if (b == 0) {
-        print("\nforth: division by zero\n", COLOR_WHITE);
+        print("\nforth: division by zero\n");
         stack_push(st, 0);
     } else {
         stack_push(st, a / b);
@@ -107,8 +107,8 @@ void word_dot(struct Stack* st) {
     char buf[32];
     itoa(a, buf);  
 
-    print(buf, COLOR_WHITE);
-    print(" ", COLOR_WHITE); 
+    print(buf);
+    print(" "); 
 }
 
 void word_fetch(struct Stack* st) {
@@ -126,7 +126,7 @@ void word_store(struct Stack* st) {
 }
 
 void word_cr(struct Stack* st) {
-    print("\n", COLOR_WHITE);
+    print("\n");
 }
 
 void word_equals(struct Stack* st) {
@@ -240,9 +240,9 @@ void interpret(struct Stack* st, char* input) {
             continue;
         }
 
-        print("\nforth: unknown word: ", COLOR_WHITE);
-        print(token, COLOR_WHITE);
-        print("\n", COLOR_WHITE);
+        print("\nforth: unknown word: ");
+        print(token);
+        print("\n");
     }
 
     sys_exit();

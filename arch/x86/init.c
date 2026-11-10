@@ -28,32 +28,32 @@ void boot() {
     is_scaled = 1;
     screen_clear();
 
-    print("Scanning PCI...                              ", COLOR_WHITE);
+    print("Scanning PCI...                              ");
     pci_scan();
-    print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 
-    print("Initializing memory manager...               ", COLOR_WHITE);
+    print("Initializing memory manager...               ");
     init_memory_manager();
-    print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 
-	print("Initializing FAT12 driver...                 ", COLOR_WHITE);
+    print("Initializing FAT12 driver...                 ");
     vfs_register_driver(&fat12_driver);
-	print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 	
-    print("Initializing ethernet card...                ", COLOR_WHITE);
+    print("Initializing ethernet card...                ");
     int is_rtl8139_found = rtl8139_find();
     if (is_rtl8139_found >= 0) {
         rtl8139_init();
-	    rtl8139_register();
+	rtl8139_register();
         struct net_device* net_device = get_primary_net_device();
-        print("[OK]\n\n", COLOR_WHITE);
+        print("[OK]\n\n");
     } else {
-        print("[ERR]\n\n", COLOR_WHITE);
+        print("[ERR]\n\n");
     }
 
-    print("Initializing icons...                        ", COLOR_WHITE);
+    print("Initializing icon...                         ");
     icon_init();
-    print("[OK]\n\n", COLOR_WHITE);
+    print("[OK]\n\n");
 
     delay_ticks(100);
 
@@ -65,7 +65,7 @@ void boot() {
     y = 10;
 
     is_scaled = 1;
-    print("Welcome to CalcOS!", COLOR_BLACK);
+    printk("Welcome to CalcOS!", COLOR_BLACK);
     is_scaled = 2;
     play_startup_sound();
 

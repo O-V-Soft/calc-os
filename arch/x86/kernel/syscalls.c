@@ -32,52 +32,24 @@ uint32_t syscall_handler(struct registers *regs) {
 
         case SYS_OPEN: {
             const char* path = (const char*)arg1;
-            if (path < (const char*)(13 * 4096)) {
-                ret_val = -EFAULT;
-                break;
-            }
+            
             ret_val = vfs_open(path);   
-            break;
-        }
-
-        case SYS_READ: {
-            int fd = (int)arg1;
-            char* buf = (char*)arg2;
-            size_t count = (size_t)arg3;
-
-            if (buf < (char*)(13 * 4096)) {
-                ret_val = -EFAULT;
-                break;
-            }
-
-            if (fd == 0) {
-                if (count == 0) {
-                    ret_val = 0;
-                } else {
-                    uint8_t scancode = get_scancode();
-                    char letter = scancode_to_ascii(scancode);
-                    if (scancode != 0) {
-                        buf[0] = letter;
-                        ret_val = 1;
-                    } else {
-                        ret_val = 0;
-                    }
-                }
-            } else {
-                ret_val = vfs_read(fd, buf, count);
-            }
-
             break;
         }
         
         case SYS_WRITE: {
             if (arg1 == 1 || arg1 == 2) {
-                printk((char*)arg2, (uint8_t)arg3);
-                ret_val = 0;
+                const char *buf = (const char*)arg2;
+                int count = (int)arg3; 
+        
+                for (size_t i = 0; i < count; i++) {
+                    put_char(buf[i], COLOR_WHITE); 
+                }
+        
+                ret_val = count;
             } else {
-                ret_val = -EBADF;
+                ret_val = -EBADF; 
             }
-
             break;
         }
 
@@ -130,7 +102,6 @@ uint32_t syscall_handler(struct registers *regs) {
 
         case SYS_UNAME: {
             char* user_buf = (char*)arg1;
-            if (user_buf < (char*)(13 * 4096)) ret_val = -EFAULT;
             memcpy(user_buf, "CalcOS 10.4", 11);
             ret_val = 0;
             break;
@@ -157,19 +128,8 @@ uint32_t syscall_handler(struct registers *regs) {
             break;
         }
 
-        case SYS_CREATE_FILE: {
-            const char* name_11 = (const char*)arg1;
-            uint8_t* buffer = (uint8_t*)arg2;
-            uint32_t length = arg3;
-            if (name_11 == 0 || buffer == 0) ret_val = -EFAULT;
-            create_file((char*)name_11, buffer, (int)length);
-            ret_val = 0;
-            break;
-        }
-
         case SYS_WAIT_STRING: {
             char* user_buf = (char*)arg1;
-            if (user_buf < (char*)(13 * 4096)) ret_val = -EFAULT;
 
             input_wait_string(user_buf);
             ret_val = 0;
@@ -189,7 +149,6 @@ uint32_t syscall_handler(struct registers *regs) {
 
         case SYS_WAIT_MULTILINE: {
             char* user_buf = (char*)arg1;
-            if (user_buf < (char*)(13 * 4096)) ret_val = -EFAULT;
 
             input_wait_multiline(user_buf);
             ret_val = 0;

@@ -37,14 +37,14 @@ void task2_main() {
                 x = 980; y = 20;
                 
                 itoa(hours, h_str);
-                if (hours < 10) print("0", COLOR_WHITE); 
-                print(h_str, COLOR_WHITE);
+                if (hours < 10) print("0"); 
+                print(h_str);
                 
-                print(":", COLOR_WHITE);
+                print(":");
                 
                 itoa(minutes, m_str);
-                if (minutes < 10) print("0", COLOR_WHITE); 
-                print(m_str, COLOR_WHITE);
+                if (minutes < 10) print("0"); 
+                print(m_str);
 
                 sti();
 

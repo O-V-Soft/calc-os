@@ -62,35 +62,35 @@ void cln() {
 
 void help() {
     #if defined(__riscv)
-    print("Available commands:\n", COLOR_WHITE);
-    print("  help - show this message\n", COLOR_WHITE);
-    print("  status - print CPU status\n", COLOR_WHITE);
-    print("  reset - reset the system\n", COLOR_WHITE);
-    print("  lspci - print PCI devices\n", COLOR_WHITE);
-    print("  lifetime - system timer ticks\n", COLOR_WHITE);
-    print("  su - change to root\n", COLOR_WHITE);
-    print("  exit - change to user\n", COLOR_WHITE);
-    print("  whoami - print current user\n", COLOR_WHITE);
+    print("Available commands:\n");
+    print("  help - show this message\n");
+    print("  status - print CPU status\n");
+    print("  reset - reset the system\n");
+    print("  lspci - print PCI devices\n");
+    print("  lifetime - system timer ticks\n");
+    print("  su - change to root\n");
+    print("  exit - change to user\n");
+    print("  whoami - print current user\n");
     #else
-    print("Available commands:\n", COLOR_WHITE);
-    print("  help - show this message\n", COLOR_WHITE);
-    print("  cln  - clear the screen\n", COLOR_WHITE);
-    print("  ls  - list all files\n", COLOR_WHITE);
-    print("  touch  - create a new file\n", COLOR_WHITE);
-    print("  status - check system status\n", COLOR_WHITE);
-    print("  cat - print file content\n", COLOR_WHITE);
-    print("  lspci - print PCI devices\n", COLOR_WHITE);
-    print("  ping - ping the network\n", COLOR_WHITE);
-    print("  reboot - reboot the system\n", COLOR_WHITE);
-    print("  forth - Forth interpreter\n", COLOR_WHITE);
-    print("  empire - play imperial march\n", COLOR_WHITE);
-    print("  umount - umount FS\n", COLOR_WHITE);
-    print("  mount - mount FS\n", COLOR_WHITE);
-    print("  casm - Calc Assembly Compiler\n", COLOR_WHITE);
-    print("  su - change to root\n", COLOR_WHITE);
-    print("  exit - change to user\n", COLOR_WHITE);
-    print("  whoami - print current user\n", COLOR_WHITE);
-    print("  cube - spin the cube\n", COLOR_WHITE);
+    print("Available commands:\n");
+    print("  help - show this message\n");
+    print("  cln  - clear the screen\n");
+    print("  ls  - list all files\n");
+    print("  touch  - create a new file\n");
+    print("  status - check system status\n");
+    print("  cat - print file content\n");
+    print("  lspci - print PCI devices\n");
+    print("  ping - ping the network\n");
+    print("  reboot - reboot the system\n");
+    print("  forth - Forth interpreter\n");
+    print("  empire - play imperial march\n");
+    print("  umount - umount FS\n");
+    print("  mount - mount FS\n");
+    print("  casm - Calc Assembly Compiler\n");
+    print("  su - change to root\n");
+    print("  exit - change to user\n");
+    print("  whoami - print current user\n");
+    print("  cube - spin the cube\n");
     #endif
 }
 
@@ -105,14 +105,14 @@ void su() {
         return;
     } else {
         char pass_buf[32];
-        print("Password: ", COLOR_WHITE);
+        print("Password: ");
         input_wait_string(pass_buf);
-        print("\n", COLOR_WHITE);
+        print("\n");
 
         if (compare_strings(pass_buf, (char*)root_password)) {
             current_uid = 0;
         } else {
-            print("su: Authentication failure\n", COLOR_WHITE);
+            print("su: Authentication failure\n");
         }
     }
 }
