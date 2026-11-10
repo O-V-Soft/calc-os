@@ -19,10 +19,22 @@
 #define SYS_WAIT_STRING  129
 #define SYS_REBOOT       130
 
+static unsigned int strlen(const char* str) {
+    unsigned int len = 0;
+    while (str[len] != '\0') {
+        len++;
+    }
+    return len;
+}
+
 static inline int _syscall(int num, unsigned int arg1, unsigned int arg2, unsigned int arg3) {
     int ret;
     __asm__ __volatile__ ("int $0x80" : "=a" (ret) : "a" (num), "b" (arg1), "c" (arg2), "d" (arg3) : "memory");
     return ret;
+}
+
+static void print(const char* str) {
+    _syscall(SYS_WRITE, 1, (unsigned int)str, strlen(str));
 }
 
 #endif

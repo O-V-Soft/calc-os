@@ -4,9 +4,9 @@ __attribute__((section(".text.prologue")))
 void _start() {
     int battery_ok = _syscall(SYS_GET_BATTERY, 0, 0, 0);
     if (battery_ok) {
-        _syscall(SYS_WRITE, 1, (unsigned int)"Battery: OK\n", 12);
+        print("Battery: OK\n");
     } else {
-        _syscall(SYS_WRITE, 1, (unsigned int)"Battery: BAD. Please insert a new CMOS battery\n", 45);
+        print("Battery: BAD. Please insert a new CMOS battery\n");
     }
     _syscall(SYS_EXIT, 0, 0, 0);
 }
