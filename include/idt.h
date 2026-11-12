@@ -157,10 +157,6 @@ extern uint8_t *timer_str[16];
 
 uint32_t syscall_handler(struct registers *regs);
 
-extern unsigned int task2_stack[1024];
-extern unsigned int task3_stack[1024];
-extern unsigned int task4_stack[2048];
-
 extern uint8_t rtl_irq;
 
 static inline int _syscall(int num, uint32_t arg1, uint32_t arg2, uint32_t arg3) {
