@@ -1,0 +1,58 @@
+#include <stdint.h>
+#include <video.h>
+#include <acpi.h>
+#include <utils.h>
+
+acpi_fadt_t *fadt = 0;
+
+uint32_t find_rsdp() {
+    for (uint32_t addr = 0x000E0000; addr < 0x000FFFFF; addr += 16) {
+        acpi_rsdp_t *rsdp = (acpi_rsdp_t*)addr;
+        
+        if (memcmp(rsdp->signature, "RSD PTR ", 8) == 0) {
+            uint8_t sum = 0;
+            uint8_t *ptr = (uint8_t*)rsdp;
+            for (int i = 0; i < 20; i++) {
+                sum += ptr[i];
+            }
+            
+            if (sum == 0) {
+                return addr; 
+            }
+        }
+    }
+    return 0;
+}
+
+int acpi_init() {
+    uint32_t rsdp_addr = find_rsdp();
+    if (rsdp_addr == 0) {
+        return -1;
+    }
+
+    acpi_rsdp_t *rsdp = (acpi_rsdp_t*)rsdp_addr;
+    
+    acpi_rsdt_t *rsdt = (acpi_rsdt_t*)(uintptr_t)rsdp->rsdt_address;
+    if (!rsdt) {
+        return -1;
+    }
+
+    int entry_count = (rsdt->length - sizeof(acpi_rsdt_t)) / sizeof(uint32_t);
+
+    for (int i = 0; i < entry_count; i++) {
+        uint32_t table_addr = rsdt->entry[i];
+        
+        char *signature = (char*)(uintptr_t)table_addr;
+        if (memcmp(signature, "FACP", 4) == 0) {
+            char msg[64];
+            fadt = (acpi_fadt_t*)(uintptr_t)table_addr;
+            break; 
+        }
+    }
+
+    if (!fadt) {
+        return -1;
+    }
+
+    return 0;
+}

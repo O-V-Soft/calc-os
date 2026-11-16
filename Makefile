@@ -21,7 +21,8 @@ ifeq ($(ARCH),x86)
 		   paging.o vfs.o casm.o manual.o signal.o desktop.o string.o memory.o \
 		   convert.o keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
 		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o \
-		   net_dev.o net.o arp.o ip.o icmp.o arp_cache.o sched.o mutex.o
+		   net_dev.o net.o arp.o ip.o icmp.o arp_cache.o sched.o mutex.o \
+		   acpi.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc
@@ -48,7 +49,8 @@ vpath %.c kernel/main kernel arch/x86/kernel arch/x86/drivers/cmos drivers/scree
 		  drivers/keybrd  arch/risc-v/drivers/pci arch/risc-v/drivers/keyboard \
 		  arch/risc-v/kernel arch/x86/fs arch/x86/drivers/keyboard drivers/pci \
 		  commands arch/risc-v/commands Calc3D arch/risc-v/drivers/virtio \
-	      arch/x86/drivers/screen arch/x86/usr/commands arch/risc-v/drivers/screen net
+	      arch/x86/drivers/screen arch/x86/usr/commands arch/risc-v/drivers/screen net \
+		  arch/x86/drivers/acpi
 
 vpath %.asm arch/x86/boot arch/x86/kernel arch/x86/drivers/mouse/asm arch/x86/cpu/idt/asm
 vpath %.S arch/risc-v/boot 

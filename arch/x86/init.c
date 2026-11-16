@@ -14,11 +14,12 @@
 #include <mm.h>
 #include <net_dev.h>
 #include <net.h>
+#include <acpi.h>
 
 extern uint32_t __bss_start[];
 extern uint32_t __bss_safe_end[];
 
-static void clear_bss(void) {
+static void clear_bss() {
     for (uint32_t *address = __bss_start; address < __bss_safe_end; address++) {
         *address = 0;
     }
@@ -36,6 +37,10 @@ void boot() {
     init_memory_manager();
     print("[OK]\n\n");
 
+    print("Initializing ACPI...                         ");
+    acpi_init();
+    print("[OK]\n\n");
+    
     print("Initializing FAT12 driver...                 ");
     vfs_register_driver(&fat12_driver);
     print("[OK]\n\n");

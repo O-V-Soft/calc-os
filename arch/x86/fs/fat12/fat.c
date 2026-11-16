@@ -50,7 +50,7 @@ uint16_t find_file_in_root(const char* target_name_11) {
             
             if ((uint8_t)entries[i].name[0] == 0xE5) continue;
 
-            if (memcmp(entries[i].name, target_name_11, 11)) {
+            if (memcmp(entries[i].name, target_name_11, 11) == 0) {
                 return entries[i].first_cluster;
             }
         }
