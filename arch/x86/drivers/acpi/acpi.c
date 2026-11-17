@@ -57,7 +57,7 @@ int acpi_init() {
         return -1;
     }
 
-    if (pm1a_cnt != 0 && fadt->smi_cmd != 0 && fadt->acpi_enable != 0) {
+    if (pm1a_cnt != 0 && fadt->acpi_enable != 0) {
         if ((inw(pm1a_cnt) & 1) == 0) {
             outb((uint16_t)fadt->smi_cmd, fadt->acpi_enable);
 
@@ -92,15 +92,10 @@ void acpi_reboot() {
     if (fadt->reset_reg.address_space_id == 1) {
         uint16_t port = (uint16_t)fadt->reset_reg.address;
         uint8_t access_size = fadt->reset_reg.access_size;
-            
-        if (access_size == 2) {
-            outw(port, (uint16_t)val);
-        } else if (access_size == 3) {
-            outl(port, (uint32_t)val);
-        } else {
-            outb(port, val);
-        }
-    } else if (fadt->reset_reg.address_space_id == 0) {
+        
+        outb(port, val);
+    } 
+    else if (fadt->reset_reg.address_space_id == 0) {
         volatile uint64_t *reg64;
         volatile uint32_t *reg32;
         volatile uint8_t  *reg8;
