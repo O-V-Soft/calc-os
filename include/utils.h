@@ -9,6 +9,7 @@ void copy_string(char *dest, char *src);
 int atoi(char *str);
 void itoa(int n, char* s);
 void htoa(int n, char str[]);
+
 #if !defined(__riscv)
 void draw_button(int _x, int _y, int _width, int _height, const char *_msg, uint8_t color, uint8_t text_color);
 #else
@@ -32,8 +33,6 @@ void draw_file_icons();
 
 void play_startup_sound();
 void play_imperial_march();
-
-int atoi_super(const char* str);
 
 size_t strlen(const char* str);
 int strcmp(const char* a, const char* b);

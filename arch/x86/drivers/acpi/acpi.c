@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include <video.h>
+#include <idt.h>
 #include <acpi.h>
 #include <utils.h>
+#include <mm.h>
 
 acpi_fadt_t *fadt = 0;
 
@@ -37,14 +39,15 @@ int acpi_init() {
         return -1;
     }
 
-    int entry_count = (rsdt->length - sizeof(acpi_rsdt_t)) / sizeof(uint32_t);
+    int entry_count = (rsdt->length - 36) / sizeof(uint32_t);
 
     for (int i = 0; i < entry_count; i++) {
         uint32_t table_addr = rsdt->entry[i];
+        if (table_addr == 0) continue;
         
         char *signature = (char*)(uintptr_t)table_addr;
+        
         if (memcmp(signature, "FACP", 4) == 0) {
-            char msg[64];
             fadt = (acpi_fadt_t*)(uintptr_t)table_addr;
             break; 
         }
@@ -52,6 +55,19 @@ int acpi_init() {
 
     if (!fadt) {
         return -1;
+    }
+
+    uint16_t pm1a_cnt = (uint16_t)fadt->pm1a_cnt_blk;
+    if (pm1a_cnt == 0 && fadt->x_pm1a_cnt_blk.address_space_id == 1) {
+        pm1a_cnt = (uint16_t)fadt->x_pm1a_cnt_blk.address;
+    }
+
+    if (pm1a_cnt != 0 && fadt->smi_cmd != 0 && fadt->acpi_enable != 0) {
+        if ((inw(pm1a_cnt) & 1) == 0) {
+            outb((uint16_t)fadt->smi_cmd, fadt->acpi_enable);
+
+            while ((inw(pm1a_cnt) & 1) == 0);
+        }
     }
 
     return 0;

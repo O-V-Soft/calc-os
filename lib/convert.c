@@ -67,19 +67,3 @@ void htoa(int n, char str[]) {
     }
     str[10] = '\0';
 }
-
-int atoi_super(const char* str) {
-    int res = 0;
-    int i = 0;
-
-    while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r') {
-        i++;
-    }
-
-    while (str[i] >= '0' && str[i] <= '9') {
-        res = res * 10 + (str[i] - '0');
-        i++;
-    }
-
-    return res;
-}
