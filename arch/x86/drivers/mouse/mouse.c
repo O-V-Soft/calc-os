@@ -1,10 +1,10 @@
 #include <video.h>
-#include <cmos.h>
 #include <mouse.h>
 #include <utils.h>
 #include <keyboard.h>
 #include <stdint.h>
 #include <idt.h>
+#include <acpi.h>
 
 volatile int mouse_cycle = 0;
 volatile uint8_t mouse_packet[3];
@@ -205,7 +205,7 @@ void check_ui_clicks() {
             }
 
             if (mouse_x >= 65 && mouse_x <= 80 && mouse_y >= 85 && mouse_y <= 100) {
-                reboot();
+                acpi_reboot();
             }
         }
         

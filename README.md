@@ -18,7 +18,7 @@
 
 ## 🛠️ Prerequisites
 
-To build and run this project, you will need the following tools (tested on Linux/Ubuntu):
+To build and run this project, you will need the following tools (tested on Linux):
 
 *   **Build tools:** `build-essential`, `gcc`, `binutils`, `make`
 *   **Assemblers:** `nasm` (for x86)

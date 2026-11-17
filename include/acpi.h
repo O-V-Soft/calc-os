@@ -8,7 +8,7 @@ typedef struct acpi_gas {
     uint8_t register_bit_offset;
     uint8_t access_size;
     uint64_t address;
-} __attribute__((__packed__)) acpi_gas_t;
+} __attribute__((packed)) acpi_gas_t;
 
 typedef struct acpi_rsdp {
     uint8_t signature[8];
@@ -20,7 +20,7 @@ typedef struct acpi_rsdp {
     uint64_t xsdt_address;
     uint8_t extended_checksum;
     uint8_t reserved[3];
-} __attribute__((__packed__)) acpi_rsdp_t;
+} __attribute__((packed)) acpi_rsdp_t;
 
 typedef struct acpi_rsdt {
     uint8_t signature[4];
@@ -33,7 +33,7 @@ typedef struct acpi_rsdt {
     uint32_t creator_id;
     uint32_t creator_revision;
     uint32_t entry[];
-} __attribute__((__packed__)) acpi_rsdt_t;
+} __attribute__((packed)) acpi_rsdt_t;
 
 typedef struct acpi_fadt {
     uint8_t signature[4];
@@ -96,8 +96,9 @@ typedef struct acpi_fadt {
     acpi_gas_t x_pm_tmr_blk;
     acpi_gas_t x_gpe0_blk;
     acpi_gas_t x_gpe1_blk;
-} __attribute__((__packed__)) acpi_fadt_t;
+} __attribute__((packed)) acpi_fadt_t;
 
 int acpi_init();
+void acpi_reboot();
 
 #endif

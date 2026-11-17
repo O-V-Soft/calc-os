@@ -1,19 +1,16 @@
-#include <cmos.h>
 #include <video.h>
-#include <mouse.h>
 #include <utils.h>
 #include <keyboard.h>
 #include <idt.h>
 #include <task.h>
 #include <stdint.h>
-#include <sound.h>
-#include <forth.h>
 #include <fat.h>
 #include <mm.h>
 #include <pci.h>
 #include <vfs.h>
 #include <net.h>
 #include <net_dev.h>
+#include <acpi.h>
 
 uint32_t syscall_handler(struct registers *regs) {
     uint32_t syscall_num = regs->eax;
@@ -102,7 +99,7 @@ uint32_t syscall_handler(struct registers *regs) {
 
         case SYS_UNAME: {
             char* user_buf = (char*)arg1;
-            memcpy(user_buf, "CalcOS 10.4", 11);
+            memcpy(user_buf, "CalcOS 10.7", 11);
             ret_val = 0;
             break;
         }
@@ -137,7 +134,7 @@ uint32_t syscall_handler(struct registers *regs) {
         }
 
         case SYS_REBOOT: {
-            reboot();
+            acpi_reboot();
             ret_val = 0;
             break;
         }
