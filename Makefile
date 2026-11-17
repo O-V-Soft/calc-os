@@ -15,7 +15,7 @@ ifeq ($(ARCH),x86)
 			   -Wno-unused-but-set-variable -Wno-unused-value -Wno-missing-field
     LDFLAGS     := -m elf_i386 -T linker.ld --nostdlib --static
 
-    OBJ := init.o kernel.o cmos.o screen.o mouse_asm.o utils.o keyboard.o font.o inout.o \
+    OBJ := init.o kernel.o cmos.o screen.o mouse_asm.o math.o keyboard.o font.o inout.o \
            mouse.o wrappers.o idt.o isr.o task.o ata.o fat.o read.o write.o \
            sound.o pci_x86.o rtl8139.o mm.o forth.o syscalls.o sys.o \
 		   paging.o vfs.o casm.o manual.o signal.o desktop.o string.o memory.o \
