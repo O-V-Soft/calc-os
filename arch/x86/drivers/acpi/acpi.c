@@ -70,20 +70,6 @@ int acpi_init() {
         }
     }
 
-    fadt->reset_reg.address_space_id = 1;
-    fadt->reset_reg.address = 0x64;
-    fadt->reset_value = 0xFE;
-
-    fadt->checksum = 0;
-    uint8_t sum = 0;
-    uint8_t *ptr = (uint8_t*)fadt;
-    
-    for (uint32_t i = 0; i < fadt->length; i++) {
-        sum += *ptr++;
-    }
-    
-    fadt->checksum = -sum;
-
     return 0;
 }
 
