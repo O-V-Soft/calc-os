@@ -57,7 +57,7 @@ int acpi_init() {
         return -1;
     }
 
-    if (pm1a_cnt != 0 && fadt->acpi_enable != 0) {
+    if (fadt->acpi_enable != 0) {
         if ((inw(pm1a_cnt) & 1) == 0) {
             outb((uint16_t)fadt->smi_cmd, fadt->acpi_enable);
 
