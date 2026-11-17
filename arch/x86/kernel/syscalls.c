@@ -1,19 +1,16 @@
-#include <cmos.h>
 #include <video.h>
-#include <mouse.h>
 #include <utils.h>
 #include <keyboard.h>
 #include <idt.h>
 #include <task.h>
 #include <stdint.h>
-#include <sound.h>
-#include <forth.h>
 #include <fat.h>
 #include <mm.h>
 #include <pci.h>
 #include <vfs.h>
 #include <net.h>
 #include <net_dev.h>
+#include <acpi.h>
 
 uint32_t syscall_handler(struct registers *regs) {
     uint32_t syscall_num = regs->eax;
@@ -137,7 +134,7 @@ uint32_t syscall_handler(struct registers *regs) {
         }
 
         case SYS_REBOOT: {
-            reboot();
+            acpi_reboot();
             ret_val = 0;
             break;
         }
