@@ -57,7 +57,12 @@ int acpi_init() {
         return -1;
     }
 
-    if (fadt->acpi_enable != 0) {
+    uint16_t pm1a_cnt = (uint16_t)fadt->pm1a_cnt_blk;
+    if (pm1a_cnt == 0 && fadt->x_pm1a_cnt_blk.address_space_id == 1) {
+        pm1a_cnt = (uint16_t)fadt->x_pm1a_cnt_blk.address;
+    }
+
+    if (pm1a_cnt != 0 && fadt->smi_cmd != 0 && fadt->acpi_enable != 0) {
         if ((inw(pm1a_cnt) & 1) == 0) {
             outb((uint16_t)fadt->smi_cmd, fadt->acpi_enable);
 
