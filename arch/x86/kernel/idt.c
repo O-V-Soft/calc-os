@@ -178,8 +178,8 @@ void exception_handler(struct registers *regs) {
 void init_timer() {
     outb(0x43, 0x36); 
 
-    outb(0x40, 0x52); 
-    outb(0x40, 0x09);
+    outb(0x40, 0x9C); 
+    outb(0x40, 0x2E);
 }
 
 void init_idt() {

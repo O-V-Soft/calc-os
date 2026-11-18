@@ -52,8 +52,6 @@ refresh:
 
     draw_button(10, 5, 56, 26, "CalcOS", COLOR_BLACK, COLOR_WHITE);
 
-    sti();
-
     graphics();
 
     while (1) {

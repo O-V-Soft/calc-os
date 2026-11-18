@@ -18,12 +18,15 @@ void map_rodata() {
 
 void init_paging() {
     for (uint32_t i = 0; i < 1024; i++) {
-        page_directory[i] = (i * 0x400000) | 0x83;
+        if (i < 256) {
+            page_directory[i] = (i * 0x400000) | 0x83;
+        } else {
+            page_directory[i] = (i * 0x400000) | 0x9B;
+        }
     }
 
     for (uint32_t j = 0; j < 1024; j++) {
         uint32_t phys_addr = j * PAGE_SIZE;
-
         first_page_table[j] = phys_addr | 0x03;
     }
 

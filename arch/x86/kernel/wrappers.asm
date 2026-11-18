@@ -39,30 +39,42 @@ timer_wrapper:
     mov fs, ax
     mov gs, ax
     popa                
-    add esp, 8          
+    add esp, 8    
+    sti      
     iret
 
 keyboard_wrapper:
+    cli
     pusha
+
     call keyboard_handler
+
     popa
+    sti
     iret
 
 mouse_wrapper:
+    cli
     pusha
 
     call stub_mouse_handler
     
     popa
+    sti
     iret   
 
 ata_wrapper:
+    cli
     pusha
+
     call ata_handler
+    
     popa
+    sti
     iret
     
 syscall_wrapper:
+    cli
     push 0       
     push 0       
     pusha       
@@ -78,7 +90,8 @@ syscall_wrapper:
     pop esp       
     pop ds        
     popa         
-    add esp, 8      
+    add esp, 8 
+    sti     
     iret
 
 rtl8139_wrapper:

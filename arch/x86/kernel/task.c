@@ -52,7 +52,7 @@ void task2_main() {
                 old_minutes = minutes;
             }
         }
-        __asm__ __volatile__("hlt");
+        hlt();
     }
 }
 
@@ -95,14 +95,14 @@ void create_task(void (*entry_point)()) {
     new_task->pid = next_pid++;
     new_task->is_active = 1;
     
-    __asm__ __volatile__("cli");
+    cli();
     new_task->next = current_task->next;
     current_task->next = new_task;
-    __asm__ __volatile__("sti");
+    sti();
 }
 
 void delete_task(int pid) {
-    __asm__ __volatile__("cli");
+    cli();
 
     Task *curr = current_task;
     
@@ -115,11 +115,11 @@ void delete_task(int pid) {
     };
 
     if (current_task->pid == pid) {
-        __asm__ __volatile__("sti");
+        sti();
         while (1) {
-            __asm__ __volatile__("hlt");
+            hlt();
         }
     }
 
-    __asm__ __volatile__("sti");
+    sti();
 }
