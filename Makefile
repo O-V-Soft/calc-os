@@ -131,10 +131,12 @@ cleane:
 	touch traffic.pcap
 
 run: os-image.img
-	qemu-system-i386 -drive file=os-image.img,format=raw \
+	qemu-system-i386 -device piix3-ide,id=ide \
+	-drive id=disk0,file=os-image.img,format=raw,if=none \
+	-device ide-hd,drive=disk0,bus=ide.0 \
 	-netdev tap,id=net0,ifname=tap0,script=no,downscript=no \
     -object filter-dump,id=f1,netdev=net0,file=traffic.pcap \
-    -device rtl8139,netdev=net0
+    -device rtl8139,netdev=net0 -machine q35
 
 ahci:
 	qemu-system-i386 -device ich9-ahci,id=ahci \

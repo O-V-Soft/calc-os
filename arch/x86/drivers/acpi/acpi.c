@@ -7,6 +7,8 @@
 
 acpi_fadt_t *fadt = 0;
 
+uint8_t acpi_irq;
+
 uint32_t find_rsdp() {
     for (uint32_t addr = 0x000E0000; addr < 0x000FFFFF; addr += 16) {
         acpi_rsdp_t *rsdp = (acpi_rsdp_t*)addr;
@@ -70,20 +72,6 @@ int acpi_init() {
         }
     }
 
-    fadt->reset_reg.address_space_id = 1;
-    fadt->reset_reg.address = 0x64;
-    fadt->reset_value = 0xFE;
-
-    fadt->checksum = 0;
-    uint8_t sum = 0;
-    uint8_t *ptr = (uint8_t*)fadt;
-    
-    for (uint32_t i = 0; i < fadt->length; i++) {
-        sum += *ptr++;
-    }
-    
-    fadt->checksum = -sum;
-
     return 0;
 }
 
@@ -96,7 +84,6 @@ void acpi_reboot() {
 
     if (fadt->reset_reg.address_space_id == 1) {
         uint16_t port = (uint16_t)fadt->reset_reg.address;
-        uint8_t access_size = fadt->reset_reg.access_size;
         
         outb(port, val);
     } 
@@ -121,6 +108,7 @@ void acpi_reboot() {
     }
 
     while (1) {
-        asm volatile ("cli; hlt");
+        cli();
+        hlt();
     }
 }

@@ -12,7 +12,6 @@ global mouse_wrapper
 global ata_wrapper
 global syscall_wrapper
 global rtl8139_wrapper
-
 timer_wrapper:
     cli
     push dword 0   
@@ -51,7 +50,9 @@ keyboard_wrapper:
 
 mouse_wrapper:
     pusha
+
     call stub_mouse_handler
+    
     popa
     iret   
 
@@ -84,11 +85,7 @@ rtl8139_wrapper:
     cli
     pusha       
     
-    call rtl8139_handler 
-    
-    mov al, 0x20
-    out 0x20, al        
-    out 0xA0, al       
+    call rtl8139_handler      
     
     popa
     sti

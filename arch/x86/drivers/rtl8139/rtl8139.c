@@ -15,22 +15,6 @@ static uint8_t mac_addr[6];
 
 uint8_t rtl_irq;
 
-void irq_unmask(uint8_t irq) {
-    uint16_t port;
-    uint8_t value;
-
-    if (irq < 8) {
-        port = 0x21; 
-    } else {
-        port = 0xA1; 
-        irq -= 8;
-    }
-
-    value = inb(port);
-    value &= ~(1 << irq); 
-    outb(port, value);
-}
-
 int rtl8139_find() {
     for (int i = 0; i < device_count; i++) {
         if (devices[i].vendor_id == 0x10EC && devices[i].device_id == 0x8139) {
@@ -92,7 +76,7 @@ void rtl8139_init() {
     tx_counter = 0;
     rx_offset = 0; 
 
-    irq_unmask(rtl_irq);
+    pic_unmask(rtl_irq);
     set_idt_gate(0x20 + rtl_irq, (uint32_t)rtl8139_wrapper, 0x08, 0x8E);
 }
 
@@ -155,6 +139,11 @@ void rtl8139_handler() {
             net_receive(&rtl_device, rx_buf, len);
         }
     }
+
+    if (rtl_irq >= 8) {
+        outb(0xA0, 0x20); 
+    }
+    outb(0x20, 0x20);
 }
 
 struct net_device rtl_device = {

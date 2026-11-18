@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <sound.h>
 #include <forth.h>
+#include <acpi.h>
 
 struct idt_entry   idt_entry[256];
 struct idt_pointer idtp;
@@ -40,6 +41,22 @@ void pic_remap() {
     
     outb(0x21, 0xF8); 
     outb(0xA1, 0x2F); 
+}
+
+void pic_unmask(uint8_t irq) {
+    uint16_t port;
+    uint8_t value;
+
+    if (irq < 8) {
+        port = 0x21; 
+    } else {
+        port = 0xA1; 
+        irq -= 8;
+    }
+
+    value = inb(port);
+    value = value & ~(1 << irq); 
+    outb(port, value);
 }
 
 uint32_t timer_handler(uint32_t esp) {
@@ -213,7 +230,7 @@ void init_idt() {
     set_idt_gate(33, (uint32_t)keyboard_wrapper, 0x08, 0x8E);
     set_idt_gate(44, (uint32_t)mouse_wrapper, 0x08, 0x8E);
     set_idt_gate(46, (uint32_t)ata_wrapper, 0x08, 0x8E);
-    set_idt_gate(128, (uint32_t)syscall_wrapper, 0x08, 0x8E); 
+    set_idt_gate(128, (uint32_t)syscall_wrapper, 0x08, 0x8E);
 
     task_init(); 
     

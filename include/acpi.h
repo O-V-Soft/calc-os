@@ -2,6 +2,8 @@
 #define ACPI_H
 #include <stdint.h>
 
+extern uint8_t acpi_irq;
+
 typedef struct acpi_gas {
     uint8_t address_space_id;
     uint8_t register_bit_width;

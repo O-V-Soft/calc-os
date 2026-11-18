@@ -40,7 +40,7 @@ void boot() {
     print("Initializing ACPI...                         ");
     acpi_init();
     print("[OK]\n\n");
-    
+
     print("Initializing FAT12 driver...                 ");
     vfs_register_driver(&fat12_driver);
     print("[OK]\n\n");
@@ -49,7 +49,7 @@ void boot() {
     int is_rtl8139_found = rtl8139_find();
     if (is_rtl8139_found >= 0) {
         rtl8139_init();
-	rtl8139_register();
+	    rtl8139_register();
         struct net_device* net_device = get_primary_net_device();
         print("[OK]\n\n");
     } else {
