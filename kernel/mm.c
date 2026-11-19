@@ -1,3 +1,9 @@
+#if !defined(__riscv)
+#include <idt.h>
+#else
+#include <riscv.h>
+#endif
+
 #include <stdint.h>
 #include <mm.h>
 
@@ -27,12 +33,18 @@ void init_kernel_heap(void* start_addr, size_t heap_size) {
 }
 
 void init_memory_manager() {
+    cli();
+
     init_kernel_heap((void*)HEAP_START, HEAP_SIZE);
+    
+    sti();
 }
 
 void* kmalloc(size_t size) {
     if (size == 0) return NULL;
     if (size > (size_t)-1 - (ALIGNMENT - 1)) return NULL;
+
+    cli();
 
     size = ALIGN(size);
 
@@ -54,11 +66,15 @@ void* kmalloc(size_t size) {
         }
         current = current->next;
     }
+    
+    sti();
     return NULL;
 }
 
 void kfree(void* ptr) {
     if (!ptr) return;
+
+    cli();
 
     Block* current = freeList;
     while (current) {
@@ -81,4 +97,6 @@ void kfree(void* ptr) {
             current = current->next;
         }
     }
+    
+    sti();
 }

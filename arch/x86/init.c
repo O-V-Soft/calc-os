@@ -29,36 +29,36 @@ void boot() {
     is_scaled = 1;
     screen_clear();
 
-    print("Scanning PCI...                              ");
+    printk("Scanning PCI...                              ", COLOR_WHITE);
     pci_scan();
-    print("[OK]\n\n");
+    printk("[OK]\n\n", COLOR_WHITE);
 
-    print("Initializing memory manager...               ");
+    printk("Initializing memory manager...               ", COLOR_WHITE);
     init_memory_manager();
-    print("[OK]\n\n");
+    printk("[OK]\n\n", COLOR_WHITE);
 
-    print("Initializing ACPI...                         ");
+    printk("Initializing ACPI...                         ", COLOR_WHITE);
     acpi_init();
-    print("[OK]\n\n");
+    printk("[OK]\n\n", COLOR_WHITE);
 
-    print("Initializing FAT12 driver...                 ");
+    printk("Initializing FAT12 driver...                 ", COLOR_WHITE);
     vfs_register_driver(&fat12_driver);
-    print("[OK]\n\n");
+    printk("[OK]\n\n", COLOR_WHITE);
 	
-    print("Initializing ethernet card...                ");
+    printk("Initializing ethernet card...                ", COLOR_WHITE);
     int is_rtl8139_found = rtl8139_find();
     if (is_rtl8139_found >= 0) {
         rtl8139_init();
 	    rtl8139_register();
         struct net_device* net_device = get_primary_net_device();
-        print("[OK]\n\n");
+        printk("[OK]\n\n", COLOR_WHITE);
     } else {
-        print("[ERR]\n\n");
+        printk("[ERR]\n\n", COLOR_WHITE);
     }
 
-    print("Initializing icon...                         ");
+    printk("Initializing icon...                         ", COLOR_WHITE);
     icon_init();
-    print("[OK]\n\n");
+    printk("[OK]\n\n", COLOR_WHITE);
 
     delay_ticks(100);
 
@@ -83,12 +83,11 @@ void __attribute__((section(".text.entry"))) kernel_main() {
     init_paging();
     enable_paging();
     
-    __asm__ __volatile__("cli");
     screen_clear();
     init_idt();
-    __asm__ __volatile__("sti");
-	
     boot();
+
+	sti();
     current_mode = 0;
 
     create_task(task2_main);
@@ -96,6 +95,6 @@ void __attribute__((section(".text.entry"))) kernel_main() {
     create_task(task4_main);
 
     while (1) {
-        __asm__ __volatile__("hlt");
+        hlt();
     }
 }

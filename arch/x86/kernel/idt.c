@@ -143,9 +143,6 @@ void exception_handler(struct registers *regs) {
     else if (regs->int_no == 29) printk("VMM COMMUNICATION EXCEPTION", COLOR_WHITE);
     else if (regs->int_no == 30) printk("SECURITY EXCEPTION", COLOR_WHITE);
     else if (regs->int_no == 31) printk("RESERVED EXCEPTION", COLOR_WHITE);
-    else if (regs->int_no == 29) printk("VMM COMMUNICATION EXCEPTION", COLOR_WHITE);
-    else if (regs->int_no == 30) printk("SECURITY EXCEPTION", COLOR_WHITE);
-    else if (regs->int_no == 31) printk("RESERVED EXCEPTION", COLOR_WHITE);
     else printk("UNKNOWN EXCEPTION\n", COLOR_WHITE);
 
     x = 10;
@@ -244,6 +241,4 @@ void init_idt() {
 
     mouse_cycle = 0; 
     mouse_ready = 0;
-    
-    __asm__ __volatile__("sti");
 }

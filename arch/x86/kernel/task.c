@@ -37,14 +37,14 @@ void task2_main() {
                 x = 980; y = 20;
                 
                 itoa(hours, h_str);
-                if (hours < 10) print("0"); 
-                print(h_str);
+                if (hours < 10) printk("0", COLOR_WHITE); 
+                printk(h_str, COLOR_WHITE);
                 
-                print(":");
-                
+                printk(":", COLOR_WHITE);
+
                 itoa(minutes, m_str);
-                if (minutes < 10) print("0"); 
-                print(m_str);
+                if (minutes < 10) printk("0", COLOR_WHITE); 
+                printk(m_str, COLOR_WHITE);
 
                 sti();
 
@@ -105,14 +105,13 @@ void delete_task(int pid) {
     cli();
 
     Task *curr = current_task;
-    
-    while (curr != current_task) {
+    do {
         if (curr->pid == pid) {
             curr->is_active = 0;
             break;
         }
         curr = curr->next;
-    };
+    } while (curr != current_task);
 
     if (current_task->pid == pid) {
         sti();
