@@ -22,7 +22,7 @@ ifeq ($(ARCH),x86)
 		   convert.o keyboard_x86.o pci.o manual_x86.o calc3d.o edges.o nodes.o \
 		   rotate.o project.o fill.o screen_x86.o multiline.o icon.o \
 		   net_dev.o net.o arp.o ip.o icmp.o arp_cache.o sched.o mutex.o \
-		   acpi.o
+		   acpi.o aml.o
 
 else ifeq ($(ARCH),riscv)
     AS      := riscv64-unknown-elf-gcc

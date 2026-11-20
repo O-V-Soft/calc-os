@@ -6,6 +6,7 @@
 #include <mm.h>
 
 acpi_fadt_t *fadt = 0;
+acpi_dsdt_t *dsdt = 0;
 
 uint8_t acpi_irq;
 
@@ -51,7 +52,8 @@ int acpi_init() {
         
         if (memcmp(signature, "FACP", 4) == 0) {
             fadt = (acpi_fadt_t*)(uintptr_t)table_addr;
-            break; 
+        } else if (memcmp(signature, "DSDT", 4) == 0) {
+            dsdt = (acpi_dsdt_t*)(uintptr_t)table_addr;
         }
     }
 

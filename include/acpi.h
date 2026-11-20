@@ -2,8 +2,6 @@
 #define ACPI_H
 #include <stdint.h>
 
-extern uint8_t acpi_irq;
-
 typedef struct acpi_gas {
     uint8_t address_space_id;
     uint8_t register_bit_width;
@@ -100,7 +98,22 @@ typedef struct acpi_fadt {
     acpi_gas_t x_gpe1_blk;
 } __attribute__((packed)) acpi_fadt_t;
 
+typedef struct acpi_dsdt {
+    uint8_t signature[4];
+    uint32_t length;
+    uint8_t revision;
+    uint8_t checksum;
+    uint8_t oem_id[6];
+    uint8_t oem_table_id[8];
+    uint32_t oem_revision;
+    uint32_t creator_id;
+    uint32_t creator_revision;
+    uint8_t definition_block[];
+} __attribute__((packed)) acpi_dsdt_t;
+
 int acpi_init();
 void acpi_reboot();
+uint32_t aml_parse_integer(uint8_t *ptr, int *bytes_read);
+uint8_t* aml_find_object(const char *name);
 
 #endif
