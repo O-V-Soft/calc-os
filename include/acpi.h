@@ -111,9 +111,17 @@ typedef struct acpi_dsdt {
     uint8_t definition_block[];
 } __attribute__((packed)) acpi_dsdt_t;
 
-int acpi_init();
-void acpi_reboot();
 uint32_t aml_parse_integer(uint8_t *ptr, int *bytes_read);
 uint8_t* aml_find_object(const char *name);
+uint32_t aml_parse_pkg_length(uint8_t *ptr, int *bytes_read);
+uint32_t aml_get_package_element(uint8_t *pkg_ptr, int target_index);
+
+int acpi_init();
+
+void acpi_reboot();
+int acpi_get_psr();
+int acpi_get_tmp();
+int acpi_get_crt();
+uint32_t acpi_get_fst_element(int index);
 
 #endif

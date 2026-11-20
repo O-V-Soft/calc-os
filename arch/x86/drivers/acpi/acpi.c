@@ -8,22 +8,12 @@
 acpi_fadt_t *fadt = 0;
 acpi_dsdt_t *dsdt = 0;
 
-uint8_t acpi_irq;
-
 uint32_t find_rsdp() {
     for (uint32_t addr = 0x000E0000; addr < 0x000FFFFF; addr += 16) {
         acpi_rsdp_t *rsdp = (acpi_rsdp_t*)addr;
         
         if (memcmp(rsdp->signature, "RSD PTR ", 8) == 0) {
-            uint8_t sum = 0;
-            uint8_t *ptr = (uint8_t*)rsdp;
-            for (int i = 0; i < 20; i++) {
-                sum += ptr[i];
-            }
-            
-            if (sum == 0) {
-                return addr; 
-            }
+            return addr;
         }
     }
     return 0;
@@ -113,4 +103,35 @@ void acpi_reboot() {
         cli();
         hlt();
     }
+}
+
+int acpi_get_psr() {
+    uint8_t *ptr = aml_find_object("_PSR");
+    if (!ptr) return -1;
+    
+    int bytes_read = 0;
+    return aml_parse_integer(ptr + 4, &bytes_read);
+}
+
+int acpi_get_tmp() {
+    uint8_t *ptr = aml_find_object("_TMP");
+    if (!ptr) return -1;
+    
+    int bytes_read = 0;
+    return aml_parse_integer(ptr + 4, &bytes_read);
+}
+
+int acpi_get_crt() {
+    uint8_t *ptr = aml_find_object("_CRT");
+    if (!ptr) return -1;
+    
+    int bytes_read = 0;
+    return aml_parse_integer(ptr + 4, &bytes_read);
+}
+
+uint32_t acpi_get_fst_element(int index) {
+    uint8_t *ptr = aml_find_object("_FST");
+    if (!ptr) return 0;
+    
+    return aml_get_package_element(ptr + 4, index);
 }
