@@ -4,7 +4,6 @@
 #include <idt.h>
 #include <ata.h>
 #include <sound.h>
-#include <forth.h>
 #include <task.h>
 #include <vfs.h>
 #include <casm.h>
@@ -123,28 +122,6 @@ void ping() {
     
     struct net_device* dev = get_primary_net_device();
     net_ping(dev, ipv4_parse(ip));
-}
-
-void forth() {
-    char *forth_name = strtok(NULL, " ");
-    if (forth_name == NULL) {
-        print("Usage: forth <file_name>\n");
-        return;
-    }
-
-    char name_11[11];
-    format_fat_name(forth_name, name_11);
-
-    int fd = sys_open(forth_name);
-    if (fd < 0) {
-        print("forth: File not found\n");
-        return;
-    }
-
-    int n = vfs_read(fd, content, 16);
-    sys_close(fd);
-                    
-    create_task(task3_main);
 }
 
 void cube() {

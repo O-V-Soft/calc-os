@@ -2,6 +2,8 @@
 #define ACPI_H
 #include <stdint.h>
 
+#define CELSIUS_TO_TMP(c) (((c) + 273) * 10)
+
 typedef struct acpi_gas {
     uint8_t address_space_id;
     uint8_t register_bit_width;
@@ -121,7 +123,5 @@ int acpi_init();
 void acpi_reboot();
 int acpi_get_psr();
 int acpi_get_tmp();
-int acpi_get_crt();
-uint32_t acpi_get_fst_element(int index);
 
 #endif

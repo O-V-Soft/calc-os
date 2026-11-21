@@ -121,17 +121,31 @@ int acpi_get_tmp() {
     return aml_parse_integer(ptr + 4, &bytes_read);
 }
 
-int acpi_get_crt() {
-    uint8_t *ptr = aml_find_object("_CRT");
-    if (!ptr) return -1;
-    
-    int bytes_read = 0;
-    return aml_parse_integer(ptr + 4, &bytes_read);
-}
+void hardware_check_main() {
+    while (1) {
+        int psr = acpi_get_psr();
+        int tmp = acpi_get_tmp();
 
-uint32_t acpi_get_fst_element(int index) {
-    uint8_t *ptr = aml_find_object("_FST");
-    if (!ptr) return 0;
-    
-    return aml_get_package_element(ptr + 4, index);
+        if (tmp == -1) {
+            return;
+        }
+
+        int threshold = 0;
+
+        if (psr == 0) {
+            threshold = CELSIUS_TO_TMP(55);
+        } else if (psr == 1) {
+            threshold = CELSIUS_TO_TMP(70);
+        } else {
+            return;
+        }
+        
+
+        if (tmp >= threshold) {
+            while (1) {
+                cli();
+                hlt();
+            }
+        }
+    }
 }

@@ -37,6 +37,6 @@ void create_task(void (*entry_point)());
 
 void task2_main();
 void task3_main();
-void task4_main();
+void hardware_check_main();
 
 #endif

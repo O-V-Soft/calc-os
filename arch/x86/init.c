@@ -92,7 +92,7 @@ void __attribute__((section(".text.entry"))) kernel_main() {
 
     create_task(task2_main);
     create_task(task3_main);
-    create_task(task4_main);
+    create_task(hardware_check_main);
 
     while (1) {
         hlt();

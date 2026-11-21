@@ -7,7 +7,6 @@
 #include <task.h>
 #include <stdint.h>
 #include <sound.h>
-#include <forth.h>
 
 void send_signal(int target_task_id, int signum) {
     if (signum <= 0 || signum >= NUM_SIGNALS) return;

@@ -4,7 +4,6 @@
 #include <mm.h>
 #include <video.h>
 #include <utils.h>
-#include <forth.h>
 
 Task *current_task = 0;
 static int next_pid = 1;
@@ -20,11 +19,15 @@ void task_init() {
 }
 
 void task2_main() {
+    system();
+}
+
+void task3_main() {
     int hours, minutes;
     int old_hours = -1, old_minutes = -1;
     char h_str[3], m_str[3];
 
-    while(1) {
+    while (1) {
         if (current_mode != 0) {
             get_time(&hours, &minutes);
 
@@ -54,16 +57,6 @@ void task2_main() {
         }
         hlt();
     }
-}
-
-void task3_main() {
-    while(1) {
-        interpret(stack_init(1024), content);
-    }
-}
-
-void task4_main() {
-    system(); 
 }
 
 void create_task(void (*entry_point)()) {

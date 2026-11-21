@@ -7,7 +7,6 @@
 #include <task.h>
 #include <stdint.h>
 #include <sound.h>
-#include <forth.h>
 #include <acpi.h>
 
 struct idt_entry   idt_entry[256];
@@ -76,7 +75,7 @@ void delay_ticks(uint32_t ticks) {
 }
 
 void exception_handler(struct registers *regs) {
-        if (current_task->pid != 0) {
+    if (current_task->pid != 0) {
         printk("\nprocess with PID ", COLOR_WHITE);
         char num_buf[16];
         itoa(current_task->pid, num_buf);
@@ -167,7 +166,7 @@ void exception_handler(struct registers *regs) {
     itoa(regs->err_code, buf); 
     printk(buf, COLOR_WHITE);
     
-    while(1) {
+    while (1) {
         __asm__ __volatile__("hlt");
     };
 }

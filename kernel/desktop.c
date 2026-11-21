@@ -5,7 +5,6 @@
 #include <idt.h>
 #include <ata.h>
 #include <sound.h>
-#include <forth.h>
 #include <task.h>
 #include <vfs.h>
 #include <casm.h>

@@ -84,6 +84,7 @@ uint32_t aml_parse_pkg_length(uint8_t *ptr, int *bytes_read) {
         *bytes_read = 3;
         uint32_t length = (byte & 0x0F) | ((uint32_t)ptr[1] << 4) | 
             ((uint32_t)ptr[2] << 12);
+
         return length;
     }
     else {

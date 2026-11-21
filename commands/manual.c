@@ -30,7 +30,6 @@ Command commands[] = {
     {"cat", cat},
     {"touch", touch},
     {"ping", ping},
-    {"forth", forth},
     {"cube", cube},
     {NULL, NULL}
 };
@@ -82,7 +81,6 @@ void help() {
     print("  lspci - print PCI devices\n");
     print("  ping - ping the network\n");
     print("  reboot - reboot the system\n");
-    print("  forth - Forth interpreter\n");
     print("  empire - play imperial march\n");
     print("  umount - umount FS\n");
     print("  mount - mount FS\n");

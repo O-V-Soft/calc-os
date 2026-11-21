@@ -21,7 +21,6 @@ void empire();
 void cat();
 void touch();
 void ping();
-void forth();
 
 void devices2();
 void lifetime();
