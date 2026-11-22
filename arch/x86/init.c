@@ -38,8 +38,11 @@ void boot() {
     printk("[OK]\n\n", COLOR_WHITE);
 
     printk("Initializing ACPI...                         ", COLOR_WHITE);
-    acpi_init();
-    printk("[OK]\n\n", COLOR_WHITE);
+    if (acpi_init() == 0) {
+        printk("[OK]\n\n", COLOR_WHITE);
+    } else {
+        printk("[ERR]\n\n", COLOR_WHITE);
+    }
 
     printk("Initializing FAT12 driver...                 ", COLOR_WHITE);
     vfs_register_driver(&fat12_driver);

@@ -14,19 +14,20 @@ int execute_command(char *line);
 void cln();
 void help();
 void exit2();
-
 void su();
+void whoami();
+void status();
+void reset();
+
 void casm();
 void empire();
 void cat();
 void touch();
+void forth();
 void ping();
-
 void devices2();
 void lifetime();
-void whoami();
-void status();
-void reset();
+
 void cube();
 
 #endif

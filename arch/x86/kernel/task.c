@@ -4,10 +4,21 @@
 #include <mm.h>
 #include <video.h>
 #include <utils.h>
+#include <acpi.h>
 
 Task *current_task = 0;
 static int next_pid = 1;
 static Task main_task;
+
+static void task_returned() {
+    if (current_task && current_task->pid != 0) {
+        delete_task(current_task->pid);
+    }
+
+    for (;;) {
+        __asm__ __volatile__("sti; hlt");
+    }
+}
 
 void task_init() {
     main_task.pid = 0;
@@ -59,19 +70,52 @@ void task3_main() {
     }
 }
 
+void hardware_check_main() {
+    while (1) {
+        int psr = acpi_get_psr();
+        int tmp = acpi_get_tmp();
+
+        if (tmp == -1) {
+            return;
+        }
+
+        int threshold = CELSIUS_TO_TMP(55);
+
+        if (psr == 1) {
+            threshold = CELSIUS_TO_TMP(70);
+        }
+
+        if (tmp >= threshold) {
+            while (1) {
+                cli();
+                hlt();
+            }
+        }
+
+        hlt();
+    }
+}
+
 void create_task(void (*entry_point)()) {
     Task *new_task = (Task*)kmalloc(sizeof(Task));
     if (!new_task) return;
 
-    uint8_t *stack = (uint8_t*)kmalloc(4096);
+    uint8_t *stack = (uint8_t*)kmalloc(4096 + sizeof(uint32_t));
     if (!stack) {
         kfree(new_task);
         return;
     }
-    
-    uint32_t *sp = (uint32_t*)(stack + 4096);
 
-    *(--sp) = 0x0202; 
+    new_task->state = 0;
+    new_task->pending_signals = 0;
+    for (int i = 0; i < NUM_SIGNALS; i++) {
+        new_task->signal_handlers[i] = 0;
+    }
+
+    uint32_t *sp = (uint32_t*)(stack + 4096);
+    *sp = (uint32_t)task_returned;
+
+    *(--sp) = 0x0202;
     *(--sp) = 0x08;
     *(--sp) = (uint32_t)entry_point;
 
@@ -87,7 +131,7 @@ void create_task(void (*entry_point)()) {
     new_task->esp = (uint32_t)sp;
     new_task->pid = next_pid++;
     new_task->is_active = 1;
-    
+
     cli();
     new_task->next = current_task->next;
     current_task->next = new_task;

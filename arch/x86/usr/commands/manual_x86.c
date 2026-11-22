@@ -16,6 +16,7 @@
 #include <coms.h>
 #include <net_dev.h>
 #include <net.h>
+#include <forth.h>
 
 void casm() {
     char *asm_name = strtok(NULL, " ");
@@ -111,6 +112,28 @@ void touch() {
 
     vfs_create(file_name, file_buffer, buffer_ptr);
     screen_clear();
+}
+
+void forth() {
+    char *forth_name = strtok(NULL, " ");
+    if (forth_name == NULL) {
+        print("Usage: forth <file_name>\n");
+        return;
+    }
+
+    char name_11[11];
+    format_fat_name(forth_name, name_11);
+
+    int fd = sys_open(forth_name);
+    if (fd < 0) {
+        print("forth: File not found\n");
+        return;
+    }
+
+    int n = vfs_read(fd, content, 16);
+    sys_close(fd);
+                    
+    interpret(stack_init(1024), content);
 }
 
 void ping() {

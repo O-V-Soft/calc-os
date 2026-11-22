@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stddef.h>
 #include <video.h>
 #include <idt.h>
 #include <acpi.h>
@@ -20,6 +21,9 @@ uint32_t find_rsdp() {
 }
 
 int acpi_init() {
+    fadt = 0;
+    dsdt = 0;
+
     uint32_t rsdp_addr = find_rsdp();
     if (rsdp_addr == 0) {
         return -1;
@@ -28,7 +32,8 @@ int acpi_init() {
     acpi_rsdp_t *rsdp = (acpi_rsdp_t*)rsdp_addr;
     
     acpi_rsdt_t *rsdt = (acpi_rsdt_t*)(uintptr_t)rsdp->rsdt_address;
-    if (!rsdt) {
+    if (!rsdt || memcmp(rsdt->signature, "RSDT", 4) != 0 ||
+        rsdt->length < sizeof(*rsdt)) {
         return -1;
     }
 
@@ -51,8 +56,32 @@ int acpi_init() {
         return -1;
     }
 
+    if (fadt->length < offsetof(acpi_fadt_t, pm1a_cnt_blk) +
+                       sizeof(fadt->pm1a_cnt_blk)) {
+        return -1;
+    }
+
+    uint64_t dsdt_addr = fadt->dsdt;
+    if (fadt->length >= offsetof(acpi_fadt_t, x_dsdt) + sizeof(fadt->x_dsdt) &&
+        fadt->x_dsdt != 0 && fadt->x_dsdt <= 0xFFFFFFFF) {
+        dsdt_addr = fadt->x_dsdt;
+    }
+    if (dsdt_addr == 0) {
+        fadt = 0;
+        return -1;
+    }
+
+    dsdt = (acpi_dsdt_t*)(uintptr_t)dsdt_addr;
+    if (memcmp(dsdt->signature, "DSDT", 4) != 0 ||
+        dsdt->length < sizeof(*dsdt)) {
+        dsdt = 0;
+        return -1;
+    }
+
     uint16_t pm1a_cnt = (uint16_t)fadt->pm1a_cnt_blk;
-    if (pm1a_cnt == 0 && fadt->x_pm1a_cnt_blk.address_space_id == 1) {
+    if (pm1a_cnt == 0 && fadt->length >=
+        offsetof(acpi_fadt_t, x_pm1a_cnt_blk) + sizeof(fadt->x_pm1a_cnt_blk) &&
+        fadt->x_pm1a_cnt_blk.address_space_id == 1) {
         pm1a_cnt = (uint16_t)fadt->x_pm1a_cnt_blk.address;
     }
 
@@ -106,46 +135,17 @@ void acpi_reboot() {
 }
 
 int acpi_get_psr() {
-    uint8_t *ptr = aml_find_object("_PSR");
-    if (!ptr) return -1;
-    
-    int bytes_read = 0;
-    return aml_parse_integer(ptr + 4, &bytes_read);
+    uint32_t value;
+    if (!aml_evaluate_integer("_PSR", &value) || value > 1) {
+        return -1;
+    }
+    return (int)value;
 }
 
 int acpi_get_tmp() {
-    uint8_t *ptr = aml_find_object("_TMP");
-    if (!ptr) return -1;
-    
-    int bytes_read = 0;
-    return aml_parse_integer(ptr + 4, &bytes_read);
-}
-
-void hardware_check_main() {
-    while (1) {
-        int psr = acpi_get_psr();
-        int tmp = acpi_get_tmp();
-
-        if (tmp == -1) {
-            return;
-        }
-
-        int threshold = 0;
-
-        if (psr == 0) {
-            threshold = CELSIUS_TO_TMP(55);
-        } else if (psr == 1) {
-            threshold = CELSIUS_TO_TMP(70);
-        } else {
-            return;
-        }
-        
-
-        if (tmp >= threshold) {
-            while (1) {
-                cli();
-                hlt();
-            }
-        }
+    uint32_t value;
+    if (!aml_evaluate_integer("_TMP", &value) || value > 0x7FFFFFFF) {
+        return -1;
     }
+    return (int)value;
 }
