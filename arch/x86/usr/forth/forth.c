@@ -244,6 +244,4 @@ void interpret(struct Stack* st, char* input) {
         print(token);
         print("\n");
     }
-
-    sys_exit();
 }

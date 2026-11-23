@@ -144,7 +144,7 @@ int acpi_get_psr() {
 
 int acpi_get_tmp() {
     uint32_t value;
-    if (!aml_evaluate_integer("_TMP", &value) || value > 0x7FFFFFFF) {
+    if (!aml_evaluate_integer("_TMP", &value) || value > INT32_MAX) {
         return -1;
     }
     return (int)value;
